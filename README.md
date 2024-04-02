@@ -4,13 +4,13 @@
 ***********************************
 > # API명세
 
-# 1. 토큰
+# 1. 대기열 토큰
 ## 1-1. 토큰 조회
 ### REQUEST
 #### 호출방식
 |Method|URL|
 |---|---|
-|GET|/token/{userId}|
+|GET|/queue/{userId}|
 #### 요청 헤더
 |Parameter|Description|
 |---|---|
@@ -26,7 +26,7 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|token_id|Sting|토큰 ID|
+|queue_id|Sting|토큰 ID|
 
 ***********************************
 
@@ -54,8 +54,8 @@
 |Name|Type|Description|
 |---|---|---|
 |concerts|Object[]|콘서트 목록|
-|&nbsp;&nbsp;&nbsp;&nbsp; ceoncert_id|int|콘서트 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; ceoncert_dateTime|int|콘서트 날짜 시간|
+|&nbsp;&nbsp;&nbsp;&nbsp; concert_id|int|콘서트 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp; concert_dateTime|int|콘서트 날짜 시간|
 |&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seat_id|String|좌석 ID|
 |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seat_status|String|좌석 예약 상태|
@@ -70,7 +70,7 @@
 #### 요청 헤더
 |Parameter|Description|
 |---|---|
-|Token-Auth|Token값|
+|Queue-Token|대기열 Token값|
 |Content-Type|<span style="color:red">application/json</span>|
     
     
@@ -100,7 +100,7 @@
 #### 요청 헤더
 |Parameter|Description|
 |---|---|
-|Token-Auth|Token값|
+|Queue-Token|대기열 Token값|
 |Content-Type|<span style="color:red">application/json</span>|
     
     
