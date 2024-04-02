@@ -171,5 +171,11 @@
 |user_id|Sting|유저 ID|
 |balance|int|잔액|
 
+***********************************
+> # Milestone
+
+![image](https://github.com/WonhoLeeDev/hhplus-concert/assets/79134378/87ed0a7f-149c-4153-85fb-e7a617b2c6bd)
+
+
 
 
