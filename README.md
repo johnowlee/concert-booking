@@ -1,6 +1,6 @@
 > # Sequence Diagram
 
-![sequence-diagram](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/sequence-diagram.png)
+![sequence-diagram](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/sequnce-diagram.png)
 ***********************************
 > # API명세
 
