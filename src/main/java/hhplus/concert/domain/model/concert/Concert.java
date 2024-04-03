@@ -1,11 +1,10 @@
 package hhplus.concert.domain.model.concert;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Concert {
@@ -17,4 +16,7 @@ public class Concert {
 
     private String title;
     private LocalDateTime concertDatetime;
+
+    @OneToMany(mappedBy = "concert")
+    private List<Seat> seats = new ArrayList<>();
 }

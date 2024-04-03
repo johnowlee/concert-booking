@@ -14,6 +14,7 @@ public class Booking {
     @Column(name = "booking_id")
     private long id;
 
+    @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
     private LocalDateTime bookingDatetime;
 
@@ -24,5 +25,4 @@ public class Booking {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id")
     private Seat seat;
-
 }

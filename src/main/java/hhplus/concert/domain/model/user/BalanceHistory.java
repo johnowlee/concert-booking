@@ -14,6 +14,8 @@ public class BalanceHistory {
     private long id;
 
     private long amount;
+
+    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
     private LocalDateTime transactionDatetime;
 

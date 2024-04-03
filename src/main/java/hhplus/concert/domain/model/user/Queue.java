@@ -10,7 +10,7 @@ public class Queue {
 
     @Id
     @Column(name = "queue_id")
-    private long id;
+    private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -19,6 +19,8 @@ public class Queue {
     private long position;
     private LocalDateTime issueDatetime;
     private LocalDateTime expiryDatetime;
+
+    @Enumerated(EnumType.STRING)
     private QueueStatus status;
 
 
