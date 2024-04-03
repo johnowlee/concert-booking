@@ -212,6 +212,12 @@
 
 
 ***********************************
+
+> # ERD
+
+![ERD](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/ERD.png)
+***********************************
+
 > # Milestone
 
 ![image](https://github.com/WonhoLeeDev/hhplus-concert/assets/79134378/87ed0a7f-149c-4153-85fb-e7a617b2c6bd)
