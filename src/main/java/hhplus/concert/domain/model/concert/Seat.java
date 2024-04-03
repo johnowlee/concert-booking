@@ -2,6 +2,9 @@ package hhplus.concert.domain.model.concert;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 public class Seat {
 
@@ -11,10 +14,12 @@ public class Seat {
 
     private String seatNo;
 
-    @OneToOne(mappedBy = "seat")
-    private Booking booking;
+    @OneToMany(mappedBy = "seat")
+    private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id")
     private Concert concert;
+
+
 }

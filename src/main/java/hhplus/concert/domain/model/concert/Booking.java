@@ -5,6 +5,8 @@ import hhplus.concert.domain.model.enums.BookingStatus;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Booking {
@@ -22,7 +24,6 @@ public class Booking {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "seat_id")
-    private Seat seat;
+    @OneToMany(mappedBy = "booking")
+    private List<BookingSeat> bookingSeats = new ArrayList<>();
 }
