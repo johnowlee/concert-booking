@@ -15,8 +15,8 @@
 |Parameter|Description|
 |---|---|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -26,7 +26,12 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|queue_id|Sting|토큰 ID|
+|queueId|Sting|대기열 토큰 ID|
+|position|int|대기 번호|
+|issueDatetime|String|토큰 발행일시|
+|expiryDatetime|String|토큰 만료일시|
+|status|String|대기열 상태<br>(PROCESSING, WAITING, EXPIRED)|
+
 
 ***********************************
 
@@ -42,8 +47,8 @@
 |Parameter|Description|
 |---|---|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -53,12 +58,14 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|concerts|Object[]|콘서트 목록|
-|&nbsp;&nbsp;&nbsp;&nbsp; concert_id|int|콘서트 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; concert_dateTime|int|콘서트 날짜 시간|
-|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seat_id|String|좌석 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seat_status|String|좌석 예약 상태|
+|conerts|Object[]|콘서트 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|String|좌석 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
 
 ## 2-2. 콘서트 예약
 ### REQUEST
@@ -72,8 +79,8 @@
 |---|---|
 |Queue-Token|대기열 Token값|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -85,7 +92,21 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|booking_result|Sting|예약 결과|
+|bookingResult|Sting|예약 결과<br>(SUCCESS, FAILURE)|
+|bookingId|int|예약 ID|
+|bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+|bookingDatetime|String|예약 일시|
+|user|Object|예약자 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp; name|String|예약자명|
+|concert|Object|콘서트 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|int|좌석 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
 
 ***********************************
 
@@ -102,8 +123,8 @@
 |---|---|
 |Queue-Token|대기열 Token값|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -114,7 +135,23 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|payment_result|Sting|결제 결과|
+|paymentResult|Sting|결제 결과</br>(SUCCESS, FAILURE)|
+|booking|Object|예약 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp; bookingResult|Sting|예약 결과<br>(SUCCESS, FAILURE)|
+|&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+|&nbsp;&nbsp;&nbsp;&nbsp; bookingDatetime|String|예약 일시|
+|&nbsp;&nbsp;&nbsp;&nbsp; user|Object|예약자 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name|String|예약자명|
+|&nbsp;&nbsp;&nbsp;&nbsp;concert|Object|콘서트 정보|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|int|좌석 ID|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
+|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
 
 ***********************************
 
@@ -130,8 +167,8 @@
 |Parameter|Description|
 |---|---|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -141,7 +178,8 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|user_id|Sting|유저 ID|
+|userId|Sting|유저 ID|
+|name|Sting|유저명|
 |balance|int|잔액|
 
 ## 4-2. 잔액 충전
@@ -155,8 +193,8 @@
 |Parameter|Description|
 |---|---|
 |Content-Type|<span style="color:red">application/json</span>|
-    
-    
+
+
 #### 요청 파라미터
 |Name|Type|Description|Required|
 |---|---|---|---|
@@ -168,8 +206,10 @@
 #### 응답 객체
 |Name|Type|Description|
 |---|---|---|
-|user_id|Sting|유저 ID|
+|userId|Sting|유저 ID|
+|name|Sting|유저명|
 |balance|int|잔액|
+
 
 ***********************************
 > # Milestone
