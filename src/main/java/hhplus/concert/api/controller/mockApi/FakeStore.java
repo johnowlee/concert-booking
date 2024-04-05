@@ -48,9 +48,7 @@ public class FakeStore {
     }
 
     public QueueResponse createFakeQueue() {
-        LocalDateTime issueDatetime = LocalDateTime.now();
-        return new QueueResponse(UUID.randomUUID().toString(), 0,
-                issueDatetime, issueDatetime.plusMinutes(5), QueueStatus.PROCESSING);
+        return new QueueResponse(UUID.randomUUID().toString(), 0);
     }
 
     public BookingResponse getBookingResponse(QueueTokenRequest queueTokenRequest, BookingRequest bookingRequest) {

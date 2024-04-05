@@ -17,8 +17,7 @@ public class Queue {
     private User user;
 
     private long position;
-    private LocalDateTime issueDatetime;
-    private LocalDateTime expiryDatetime;
+    private LocalDateTime updateAt;
 
     @Enumerated(EnumType.STRING)
     private QueueStatus status;
