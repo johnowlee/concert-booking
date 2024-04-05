@@ -15,7 +15,7 @@ public class Concert {
     private long id;
 
     private String title;
-    private LocalDateTime concertDatetime;
+    private LocalDateTime concertDateTime;
 
     @OneToMany(mappedBy = "concert")
     private List<Seat> seats = new ArrayList<>();

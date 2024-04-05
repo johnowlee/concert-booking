@@ -4,5 +4,5 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ConcertWithSeatsResponse(long concertId, String title,
-                                       LocalDateTime concertDatetime,
+                                       LocalDateTime concertDateTime,
                                        List<SeatResponse> seats) {}

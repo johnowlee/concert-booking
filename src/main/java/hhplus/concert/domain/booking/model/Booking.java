@@ -17,7 +17,8 @@ public class Booking {
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;
-    private LocalDateTime bookingDatetime;
+    private LocalDateTime bookingDateTime;
+    private String concertTitle;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

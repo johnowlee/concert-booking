@@ -17,7 +17,7 @@ public class BalanceHistory {
 
     @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
-    private LocalDateTime transactionDatetime;
+    private LocalDateTime transactionDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")

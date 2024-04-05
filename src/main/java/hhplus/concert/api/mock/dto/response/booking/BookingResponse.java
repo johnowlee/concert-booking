@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public record BookingResponse(ResponseResult bookingResult,
                               long bookingId,
                               BookingStatus bookingStatus,
-                              LocalDateTime bookingDatetime,
+                              LocalDateTime bookingDateTime,
                               UserResponse user,
                               ConcertWithSeatsResponse concert) {}
