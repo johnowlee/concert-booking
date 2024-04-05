@@ -5,4 +5,4 @@ import java.util.List;
 
 public record ConcertResponse(long concertId, String title,
                               LocalDateTime concertDatetime,
-                              List<SeatResponse> seats) {}
+                              int availableSeatsCount) {}

@@ -8,12 +8,12 @@ import hhplus.concert.api.dto.response.booking.BookingResponse;
 import hhplus.concert.api.dto.response.booking.PaymentResponse;
 import hhplus.concert.api.dto.response.ResponseResult;
 import hhplus.concert.api.dto.response.concert.ConcertResponse;
+import hhplus.concert.api.dto.response.concert.ConcertWithSeatsResponse;
 import hhplus.concert.api.dto.response.concert.ConcertsResponse;
 import hhplus.concert.api.dto.response.concert.SeatResponse;
 import hhplus.concert.api.dto.response.user.QueueResponse;
 import hhplus.concert.api.dto.response.user.UserResponse;
 import hhplus.concert.domain.model.enums.BookingStatus;
-import hhplus.concert.domain.model.enums.QueueStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -27,11 +27,15 @@ public class FakeStore {
     public ConcertsResponse createConcerts() {
 
         List<ConcertResponse> concertsResponses = new ArrayList<>(List.of(
-                new ConcertResponse(1, "concertA", LocalDateTime.now().plusDays(1), createSeats(1)),
-                new ConcertResponse(2, "concertB", LocalDateTime.now().plusDays(2), createSeats(2)),
-                new ConcertResponse(3, "concertC", LocalDateTime.now().plusDays(2), createSeats(3))
+                new ConcertResponse(1, "concertA", LocalDateTime.now().plusDays(1), 50),
+                new ConcertResponse(2, "concertB", LocalDateTime.now().plusDays(2), 50),
+                new ConcertResponse(3, "concertC", LocalDateTime.now().plusDays(2), 50)
         ));
         return new ConcertsResponse(concertsResponses);
+    }
+
+    public ConcertWithSeatsResponse createConcert(long concertId) {
+        return new ConcertWithSeatsResponse(concertId, "concertA", LocalDateTime.now().plusDays(1), createSeats(1));
     }
 
     private static List<SeatResponse> createSeats(int batchNumber) {
@@ -64,7 +68,7 @@ public class FakeStore {
                 BookingStatus.COMPLETE,
                 LocalDateTime.now(),
                 new UserResponse(bookingRequest.userId(), "UserA", 100000),
-                new ConcertResponse(bookingRequest.concertId(),"concertA",LocalDateTime.now().plusDays(5), seatResponse)
+                new ConcertWithSeatsResponse(bookingRequest.concertId(),"concertA",LocalDateTime.now().plusDays(5), seatResponse)
                 );
     }
 
@@ -82,7 +86,7 @@ public class FakeStore {
                     BookingStatus.COMPLETE,
                     LocalDateTime.now(),
                     new UserResponse(paymentRequest.userId(), "UserA", 100000),
-                    new ConcertResponse(10,"concertA",LocalDateTime.now().plusDays(5),seatResponse)
+                    new ConcertWithSeatsResponse(10,"concertA",LocalDateTime.now().plusDays(5),seatResponse)
                 )
         );
     }

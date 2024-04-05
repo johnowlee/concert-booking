@@ -6,6 +6,7 @@ import hhplus.concert.api.dto.request.PaymentRequest;
 import hhplus.concert.api.dto.request.QueueTokenRequest;
 import hhplus.concert.api.dto.response.booking.BookingResponse;
 import hhplus.concert.api.dto.response.booking.PaymentResponse;
+import hhplus.concert.api.dto.response.concert.ConcertWithSeatsResponse;
 import hhplus.concert.api.dto.response.concert.ConcertsResponse;
 import hhplus.concert.api.dto.response.user.QueueResponse;
 import hhplus.concert.api.dto.response.user.UserResponse;
@@ -27,6 +28,11 @@ public class MockQueueController {
     @GetMapping("/concerts")
     public ConcertsResponse concerts() {
         return fakeStore.createConcerts();
+    }
+
+    @GetMapping("/concerts/{id}")
+    public ConcertWithSeatsResponse concerts(@PathVariable long id) {
+        return fakeStore.createConcert(id);
     }
 
     @PostMapping("/booking")

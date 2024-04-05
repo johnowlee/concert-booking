@@ -1,7 +1,7 @@
 package hhplus.concert.api.dto.response.booking;
 
 import hhplus.concert.api.dto.response.ResponseResult;
-import hhplus.concert.api.dto.response.concert.ConcertResponse;
+import hhplus.concert.api.dto.response.concert.ConcertWithSeatsResponse;
 import hhplus.concert.api.dto.response.user.UserResponse;
 import hhplus.concert.domain.model.enums.BookingStatus;
 
@@ -12,4 +12,4 @@ public record BookingResponse(ResponseResult bookingResult,
                               BookingStatus bookingStatus,
                               LocalDateTime bookingDatetime,
                               UserResponse user,
-                              ConcertResponse concert) {}
+                              ConcertWithSeatsResponse concert) {}
