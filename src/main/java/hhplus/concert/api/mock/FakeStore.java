@@ -1,23 +1,21 @@
 package hhplus.concert.api.mock;
 
 import hhplus.concert.api.mock.dto.request.BookingRequest;
-import hhplus.concert.api.mock.dto.request.PaymentRequest;
 import hhplus.concert.api.mock.dto.request.QueueTokenRequest;
 import hhplus.concert.api.mock.dto.request.UserRequest;
-import hhplus.concert.api.mock.dto.response.booking.BookingResponse;
-import hhplus.concert.api.mock.dto.response.booking.PaymentResponse;
+import hhplus.concert.api.mock.dto.response.booking.*;
 import hhplus.concert.api.mock.dto.response.ResponseResult;
-import hhplus.concert.api.mock.dto.response.concert.ConcertResponse;
-import hhplus.concert.api.mock.dto.response.concert.ConcertWithSeatsResponse;
-import hhplus.concert.api.mock.dto.response.concert.ConcertsResponse;
-import hhplus.concert.api.mock.dto.response.concert.SeatResponse;
+import hhplus.concert.api.mock.dto.response.concert.*;
 import hhplus.concert.api.mock.dto.response.user.QueueResponse;
-import hhplus.concert.api.mock.dto.response.user.UserResponse;
+import hhplus.concert.api.mock.dto.response.user.UserDTO;
+import hhplus.concert.api.mock.dto.response.user.UserWithBalanceResponse;
+import hhplus.concert.api.mock.dto.response.user.chargeBalanceResponse;
 import hhplus.concert.domain.booking.model.BookingStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,47 +53,54 @@ public class FakeStore {
         return new QueueResponse(UUID.randomUUID().toString(), 0);
     }
 
-    public BookingResponse getBookingResponse(QueueTokenRequest queueTokenRequest, BookingRequest bookingRequest) {
+    public BookingResultResponse getBookingResponse(QueueTokenRequest queueTokenRequest, long concertId, BookingRequest bookingRequest) {
         // 좌석 정보
-        List<SeatResponse> seatResponse = new ArrayList<>();
-        String[] seats = bookingRequest.seats().split(",");
-        for (int i = 0; i<seats.length; i++) {
-            seatResponse.add(new SeatResponse(i, seats[i], BookingStatus.COMPLETE));
-        }
-        return new BookingResponse(
+        List<String> seatNoList = getSeats(bookingRequest.seats());
+        return new BookingResultResponse(
                 ResponseResult.SUCCESS,
-                1,
-                BookingStatus.COMPLETE,
                 LocalDateTime.now(),
-                new UserResponse(bookingRequest.userId(), "UserA", 100000),
-                new ConcertWithSeatsResponse(bookingRequest.concertId(),"concertA",LocalDateTime.now().plusDays(5), seatResponse)
+                "아무개",
+                new BookingConcert("concertA",LocalDateTime.now().plusDays(5), seatNoList)
                 );
     }
 
-    public PaymentResponse getPaymentResponse(QueueTokenRequest queueTokenRequest, PaymentRequest paymentRequest) {
-        List<SeatResponse> seatResponse = new ArrayList<>();
-        String[] seats = "A_10,A_11".split(",");
-        for (int i = 0; i<seats.length; i++) {
-            seatResponse.add(new SeatResponse(i, seats[i], BookingStatus.COMPLETE));
-        }
-        return new PaymentResponse(
-                ResponseResult.SUCCESS,
-                new BookingResponse(
-                    ResponseResult.SUCCESS,
-                    paymentRequest.bookingId(),
-                    BookingStatus.COMPLETE,
-                    LocalDateTime.now(),
-                    new UserResponse(paymentRequest.userId(), "UserA", 100000),
-                    new ConcertWithSeatsResponse(10,"concertA",LocalDateTime.now().plusDays(5),seatResponse)
-                )
+    private static List<String> getSeats(String seats) {
+        return new ArrayList<>(Arrays.asList(seats.split(",")));
+    }
+
+    public PaymentResponse getPaymentResponse(QueueTokenRequest queueTokenRequest, long bookingId) {
+        return new PaymentResponse(ResponseResult.SUCCESS);
+    }
+
+    public UserWithBalanceResponse getBalance(long id) {
+        return new UserWithBalanceResponse(id, "아무개", 10000);
+    }
+
+    public chargeBalanceResponse chargeBalance(long userId, UserRequest userRequest) {
+        return new chargeBalanceResponse(ResponseResult.SUCCESS, userRequest.balance());
+    }
+
+    public List<BookingsDTO> createBookings(long id) {
+        List<BookingsDTO> objects = new ArrayList<>();
+        objects.add(new BookingsDTO(
+                new BookingDTO(1, BookingStatus.INCOMPLETE, LocalDateTime.now().plusDays(2)),
+                new BookingConcert("concertA", LocalDateTime.now().plusDays(5), getSeats("A_13,B_22,B_23"))
+        ));
+        objects.add(new BookingsDTO(
+                new BookingDTO(2, BookingStatus.COMPLETE, LocalDateTime.now().plusDays(8)),
+                new BookingConcert("concertC", LocalDateTime.now().plusDays(5), getSeats("A_4,A_5"))
+        ));
+        return objects;
+    }
+
+    public BookingResponse createBooking(long userId, long bookingId) {
+        ArrayList<SeatDTO> seats = new ArrayList<>();
+        seats.add(new SeatDTO(1, "A_3"));
+        seats.add(new SeatDTO(2, "A_4"));
+        return new BookingResponse(
+                new BookingDTO(bookingId, BookingStatus.INCOMPLETE, LocalDateTime.now().minusDays(2)),
+                new UserDTO(userId, "userA"),
+                new ConcertDTO(1, "concertA", LocalDateTime.now().plusDays(3), seats)
         );
-    }
-
-    public UserResponse getBalance(long id) {
-        return new UserResponse(id, "아무개", 10000);
-    }
-
-    public UserResponse chargeBalance(UserRequest userRequest) {
-        return new UserResponse(userRequest.userId(), "아무개", userRequest.balance());
     }
 }
