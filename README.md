@@ -7,208 +7,280 @@
 # 1. 대기열 토큰
 ## 1-1. 토큰 조회
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|GET|/queue/{userId}|
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Content-Type|<span style="color:red">application/json</span>|
+ - #### Method
+   |Method|URL|
+   |---|---|
+   |GET|/queue/{userId}|
+  
+ - #### Header
+   |Parameter|Description|
+   |---|---|
+   |Content-Type|<span style="color:red">application/json</span>|
 
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|userId|int|유저의 ID|필수|
+ - #### Path Parameter
+   |Name|Type|Description|Required|
+   |---|---|---|---|
+   |userId|int|유저의 ID|필수|
+   <br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|queueId|Sting|대기열 토큰 ID|
-|position|int|대기 번호|
-|issueDatetime|String|토큰 발행일시|
-|expiryDatetime|String|토큰 만료일시|
-|status|String|대기열 상태<br>(PROCESSING, WAITING, EXPIRED)|
+  - |Name|Type|Description|
+  	|---|---|---|
+  	|queueId|Sting|대기열 토큰 ID|
+  	|position|int|대기 번호|
 
 
 ***********************************
 
-# 2. 예약
-## 2-1. 콘서트 조회
+# 2. 콘서트
+## 2-1. 콘서트 목록 조회
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|GET|/concerts|
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/concerts|
 
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Content-Type|<span style="color:red">application/json</span>|
-
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|-|-|-|-|
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+<br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|conerts|Object[]|콘서트 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
-|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
-|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|String|좌석 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
+  - |Name|Type|Description|
+	|---|---|---|
+	|conerts|Object[]|콘서트 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+	|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+	|&nbsp;&nbsp;&nbsp;&nbsp; availableSeatsCount|int|잔여좌석 수|
+    <br>
 
-## 2-2. 콘서트 예약
+## 2-2. 콘서트 상세 조회(좌석)
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|POST|/booking|
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/concerts/{concertId}|
 
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Queue-Token|대기열 Token값|
-|Content-Type|<span style="color:red">application/json</span>|
-
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|user_id|int|유저의 ID|필수|
-|concert_id|int|콘서트 ID|필수|
-|seat_no|String|좌석번호<br>하나 이상 요청<br>둘 이상 시 쉼표로 구분<br> 예) <span style="color:red">10,11</span> |필수|
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+    
+  - #### Path Parameter
+ 	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|concertId|int|콘서트 ID|필수|
+	<br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|bookingResult|Sting|예약 결과<br>(SUCCESS, FAILURE)|
-|bookingId|int|예약 ID|
-|bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
-|bookingDatetime|String|예약 일시|
-|user|Object|예약자 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; name|String|예약자명|
-|concert|Object|콘서트 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
-|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
-|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|int|좌석 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
+  - |Name|Type|Description|
+	|---|---|---|
+	|concertId|int|콘서트 ID|
+	|title|String|콘서트명|
+	|concertDateTime|String|콘서트 일시|
+	|seats|Object[]|좌석정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; seatId|String|좌석 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
+	|&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
+	<br>
+
+## 2-3. 콘서트 예약
+### REQUEST
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|POST|/concerts/{concertId}/booking|
+
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Queue-Token|대기열 Token값|
+	|Content-Type|<span style="color:red">application/json</span>|
+        
+  - #### Path Parameter
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|concertId|int|콘서트 ID|필수|
+
+  - #### Body
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|seat_no|String|좌석번호<br>하나 이상 요청<br>둘 이상 시 쉼표로 구분<br>	 예) <span style="color:red">10,11</span> |필수|
+	<br>
+
+### RESPONSE
+  - |Name|Type|Description|
+	|---|---|---|
+	|bookingResult|Sting|예약 결과<br>(SUCCESS, FAILURE)|
+	|bookingDateTime|String|예약 일시|
+	|bookingUserName|String|예약자명|
+	|concert|Object|콘서트 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+	|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+	|&nbsp;&nbsp;&nbsp;&nbsp; seats|String[]|좌석번호|
+	
 
 ***********************************
 
-# 3. 결제
-## 3-1. 결제
+# 3. 예약
+
+## 3-1. 예약 목록 조회
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|POST|/payment|
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/users/{userId}/bookings|
 
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Queue-Token|대기열 Token값|
-|Content-Type|<span style="color:red">application/json</span>|
-
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|user_id|int|유저의 ID|필수|
-|booking_id|int|예약 ID|필수|
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+  - #### Path Parameter
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|userId|int|유저의 ID|필수|
+	<br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|paymentResult|Sting|결제 결과</br>(SUCCESS, FAILURE)|
-|booking|Object|예약 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp; bookingResult|Sting|예약 결과<br>(SUCCESS, FAILURE)|
-|&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
-|&nbsp;&nbsp;&nbsp;&nbsp; bookingDatetime|String|예약 일시|
-|&nbsp;&nbsp;&nbsp;&nbsp; user|Object|예약자 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name|String|예약자명|
-|&nbsp;&nbsp;&nbsp;&nbsp;concert|Object|콘서트 정보|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|int|좌석 ID|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
-|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; status|String|좌석 예약 상태|
+  - |Name|Type|Description|
+	|---|---|---|
+	|bookings|Object[]|예약 목록 정보|
+    |&nbsp;&nbsp;&nbsp;&nbsp; booking|Object|예약 목록|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingDateTime|String|예약 일시|
+    |&nbsp;&nbsp;&nbsp;&nbsp; bookingConcert|Object|콘서트 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seats|String[]|좌석정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석번호|
+	<br>
+
+## 3-2. 예약 상세 조회
+### REQUEST
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/users/{userId}/bookings/{bookingId}|
+
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+    
+  - #### Path Parameter
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|userId|int|유저 ID|필수|
+	|bookingId|int|예약 ID|필수|
+	<br>
+
+### RESPONSE
+  - |Name|Type|Description|
+	|---|---|---|
+    |booking|Object|예약 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+	|&nbsp;&nbsp;&nbsp;&nbsp; bookingDateTime|String|예약 일시|
+	|bookingUser|Object|예약자 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp; name|String|예약자명|
+	|bookingConcert|Object|콘서트 정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp; concertId|int|콘서트 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
+	|&nbsp;&nbsp;&nbsp;&nbsp; concertDateTime|String|콘서트 일시|
+	|&nbsp;&nbsp;&nbsp;&nbsp; seats|Object[]|좌석정보|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatId|int|좌석 ID|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatNo|String|좌석 번호|
+<br>
+
+## 3-3. 예약 결제
+### REQUEST
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/bookings/{bookingId}/payment|
+
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Queue-Token|대기열 Token값|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+  - #### Path Parameter
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|bookingId|int|예약 ID|필수|
+	<br>
+
+### RESPONSE
+  - |Name|Type|Description|
+	|---|---|---|
+	|paymentResult|Sting|결제 결과</br>(SUCCESS, FAILURE)|
 
 ***********************************
 
 # 4. 잔액
 ## 4-1. 잔액 조회
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|GET|/balance/{userId}|
-
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Content-Type|<span style="color:red">application/json</span>|
-
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|userId|int|유저의 ID|필수|
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|GET|/balance/{userId}|
+	
+  - #### Header
+  	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+  - #### Path Parameter
+  	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|userId|int|유저의 ID|필수|
+	<br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|userId|Sting|유저 ID|
-|name|Sting|유저명|
-|balance|int|잔액|
+  - |Name|Type|Description|
+	|---|---|---|
+	|userId|Sting|유저 ID|
+	|name|Sting|유저명|
+	|balance|int|잔액|
+	<br>
 
 ## 4-2. 잔액 충전
 ### REQUEST
-#### 호출방식
-|Method|URL|
-|---|---|
-|POST|/balance|
-
-#### 요청 헤더
-|Parameter|Description|
-|---|---|
-|Content-Type|<span style="color:red">application/json</span>|
-
-
-#### 요청 파라미터
-|Name|Type|Description|Required|
-|---|---|---|---|
-|user_id|int|유저 ID|필수|
-|balance|int|충전금액|필수|
-
+  - #### Method
+  	|Method|URL|
+	|---|---|
+	|POST|/balance/{userId}|
+	
+  - #### Header
+	|Parameter|Description|
+	|---|---|
+	|Content-Type|<span style="color:red">application/json</span>|
+    
+  - #### Path Parameter
+	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|userId|int|유저 ID|필수|
+    
+  - #### Body
+	|Name|Type|Description|Required|
+	|---|---|---|---|
+	|balance|int|충전금액|필수|
+	<br>
 
 ### RESPONSE
-#### 응답 객체
-|Name|Type|Description|
-|---|---|---|
-|userId|Sting|유저 ID|
-|name|Sting|유저명|
-|balance|int|잔액|
+  - |Name|Type|Description|
+	|---|---|---|
+	|chargeResult|Sting|충전결과<br>(SUCCESS, FAILURE)|
+	|balance|int|잔액|
+
 
 
 ***********************************
@@ -220,7 +292,7 @@
 
 > # Milestone
 
-![image](https://github.com/WonhoLeeDev/hhplus-concert/assets/79134378/87ed0a7f-149c-4153-85fb-e7a617b2c6bd)
+https://github.com/WonhoLeeDev/hhplus-concert/milestones?with_issues=no
 
 
 
