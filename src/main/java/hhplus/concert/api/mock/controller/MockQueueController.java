@@ -20,7 +20,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/mock")
+//@RequestMapping("/mock")
 public class MockQueueController {
 
     private final FakeStore fakeStore;
