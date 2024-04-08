@@ -19,8 +19,8 @@ public class Seat {
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "concert_id")
-    private Concert concert;
+    @JoinColumn(name = "concert_option_id")
+    private ConcertOption concertOption;
 
 
 }

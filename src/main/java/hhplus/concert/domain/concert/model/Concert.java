@@ -15,8 +15,8 @@ public class Concert {
     private long id;
 
     private String title;
-    private LocalDateTime concertDateTime;
+    private String organizer;
 
     @OneToMany(mappedBy = "concert")
-    private List<Seat> seats = new ArrayList<>();
+    private List<ConcertOption> concertOptions = new ArrayList<>();
 }
