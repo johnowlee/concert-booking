@@ -2,6 +2,7 @@ package hhplus.concert.domain.user.model;
 
 import hhplus.concert.domain.balance.model.BalanceHistory;
 import hhplus.concert.domain.booking.model.Booking;
+import hhplus.concert.domain.payment.model.Payment;
 import hhplus.concert.domain.queue.model.Queue;
 import jakarta.persistence.*;
 
@@ -27,4 +28,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Payment> payments = new ArrayList<>();
 }

@@ -1,5 +1,6 @@
 package hhplus.concert.domain.booking.model;
 
+import hhplus.concert.domain.payment.model.Payment;
 import hhplus.concert.domain.user.model.User;
 import jakarta.persistence.*;
 
@@ -26,4 +27,7 @@ public class Booking {
 
     @OneToMany(mappedBy = "booking")
     private List<BookingSeat> bookingSeats = new ArrayList<>();
+
+    @OneToOne(mappedBy = "booking")
+    private Payment payment;
 }
