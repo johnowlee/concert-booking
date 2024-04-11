@@ -12,7 +12,7 @@ public class ConcertOption {
     @Id
     @GeneratedValue
     @Column(name = "concert_option_id")
-    private long id;
+    private Long id;
 
     private LocalDateTime concertDateTime;
     private String place;

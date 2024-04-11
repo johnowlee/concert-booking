@@ -1,9 +1,10 @@
 package hhplus.concert.api.balance.controller;
 
-import hhplus.concert.api.fakeStore.FakeStore;
-import hhplus.concert.api.fakeStore.dto.request.UserRequest;
-import hhplus.concert.api.fakeStore.dto.response.user.UserWithBalanceResponse;
-import hhplus.concert.api.fakeStore.dto.response.user.chargeBalanceResponse;
+import hhplus.concert.api.balance.dto.request.BalanceChargeRequest;
+import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
+import hhplus.concert.api.balance.dto.response.BalanceResponse;
+import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
+import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,15 +13,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/balance")
 public class BalanceController {
 
-    private final FakeStore fakeStore;
+    private final GetBalanceUseCase getBalanceUseCase;
+    private final ChargeBalanceUseCase chargeBalanceUseCase;
 
-    @GetMapping("{id}")
-    public UserWithBalanceResponse balance(@PathVariable long id) {
-        return fakeStore.getBalance(id);
+    @GetMapping("{userId}")
+    public BalanceResponse balance(@PathVariable Long userId) {
+        return getBalanceUseCase.excute(userId);
     }
 
-    @PostMapping("{id}")
-    public chargeBalanceResponse booking(@PathVariable long id, @RequestBody UserRequest userRequest) {
-        return fakeStore.chargeBalance(id, userRequest);
+    @PostMapping("{userId}")
+    public BalanceChargeResponse charge(@PathVariable Long userId, @RequestBody BalanceChargeRequest balanceChargeRequest) {
+        return chargeBalanceUseCase.excute(userId, balanceChargeRequest.balance());
     }
 }

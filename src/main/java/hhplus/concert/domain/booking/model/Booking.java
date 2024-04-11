@@ -1,7 +1,7 @@
 package hhplus.concert.domain.booking.model;
 
 import hhplus.concert.domain.payment.model.Payment;
-import hhplus.concert.domain.user.model.User;
+import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -14,7 +14,7 @@ public class Booking {
     @Id
     @GeneratedValue
     @Column(name = "booking_id")
-    private long id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     private BookingStatus bookingStatus;

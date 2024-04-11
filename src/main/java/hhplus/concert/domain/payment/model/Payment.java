@@ -1,7 +1,7 @@
 package hhplus.concert.domain.payment.model;
 
 import hhplus.concert.domain.booking.model.Booking;
-import hhplus.concert.domain.user.model.User;
+import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -12,7 +12,7 @@ public class Payment {
     @Id
     @GeneratedValue
     @Column(name = "payment_id")
-    private long id;
+    private Long id;
 
     private LocalDateTime paymentDateTime;
 

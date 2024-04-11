@@ -16,7 +16,7 @@ public class QueueController {
     private final FakeStore fakeStore;
 
     @GetMapping("{id}")
-    public QueueResponse queue(@PathVariable long id) {
+    public QueueResponse queue(@PathVariable Long id) {
         return fakeStore.createFakeQueue();
     }
 

@@ -12,7 +12,7 @@ public class Concert {
     @Id
     @GeneratedValue
     @Column(name = "concert_id")
-    private long id;
+    private Long id;
 
     private String title;
     private String organizer;

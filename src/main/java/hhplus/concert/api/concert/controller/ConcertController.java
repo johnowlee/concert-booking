@@ -22,13 +22,13 @@ public class ConcertController {
     }
 
     @GetMapping("/{id}")
-    public ConcertWithSeatsResponse concert(@PathVariable long id) {
+    public ConcertWithSeatsResponse concert(@PathVariable Long id) {
         return fakeStore.createConcert(id);
     }
 
     @PostMapping("/{id}/booking")
     public BookingResultResponse ConcertBooking(@RequestHeader("Queue-Token") QueueTokenRequest queueTokenRequest,
-                                         @PathVariable long id,
+                                         @PathVariable Long id,
                                          @RequestBody BookingRequest bookingRequest) {
         return fakeStore.getBookingResponse(queueTokenRequest, id, bookingRequest);
     }

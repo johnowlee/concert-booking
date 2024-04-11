@@ -1,6 +1,6 @@
-package hhplus.concert.domain.balance.model;
+package hhplus.concert.domain.balance.models;
 
-import hhplus.concert.domain.user.model.User;
+import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -11,7 +11,7 @@ public class BalanceHistory {
     @Id
     @GeneratedValue
     @Column(name = "balance_history_id")
-    private long id;
+    private Long id;
 
     private long amount;
 

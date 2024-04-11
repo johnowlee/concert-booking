@@ -18,18 +18,18 @@ public class BookingController {
     private final FakeStore fakeStore;
 
     @GetMapping("/users/{id}")
-    public List<BookingsDTO> bookings(@PathVariable long id) {
+    public List<BookingsDTO> bookings(@PathVariable Long id) {
         return fakeStore.createBookings(id);
     }
 
     @GetMapping("{id}")
-    public BookingResponse booking(@PathVariable long id) {
+    public BookingResponse booking(@PathVariable Long id) {
         return fakeStore.createBooking(id);
     }
 
     @GetMapping("{id}/payment")
     public PaymentResponse booking(@RequestHeader("Queue-Token") QueueTokenRequest queueTokenRequest,
-                                   @PathVariable long id) {
+                                   @PathVariable Long id) {
         return fakeStore.getPaymentResponse(queueTokenRequest, id);
     }
 }

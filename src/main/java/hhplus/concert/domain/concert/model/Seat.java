@@ -11,7 +11,7 @@ public class Seat {
 
     @Id @GeneratedValue
     @Column(name = "seat_id")
-    private long id;
+    private Long id;
 
     private String seatNo;
 

@@ -9,7 +9,7 @@ public class BookingSeat {
     @Id
     @GeneratedValue
     @Column(name = "booking_seat_id")
-    private long id;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
