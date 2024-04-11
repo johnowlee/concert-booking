@@ -1,13 +1,14 @@
 package hhplus.concert.domain.payment.model;
 
-import hhplus.concert.domain.booking.model.Booking;
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.booking.model.BookingEntity;
+import hhplus.concert.domain.user.models.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Payment {
+@Table(name = "payment")
+public class PaymentEntity {
 
     @Id
     @GeneratedValue
@@ -20,9 +21,9 @@ public class Payment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
-    private Booking booking;
+    private BookingEntity bookingEntity;
 }

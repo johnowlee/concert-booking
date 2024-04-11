@@ -1,10 +1,11 @@
 package hhplus.concert.domain.booking.model;
 
-import hhplus.concert.domain.concert.model.Seat;
+import hhplus.concert.domain.concert.models.SeatEntity;
 import jakarta.persistence.*;
 
 @Entity
-public class BookingSeat {
+@Table(name = "booking_seat")
+public class BookingSeatEntity {
 
     @Id
     @GeneratedValue
@@ -13,9 +14,9 @@ public class BookingSeat {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
-    private Booking booking;
+    private BookingEntity bookingEntity;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "seat_id")
-    private Seat seat;
+    private SeatEntity seatEntity;
 }

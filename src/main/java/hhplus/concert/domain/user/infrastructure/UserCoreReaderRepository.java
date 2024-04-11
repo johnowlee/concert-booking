@@ -1,6 +1,6 @@
 package hhplus.concert.domain.user.infrastructure;
 
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.user.models.UserEntity;
 import hhplus.concert.domain.user.repositories.UserReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -14,7 +14,7 @@ public class UserCoreReaderRepository implements UserReaderRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public Optional<User> findByUserId(Long userId) {
+    public Optional<UserEntity> findByUserId(Long userId) {
         return userJpaRepository.findById(userId);
     }
 

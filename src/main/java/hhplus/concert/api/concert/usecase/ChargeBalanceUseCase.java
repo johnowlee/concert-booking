@@ -1,15 +1,13 @@
-package hhplus.concert.api.balance.usecase;
+package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;
 import hhplus.concert.domain.user.models.UserEntity;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 
-@Service
 @RequiredArgsConstructor
 public class ChargeBalanceUseCase {
 

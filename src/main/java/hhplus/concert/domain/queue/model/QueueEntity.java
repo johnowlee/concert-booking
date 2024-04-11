@@ -1,12 +1,13 @@
 package hhplus.concert.domain.queue.model;
 
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.user.models.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class Queue {
+@Table(name = "queue")
+public class QueueEntity {
 
     @Id
     @Column(name = "queue_id")
@@ -14,7 +15,7 @@ public class Queue {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
     private long position;
     private LocalDateTime updateAt;

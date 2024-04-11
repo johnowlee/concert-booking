@@ -1,10 +1,8 @@
 package hhplus.concert.domain.user.repositories;
 
-import hhplus.concert.domain.user.models.User;
-
-import java.util.Optional;
+import hhplus.concert.domain.user.models.UserEntity;
 
 public interface UserWriterRepository {
 
-    User save(User user);
+    UserEntity save(UserEntity userEntity);
 }

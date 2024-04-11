@@ -1,7 +1,7 @@
 package hhplus.concert.domain.booking.model;
 
-import hhplus.concert.domain.payment.model.Payment;
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.payment.model.PaymentEntity;
+import hhplus.concert.domain.user.models.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Booking {
+@Table(name = "booking")
+public class BookingEntity {
 
     @Id
     @GeneratedValue
@@ -23,11 +24,11 @@ public class Booking {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 
-    @OneToMany(mappedBy = "booking")
-    private List<BookingSeat> bookingSeats = new ArrayList<>();
+    @OneToMany(mappedBy = "bookingEntity")
+    private List<BookingSeatEntity> bookingSeatEntities = new ArrayList<>();
 
-    @OneToOne(mappedBy = "booking")
-    private Payment payment;
+    @OneToOne(mappedBy = "bookingEntity")
+    private PaymentEntity paymentEntity;
 }

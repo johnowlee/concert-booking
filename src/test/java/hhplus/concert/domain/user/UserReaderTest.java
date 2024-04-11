@@ -1,11 +1,5 @@
 package hhplus.concert.domain.user;
 
-import hhplus.concert.domain.user.components.UserReader;
-import hhplus.concert.domain.user.models.User;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-
 public class UserReaderTest {
 
 

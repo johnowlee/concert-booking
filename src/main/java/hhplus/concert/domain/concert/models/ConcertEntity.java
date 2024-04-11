@@ -1,13 +1,13 @@
-package hhplus.concert.domain.concert.model;
+package hhplus.concert.domain.concert.models;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class Concert {
+@Table(name = "concert")
+public class ConcertEntity {
 
     @Id
     @GeneratedValue
@@ -17,6 +17,6 @@ public class Concert {
     private String title;
     private String organizer;
 
-    @OneToMany(mappedBy = "concert")
-    private List<ConcertOption> concertOptions = new ArrayList<>();
+    @OneToMany(mappedBy = "concertEntity")
+    private List<ConcertOptionEntity> concertOptionEntities = new ArrayList<>();
 }

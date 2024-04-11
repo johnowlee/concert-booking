@@ -1,12 +1,13 @@
 package hhplus.concert.domain.balance.models;
 
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.user.models.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-public class BalanceHistory {
+@Table(name = "balance_history")
+public class BalanceHistoryEntity {
 
     @Id
     @GeneratedValue
@@ -21,5 +22,5 @@ public class BalanceHistory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private User user;
+    private UserEntity userEntity;
 }

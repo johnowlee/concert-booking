@@ -1,11 +1,11 @@
 package hhplus.concert.domain.user.repositories;
 
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.domain.user.models.UserEntity;
 
 import java.util.Optional;
 
 public interface UserReaderRepository {
 
-    Optional<User> findByUserId(Long userId);
+    Optional<UserEntity> findByUserId(Long userId);
 
 }
