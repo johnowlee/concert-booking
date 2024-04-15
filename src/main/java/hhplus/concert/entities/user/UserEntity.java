@@ -10,14 +10,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
-@DynamicUpdate
+//@DynamicUpdate
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
 public class UserEntity {
@@ -57,21 +56,10 @@ public class UserEntity {
         this.paymentEntities = paymentEntities;
     }
 
-    public void chargeBalance(long amount) {
-        if (amount <= 0 ) {
-            throw new IllegalArgumentException("충전금액은 0보다 커야합니다.");
-        }
-        this.balance += amount;
-    }
 
-    public void useBalance(long amount) {
-        if (this.balance < amount) {
-            throw new IllegalStateException("잔액이 부족합니다.");
-        }
-        if (amount <= 0 ) {
-            throw new IllegalArgumentException("사용금액은 0보다 커야합니다.");
-        }
-        this.balance -= amount;
+    public void updateUserEntity(User user) {
+        this.name = user.getName();
+        this.balance = user.getBalance();
     }
 
     public User toUser() {

@@ -25,18 +25,10 @@ public class UserCoreWriterRepository implements UserWriterRepository {
     }
 
     @Override
-    public User chargeBalance(Long userId, long amount) {
-        UserEntity userEntity = userJpaRepository.findById(userId)
+    public User update(User user) {
+        UserEntity userEntity = userJpaRepository.findById(user.getId())
                 .orElseThrow(NoSuchElementException::new);
-        userEntity.chargeBalance(amount);
-        return userEntity.toUser();
-    }
-
-    @Override
-    public User useBalance(Long userId, long amount) {
-        UserEntity userEntity = userJpaRepository.findById(userId)
-                .orElseThrow(NoSuchElementException::new);
-        userEntity.useBalance(amount);
+        userEntity.updateUserEntity(user);
         return userEntity.toUser();
     }
 }

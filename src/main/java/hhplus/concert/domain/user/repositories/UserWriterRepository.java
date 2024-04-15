@@ -6,7 +6,5 @@ public interface UserWriterRepository {
 
     User save(User user);
 
-    User chargeBalance(Long userId, long amount);
-
-    User useBalance(Long userId, long amount);
+    User update(User user);
 }

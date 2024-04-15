@@ -17,8 +17,7 @@ public class UserWriter {
         return userWriterRepository.save(user);
     }
 
-    public User chargeBalance(Long userId, long amount) {
-        return userWriterRepository.chargeBalance(userId, amount);
+    public User update(User user) {
+        return userWriterRepository.update(user);
     }
-
 }

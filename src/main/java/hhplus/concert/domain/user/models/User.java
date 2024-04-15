@@ -35,4 +35,21 @@ public class User {
         this.bookings = bookings;
         this.payments = payments;
     }
+
+    public void chargeBalance(long amount) {
+        if (amount <= 0 ) {
+            throw new IllegalArgumentException("충전금액은 0보다 커야합니다.");
+        }
+        this.balance += amount;
+    }
+
+    public void useBalance(long amount) {
+        if (this.balance < amount) {
+            throw new IllegalStateException("잔액이 부족합니다.");
+        }
+        if (amount <= 0 ) {
+            throw new IllegalArgumentException("사용금액은 0보다 커야합니다.");
+        }
+        this.balance -= amount;
+    }
 }
