@@ -1,19 +1,20 @@
 package hhplus.concert.api.concert.usecase;
 
-import hhplus.concert.api.balance.dto.response.BalanceResponse;
+import hhplus.concert.api.fakeStore.dto.response.concert.ConcertResponse;
 import hhplus.concert.domain.concert.components.ConcertReader;
-import hhplus.concert.domain.user.components.UserReader;
+import hhplus.concert.domain.concert.models.Concert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class GetConcertsUseCase {
 
-//    private final ConcertReader concertReader;
-//
-//    public BalanceResponse excute(Long userId) {
-////        return concertReader.getConcerts();
-//        return null;
-//    }
+    private final ConcertReader concertReader;
+
+    public List<Concert> excute() {
+        return concertReader.getConcerts();
+    }
 }

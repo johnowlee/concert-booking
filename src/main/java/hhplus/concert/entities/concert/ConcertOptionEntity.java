@@ -1,12 +1,18 @@
 package hhplus.concert.entities.concert;
 
+import hhplus.concert.domain.concert.models.Concert;
+import hhplus.concert.domain.concert.models.ConcertOption;
+import hhplus.concert.domain.concert.models.Seat;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
+@Getter
 @Table(name = "concert_option")
 public class ConcertOptionEntity {
 
@@ -24,4 +30,22 @@ public class ConcertOptionEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_id")
     private ConcertEntity concertEntity;
+
+    public ConcertOption toConcertOption() {
+
+
+        return ConcertOption.builder()
+                .id(id)
+                .concertDateTime(concertDateTime)
+                .place(place)
+                .seats(getSeats())
+                .build();
+    }
+
+    private List<Seat> getSeats() {
+        return seatEntities.stream()
+                .map(se -> se.toSeat())
+                .collect(Collectors.toList());
+    }
+
 }
