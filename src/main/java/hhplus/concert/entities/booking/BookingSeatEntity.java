@@ -1,6 +1,6 @@
-package hhplus.concert.domain.booking.model;
+package hhplus.concert.entities.booking;
 
-import hhplus.concert.domain.concert.models.SeatEntity;
+import hhplus.concert.entities.concert.SeatEntity;
 import jakarta.persistence.*;
 
 @Entity

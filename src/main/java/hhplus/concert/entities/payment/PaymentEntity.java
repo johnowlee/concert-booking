@@ -1,7 +1,7 @@
-package hhplus.concert.domain.payment.model;
+package hhplus.concert.entities.payment;
 
-import hhplus.concert.domain.booking.model.BookingEntity;
-import hhplus.concert.domain.user.models.UserEntity;
+import hhplus.concert.entities.booking.BookingEntity;
+import hhplus.concert.entities.user.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

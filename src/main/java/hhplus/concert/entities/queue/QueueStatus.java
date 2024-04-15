@@ -1,4 +1,4 @@
-package hhplus.concert.domain.queue.model;
+package hhplus.concert.entities.queue;
 
 public enum QueueStatus {
     PROCESSING, WAITING, EXPIRED

@@ -10,7 +10,7 @@ import hhplus.concert.api.fakeStore.dto.response.user.QueueResponse;
 import hhplus.concert.api.fakeStore.dto.response.user.UserDTO;
 import hhplus.concert.api.fakeStore.dto.response.user.UserWithBalanceResponse;
 import hhplus.concert.api.fakeStore.dto.response.user.chargeBalanceResponse;
-import hhplus.concert.domain.booking.model.BookingStatus;
+import hhplus.concert.entities.booking.BookingStatus;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

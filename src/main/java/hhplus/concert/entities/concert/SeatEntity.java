@@ -1,6 +1,6 @@
-package hhplus.concert.domain.concert.models;
+package hhplus.concert.entities.concert;
 
-import hhplus.concert.domain.booking.model.BookingSeatEntity;
+import hhplus.concert.entities.booking.BookingSeatEntity;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

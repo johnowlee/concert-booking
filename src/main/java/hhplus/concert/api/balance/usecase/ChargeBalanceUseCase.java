@@ -3,7 +3,7 @@ package hhplus.concert.api.balance.usecase;
 import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;
-import hhplus.concert.domain.user.models.UserEntity;
+import hhplus.concert.entities.user.UserEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

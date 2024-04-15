@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetConcertsUseCase {
 
-    private final ConcertReader concertReader;
-
-    public BalanceResponse excute(Long userId) {
-//        return concertReader.getConcerts();
-        return null;
-    }
+//    private final ConcertReader concertReader;
+//
+//    public BalanceResponse excute(Long userId) {
+////        return concertReader.getConcerts();
+//        return null;
+//    }
 }

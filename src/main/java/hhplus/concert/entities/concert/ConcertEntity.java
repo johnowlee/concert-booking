@@ -1,11 +1,13 @@
-package hhplus.concert.domain.concert.models;
+package hhplus.concert.entities.concert;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "concert")
 public class ConcertEntity {
 

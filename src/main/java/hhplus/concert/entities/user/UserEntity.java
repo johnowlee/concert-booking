@@ -1,9 +1,9 @@
-package hhplus.concert.domain.user.models;
+package hhplus.concert.entities.user;
 
-import hhplus.concert.domain.balance.models.BalanceHistoryEntity;
-import hhplus.concert.domain.booking.model.BookingEntity;
-import hhplus.concert.domain.payment.model.PaymentEntity;
-import hhplus.concert.domain.queue.model.QueueEntity;
+import hhplus.concert.entities.balance.BalanceHistoryEntity;
+import hhplus.concert.entities.booking.BookingEntity;
+import hhplus.concert.entities.payment.PaymentEntity;
+import hhplus.concert.entities.queue.QueueEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

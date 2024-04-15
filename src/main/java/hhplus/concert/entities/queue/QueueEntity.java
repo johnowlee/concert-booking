@@ -1,6 +1,6 @@
-package hhplus.concert.domain.queue.model;
+package hhplus.concert.entities.queue;
 
-import hhplus.concert.domain.user.models.UserEntity;
+import hhplus.concert.entities.user.UserEntity;
 import jakarta.persistence.*;
 
 import java.time.LocalDateTime;

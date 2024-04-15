@@ -1,6 +1,6 @@
 package hhplus.concert.domain.user.infrastructure;
 
-import hhplus.concert.domain.user.models.UserEntity;
+import hhplus.concert.entities.user.UserEntity;
 import hhplus.concert.domain.user.repositories.UserReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;

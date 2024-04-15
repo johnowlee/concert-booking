@@ -1,6 +1,6 @@
 package hhplus.concert.api.fakeStore.dto.response.booking;
 
-import hhplus.concert.domain.booking.model.BookingStatus;
+import hhplus.concert.entities.booking.BookingStatus;
 
 import java.time.LocalDateTime;
 

@@ -1,4 +1,4 @@
-package hhplus.concert.domain.balance.models;
+package hhplus.concert.entities.balance;
 
 public enum TransactionType {
     CHARGE, USE
