@@ -1,11 +1,11 @@
 package hhplus.concert.domain.user.infrastructure;
 
-import hhplus.concert.entities.user.UserEntity;
+import hhplus.concert.domain.user.models.User;
 import hhplus.concert.domain.user.repositories.UserReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 @Repository
 @RequiredArgsConstructor
@@ -14,8 +14,10 @@ public class UserCoreReaderRepository implements UserReaderRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public Optional<UserEntity> findByUserId(Long userId) {
-        return userJpaRepository.findById(userId);
+    public User getUserByUserId(Long userId) {
+        return userJpaRepository.findById(userId)
+                .orElseThrow(NoSuchElementException::new)
+                .toUser();
     }
 
 }

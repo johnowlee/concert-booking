@@ -1,18 +1,24 @@
 package hhplus.concert.domain.user.components;
 
-import hhplus.concert.entities.user.UserEntity;
+import hhplus.concert.domain.user.models.User;
 import hhplus.concert.domain.user.repositories.UserWriterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 @RequiredArgsConstructor
+@Transactional
 public class UserWriter {
 
     private final UserWriterRepository userWriterRepository;
 
-    public UserEntity save(UserEntity userEntity) {
-        return userWriterRepository.save(userEntity);
+    public User save(User user) {
+        return userWriterRepository.save(user);
+    }
+
+    public User chargeBalance(Long userId, long amount) {
+        return userWriterRepository.chargeBalance(userId, amount);
     }
 
 }
