@@ -8,20 +8,20 @@
 ## 1-1. 토큰 조회
 ### REQUEST
  - #### Method
-   |Method|URL|
-   |---|---|
-   |GET|/queue/{userId}|
+  |Method|URL|
+  |---|---|
+  |GET|/queue/{userId}|
   
  - #### Header
-   |Parameter|Description|
-   |---|---|
-   |Content-Type|<span style="color:red">application/json</span>|
+  |Parameter|Description|
+  |---|---|
+  |Content-Type|<span style="color:red">application/json</span>|
 
  - #### Path Parameter
-   |Name|Type|Description|Required|
-   |---|---|---|---|
-   |userId|int|유저의 ID|필수|
-   <br>
+  |Name|Type|Description|Required|
+  |---|---|---|---|
+  |userId|int|유저의 ID|필수|
+  <br>
 
 ### RESPONSE
   - |Name|Type|Description|
@@ -132,7 +132,7 @@
   - #### Method
   	|Method|URL|
 	|---|---|
-	|GET|/users/{userId}/bookings|
+	|GET|/bookings/users/{userId}|
 
   - #### Header
   	|Parameter|Description|
@@ -165,7 +165,7 @@
   - #### Method
   	|Method|URL|
 	|---|---|
-	|GET|/users/{userId}/bookings/{bookingId}|
+	|GET|/bookings/{bookingId}|
 
   - #### Header
   	|Parameter|Description|
@@ -176,8 +176,8 @@
   - #### Path Parameter
   	|Name|Type|Description|Required|
 	|---|---|---|---|
-	|userId|int|유저 ID|필수|
-	|bookingId|int|예약 ID|필수|
+    |bookingId|int|예약 ID|필수|
+	
 	<br>
 
 ### RESPONSE
@@ -247,8 +247,6 @@
 ### RESPONSE
   - |Name|Type|Description|
 	|---|---|---|
-	|userId|Sting|유저 ID|
-	|name|Sting|유저명|
 	|balance|int|잔액|
 	<br>
 
@@ -283,6 +281,7 @@
 
 
 
+
 ***********************************
 
 > # ERD
@@ -293,6 +292,13 @@
 > # Milestone
 
 https://github.com/WonhoLeeDev/hhplus-concert/milestones?with_issues=no
+
+***********************************
+
+> # API Swagger UI
+
+![API Swagger UI](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/API%20Swagger%20UI.png)
+
 
 
 
