@@ -15,13 +15,4 @@ class ConcertReaderTest {
     @Autowired
     private ConcertReaderRepository concertReaderRepository;
 
-    @Test
-    void findAllConcertTest() {
-        List<ConcertEntity> concerts = concertReaderRepository.getConcerts();
-    }
-
-    @Test
-    void findAllConcertOptionsTest() {
-        List<ConcertOptionEntity> concertOptions = concertReaderRepository.getConcertOptions();
-    }
 }

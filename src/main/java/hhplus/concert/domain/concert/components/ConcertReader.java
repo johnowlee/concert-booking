@@ -1,8 +1,8 @@
 package hhplus.concert.domain.concert.components;
 
 import hhplus.concert.domain.concert.models.Concert;
+import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.repositories.ConcertReaderRepository;
-import hhplus.concert.entities.concert.ConcertOptionEntity;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,12 @@ public class ConcertReader {
         return concertReaderRepository.getConcerts();
     }
 
-    public List<ConcertOptionEntity> getConcertOptions() {
-        return concertReaderRepository.getConcertOptions();
+    public Concert getConcertById(Long id) {
+        return concertReaderRepository.getConcertById(id);
+//        return concertReaderRepository.getConcerts();
+    }
+
+    public ConcertOption getConcertOptionById(Long id) {
+        return concertReaderRepository.getConcertOptionById(id);
     }
 }

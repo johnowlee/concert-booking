@@ -32,8 +32,6 @@ public class ConcertOptionEntity {
     private ConcertEntity concertEntity;
 
     public ConcertOption toConcertOption() {
-
-
         return ConcertOption.builder()
                 .id(id)
                 .concertDateTime(concertDateTime)
@@ -46,6 +44,16 @@ public class ConcertOptionEntity {
         return seatEntities.stream()
                 .map(se -> se.toSeat())
                 .collect(Collectors.toList());
+    }
+
+    public ConcertOption toConcertOptionWithConcert() {
+        return ConcertOption.builder()
+                .id(id)
+                .concertDateTime(concertDateTime)
+                .place(place)
+                .concert(concertEntity.toConcert())
+                .seats(getSeats())
+                .build();
     }
 
 }

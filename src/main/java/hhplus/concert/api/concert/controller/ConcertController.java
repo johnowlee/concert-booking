@@ -1,39 +1,37 @@
 package hhplus.concert.api.concert.controller;
 
+import hhplus.concert.api.concert.dto.response.ConcertOptionResponse;
+import hhplus.concert.api.concert.dto.response.ConcertResponse;
+import hhplus.concert.api.concert.dto.response.ConcertsResponse;
+import hhplus.concert.api.concert.usecase.GetConcertByIdUseCase;
+import hhplus.concert.api.concert.usecase.GetConcertOptionByIdUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
-import hhplus.concert.api.fakeStore.FakeStore;
-import hhplus.concert.api.fakeStore.dto.request.BookingRequest;
-import hhplus.concert.api.fakeStore.dto.request.QueueTokenRequest;
-import hhplus.concert.api.fakeStore.dto.response.booking.BookingResultResponse;
-import hhplus.concert.api.fakeStore.dto.response.concert.ConcertWithSeatsResponse;
-import hhplus.concert.domain.concert.models.Concert;
+import hhplus.concert.domain.concert.models.ConcertOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/concerts")
 public class ConcertController {
 
-    private final FakeStore fakeStore;
     private final GetConcertsUseCase getConcertsUseCase;
+    private final GetConcertByIdUseCase getConcertByIdUseCase;
+    private final GetConcertOptionByIdUseCase getConcertOptionByIdUseCase;
 
     @GetMapping
-    public List<Concert> concerts() {
+    public ConcertsResponse concerts() {
         return getConcertsUseCase.excute();
     }
 
-    @GetMapping("/{id}")
-    public ConcertWithSeatsResponse concert(@PathVariable Long id) {
-        return fakeStore.createConcert(id);
+    @GetMapping("{id}")
+    public ConcertResponse concert(@PathVariable Long id) {
+        return getConcertByIdUseCase.excute(id);
     }
 
-    @PostMapping("/{id}/booking")
-    public BookingResultResponse ConcertBooking(@RequestHeader("Queue-Token") QueueTokenRequest queueTokenRequest,
-                                         @PathVariable Long id,
-                                         @RequestBody BookingRequest bookingRequest) {
-        return fakeStore.getBookingResponse(queueTokenRequest, id, bookingRequest);
+    @GetMapping("/option/{id}")
+    public ConcertOptionResponse concertOption(@PathVariable Long id) {
+        return getConcertOptionByIdUseCase.excute(id);
     }
+
 }

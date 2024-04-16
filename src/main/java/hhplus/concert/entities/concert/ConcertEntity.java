@@ -25,7 +25,7 @@ public class ConcertEntity {
     @OneToMany(mappedBy = "concertEntity")
     private List<ConcertOptionEntity> concertOptionEntities = new ArrayList<>();
 
-    public Concert toConcert() {
+    public Concert toConcertWithConcertOptions() {
         return Concert.builder()
                 .id(id)
                 .title(title)
@@ -38,5 +38,13 @@ public class ConcertEntity {
         return concertOptionEntities.stream()
                 .map(coe -> coe.toConcertOption())
                 .collect(Collectors.toList());
+    }
+
+    public Concert toConcert() {
+        return Concert.builder()
+                .id(id)
+                .title(title)
+                .organizer(organizer)
+                .build();
     }
 }

@@ -1,22 +1,20 @@
-package hhplus.concert.domain.concert.models;
+package hhplus.concert.api.concert.dto;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
 
 import java.util.List;
 
 @Getter
-public class Concert {
-
+public class ConcertDto {
     private Long concertId;
     private String title;
     private String organizer;
-    private List<ConcertOption> concertOptions;
+    private List<ConcertOptionDto> concertOptions;
 
     @Builder
-    private Concert(Long id, String title, String organizer, @Singular List<ConcertOption> concertOptions) {
-        this.concertId = id;
+    private ConcertDto(Long concertId, String title, String organizer, List<ConcertOptionDto> concertOptions) {
+        this.concertId = concertId;
         this.title = title;
         this.organizer = organizer;
         this.concertOptions = concertOptions;

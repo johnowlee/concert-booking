@@ -30,6 +30,7 @@ public class SeatEntity {
         return Seat.builder()
                 .id(id)
                 .seatNo(seatNo)
+                .bookingStatus(null)
                 .build();
     }
 }

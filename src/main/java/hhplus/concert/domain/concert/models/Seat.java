@@ -8,10 +8,12 @@ public class Seat {
 
     private Long id;
     private String seatNo;
+    private BookingStatus bookingStatus;
 
     @Builder
-    private Seat(Long id, String seatNo) {
+    private Seat(Long id, String seatNo, BookingStatus bookingStatus) {
         this.id = id;
         this.seatNo = seatNo;
+        this.bookingStatus = bookingStatus;
     }
 }
