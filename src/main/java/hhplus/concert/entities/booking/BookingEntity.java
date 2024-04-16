@@ -1,14 +1,18 @@
 package hhplus.concert.entities.booking;
 
+import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.entities.payment.PaymentEntity;
 import hhplus.concert.entities.user.UserEntity;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "booking")
 public class BookingEntity {
 
@@ -31,4 +35,13 @@ public class BookingEntity {
 
     @OneToOne(mappedBy = "bookingEntity")
     private PaymentEntity paymentEntity;
+
+    public Booking toBooking() {
+        return Booking.builder()
+                .id(id)
+                .bookingStatus(bookingStatus)
+                .bookingDateTime(bookingDateTime)
+                .concertTitle(concertTitle)
+                .build();
+    }
 }

@@ -1,8 +1,8 @@
 package hhplus.concert.domain.user.models;
 
 import hhplus.concert.domain.balance.models.BalanceHistory;
-import hhplus.concert.domain.booking.model.Booking;
-import hhplus.concert.domain.payment.model.Payment;
+import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.queue.model.Queue;
 import lombok.Builder;
 import lombok.Getter;
