@@ -1,7 +1,6 @@
 package hhplus.concert.api.concert.dto.response;
 
 import hhplus.concert.api.concert.dto.ConcertDto;
-import hhplus.concert.domain.concert.models.Concert;
 
 import java.util.List;
 

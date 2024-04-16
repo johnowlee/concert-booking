@@ -25,13 +25,6 @@ public class ConcertCoreReaderRepository implements ConcertReaderRepository {
     }
 
     @Override
-    public Concert getConcertById(Long id) {
-        return concertJpaRepository.findById(id)
-                .orElseThrow(NoSuchElementException::new)
-                .toConcertWithConcertOptions();
-    }
-
-    @Override
     public ConcertOption getConcertOptionById(Long id) {
         return concertOptionJpaRepository.findConcertOptionById(id)
                 .orElseThrow(NoSuchElementException::new)

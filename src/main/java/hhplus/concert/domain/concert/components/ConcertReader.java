@@ -18,11 +18,6 @@ public class ConcertReader {
         return concertReaderRepository.getConcerts();
     }
 
-    public Concert getConcertById(Long id) {
-        return concertReaderRepository.getConcertById(id);
-//        return concertReaderRepository.getConcerts();
-    }
-
     public ConcertOption getConcertOptionById(Long id) {
         return concertReaderRepository.getConcertOptionById(id);
     }

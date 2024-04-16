@@ -9,7 +9,5 @@ public interface ConcertReaderRepository {
 
     List<Concert> getConcerts();
 
-    Concert getConcertById(Long id);
-
     ConcertOption getConcertOptionById(Long id);
 }
