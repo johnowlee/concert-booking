@@ -1,13 +1,13 @@
 package hhplus.concert.domain.booking.infrastructure;
 
-import hhplus.concert.entities.booking.BookingEntity;
+import hhplus.concert.domain.booking.models.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-public interface BookingJpaRepository extends JpaRepository<BookingEntity, Long> {
+public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
 
-    @Query("select b from BookingEntity b join b.userEntity u where u.id = :userId")
-    List<BookingEntity> findBookingsByUserId(Long userId);
+    @Query("select b from Booking b join b.user u where u.id = :userId")
+    List<Booking> findBookingsByUserId(Long userId);
 }

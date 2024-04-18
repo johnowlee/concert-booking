@@ -4,33 +4,51 @@ import hhplus.concert.domain.balance.models.BalanceHistory;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.queue.model.Queue;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Singular;
+import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "users")
 public class User {
 
+    @Id
+    @GeneratedValue
+    @Column(name = "user_id")
     private Long id;
+
     private String name;
     private long balance;
-    private List<Queue> queues;
-    private List<BalanceHistory> balanceHistories;
-    private List<Booking> bookings;
-    private List<Payment> payments;
+
+    @OneToMany(mappedBy = "user")
+    private List<Queue> queue = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<BalanceHistory> balanceHistories = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Booking> bookings = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user")
+    private List<Payment> payments = new ArrayList<>();
 
     @Builder
     private User(Long id, String name, long balance,
-                @Singular List<Queue> queues,
-                @Singular List<BalanceHistory> balanceHistories,
-                @Singular List<Booking> bookings,
-                @Singular List<Payment> payments) {
+                 List<Queue> queue,
+                 List<BalanceHistory> balanceHistories,
+                 List<Booking> bookings,
+                 List<Payment> payments) {
         this.id = id;
         this.name = name;
         this.balance = balance;
-        this.queues = queues;
+        this.queue = queue;
         this.balanceHistories = balanceHistories;
         this.bookings = bookings;
         this.payments = payments;

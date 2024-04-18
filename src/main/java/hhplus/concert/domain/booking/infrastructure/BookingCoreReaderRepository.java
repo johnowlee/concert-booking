@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Repository
@@ -16,8 +17,17 @@ public class BookingCoreReaderRepository implements BookingReaderRepository {
 
     @Override
     public List<Booking> getBookingsByUserId(Long userId) {
-        return bookingJpaRepository.findBookingsByUserId(userId).stream()
-                .map(be -> be.toBooking())
-                .collect(Collectors.toList());
+//        return bookingJpaRepository.findBookingsByUserId(userId).stream()
+//                .map(be -> be.toBooking())
+//                .collect(Collectors.toList());
+        return null;
+    }
+
+    @Override
+    public Booking getBookingsByBookingId(Long bookingId) {
+//        return bookingJpaRepository.findById(bookingId)
+//                .orElseThrow(NoSuchElementException::new)
+//                .toBooking();
+        return null;
     }
 }

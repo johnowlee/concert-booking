@@ -1,9 +1,7 @@
 package hhplus.concert.domain.booking.components;
 
-import hhplus.concert.domain.booking.infrastructure.BookingCoreReaderRepository;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.repositories.BookingReaderRepository;
-import hhplus.concert.domain.concert.models.Concert;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +15,10 @@ public class BookingReader {
 
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingReaderRepository.getBookingsByUserId(userId);
+    }
+
+    public Booking getBookingByBookingId(Long bookingId) {
+        return bookingReaderRepository.getBookingsByBookingId(bookingId);
     }
 
 

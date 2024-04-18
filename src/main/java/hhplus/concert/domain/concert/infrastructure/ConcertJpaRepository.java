@@ -1,7 +1,7 @@
 package hhplus.concert.domain.concert.infrastructure;
 
-import hhplus.concert.entities.concert.ConcertEntity;
+import hhplus.concert.domain.concert.models.Concert;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ConcertJpaRepository extends JpaRepository<ConcertEntity, Long> {
+public interface ConcertJpaRepository extends JpaRepository<Concert, Long> {
 }

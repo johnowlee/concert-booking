@@ -16,8 +16,4 @@ public class UserWriter {
     public User save(User user) {
         return userWriterRepository.save(user);
     }
-
-    public User update(User user) {
-        return userWriterRepository.update(user);
-    }
 }

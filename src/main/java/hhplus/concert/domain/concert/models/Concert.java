@@ -1,24 +1,24 @@
 package hhplus.concert.domain.concert.models;
 
-import lombok.Builder;
+import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Singular;
 
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @Getter
+@Table(name = "concert")
 public class Concert {
 
-    private Long concertId;
+    @Id
+    @GeneratedValue
+    @Column(name = "concert_id")
+    private Long id;
+
     private String title;
     private String organizer;
-    private List<ConcertOption> concertOptions;
 
-    @Builder
-    private Concert(Long id, String title, String organizer, @Singular List<ConcertOption> concertOptions) {
-        this.concertId = id;
-        this.title = title;
-        this.organizer = organizer;
-        this.concertOptions = concertOptions;
-    }
+    @OneToMany(mappedBy = "concert")
+    private List<ConcertOption> concertOptions = new ArrayList<>();
 }

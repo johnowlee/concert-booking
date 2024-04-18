@@ -1,4 +1,4 @@
-package hhplus.concert.entities.booking;
+package hhplus.concert.domain.booking.models;
 
 public enum BookingStatus {
     COMPLETE, INCOMPLETE
