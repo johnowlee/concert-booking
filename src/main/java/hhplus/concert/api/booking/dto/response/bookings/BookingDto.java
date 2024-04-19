@@ -11,14 +11,14 @@ public record BookingDto(Long bookingId,
                          BookingStatus bookingStatus,
                          LocalDateTime bookingDateTime,
                          String title,
-                         LocalDateTime cocnertDateTime,
+                         LocalDateTime concertDateTime,
                          List<String> seatNo) {
     public static BookingDto of(Long bookingId,
                                 BookingStatus bookingStatus,
                                 LocalDateTime bookingDateTime,
                                 String title,
-                                LocalDateTime cocnertDateTime,
+                                LocalDateTime concertDateTime,
                                 List<String> seatNo) {
-        return new BookingDto(bookingId, bookingStatus, bookingDateTime, title, cocnertDateTime, seatNo);
+        return new BookingDto(bookingId, bookingStatus, bookingDateTime, title, concertDateTime, seatNo);
     }
 }
