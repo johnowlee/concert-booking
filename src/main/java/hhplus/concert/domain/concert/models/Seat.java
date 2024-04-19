@@ -23,7 +23,8 @@ public class Seat {
     private String seatNo;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
+    @Column(name = "booking_status")
+    private SeatBookingStatus seatBookingStatus;
 
     @OneToMany(mappedBy = "seat")
     private List<BookingSeat> bookingSeats = new ArrayList<>();
@@ -33,10 +34,10 @@ public class Seat {
     private ConcertOption concertOption;
 
     @Builder
-    private Seat(Long id, String seatNo, BookingStatus bookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption) {
+    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption) {
         this.id = id;
         this.seatNo = seatNo;
-        this.bookingStatus = bookingStatus;
+        this.seatBookingStatus = seatBookingStatus;
         this.bookingSeats = bookingSeats;
         this.concertOption = concertOption;
     }

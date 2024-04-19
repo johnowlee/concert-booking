@@ -1,7 +1,7 @@
 package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionResponse;
-import hhplus.concert.domain.concert.components.ConcertReader;
+import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class GetConcertOptionUseCase {
 
-    private final ConcertReader concertReader;
+    private final ConcertOptionReader concertOptionReader;
 
     public ConcertOptionResponse excute(Long id) {
-        return ConcertOptionResponse.from(concertReader.getConcertOptionById(id));
+        return ConcertOptionResponse.from(concertOptionReader.getConcertOptionById(id));
     }
 }

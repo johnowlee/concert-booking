@@ -1,19 +1,19 @@
 package hhplus.concert.api.booking.usecase;
 
+import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
-import hhplus.concert.domain.booking.models.Booking;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class GetBookingsByUserIdUseCase {
 
     private final BookingReader bookingReader;
 
-    public List<Booking> excute(Long userId) {
-        return bookingReader.getBookingsByUserId(userId);
+    public BookingsResponse excute(Long userId) {
+        return BookingsResponse.from(bookingReader.getBookingsByUserId(userId));
     }
 }

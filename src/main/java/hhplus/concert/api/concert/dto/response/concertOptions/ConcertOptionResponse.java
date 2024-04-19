@@ -31,6 +31,6 @@ public record ConcertOptionResponse(Long concertOptioinId,
     }
 
     private static SeatDto toSeatDto(Seat s) {
-        return SeatDto.of(s.getId(), s.getSeatNo(), s.getBookingStatus());
+        return SeatDto.of(s.getId(), s.getSeatNo(), s.getSeatBookingStatus());
     }
 }

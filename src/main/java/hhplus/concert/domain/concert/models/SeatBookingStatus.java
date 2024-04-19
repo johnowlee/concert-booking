@@ -1,5 +1,5 @@
 package hhplus.concert.domain.concert.models;
 
-public enum BookingStatus {
+public enum SeatBookingStatus {
     BOOKED, AVAILABLE
 }

@@ -3,10 +3,12 @@ package hhplus.concert.domain.payment.models;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "payment")
 public class Payment {
 

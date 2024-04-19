@@ -151,7 +151,7 @@
 	|bookings|Object[]|예약 목록 정보|
     |&nbsp;&nbsp;&nbsp;&nbsp; booking|Object|예약 목록|
 	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
-	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; seatBookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
 	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bookingDateTime|String|예약 일시|
     |&nbsp;&nbsp;&nbsp;&nbsp; bookingConcert|Object|콘서트 정보|
 	|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; title|String|콘서트명|
@@ -185,7 +185,7 @@
 	|---|---|---|
     |booking|Object|예약 정보|
 	|&nbsp;&nbsp;&nbsp;&nbsp; bookingId|int|예약 ID|
-	|&nbsp;&nbsp;&nbsp;&nbsp; bookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
+	|&nbsp;&nbsp;&nbsp;&nbsp; seatBookingStatus|String|예약 상태<br>(COMPLETE, UNCOMPLETE)|
 	|&nbsp;&nbsp;&nbsp;&nbsp; bookingDateTime|String|예약 일시|
 	|bookingUser|Object|예약자 정보|
 	|&nbsp;&nbsp;&nbsp;&nbsp; userId|int|예약자 ID|

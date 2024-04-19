@@ -16,6 +16,7 @@ public class BookingCoreReaderRepository implements BookingReaderRepository {
     @Override
     public List<Booking> getBookingsByUserId(Long userId) {
         return bookingJpaRepository.findBookingsByUserId(userId);
+
     }
 
     @Override
