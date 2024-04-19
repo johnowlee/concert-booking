@@ -7,6 +7,7 @@ import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.booking.models.BookingStatus;
+import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.ConcertReader;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
@@ -29,6 +30,7 @@ public class BookConcertUseCase {
 
     private final UserReader userReader;
     private final ConcertReader concertReader;
+    private final ConcertOptionReader concertOptionReader;
     private final BookingWriter bookingWriter;
     private final SeatReader seatReader;
 
@@ -37,7 +39,7 @@ public class BookConcertUseCase {
         // 토큰아이디로 유저 조회
         User user = userReader.getUserByUserId(2L);
         // 콘서트 옵션 id로 콘서트 옵션 조회
-        ConcertOption concertOption = concertReader.getConcertOptionById(request.concertOptionId());
+        ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
 
 
         List<Long> seatIds = parseSeatIds(request.seatId());
