@@ -32,7 +32,7 @@ public class ConcertController {
     @PostMapping("/option/{optionId}/booking")
     public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueTokeinId,
                                              @PathVariable Long optionId,
-                                             @RequestBody ConcertBookingRequest concertBookingRequest) throws InterruptedException {
-        return bookConcertUseCase.excute(queueTokeinId, ConcertBookingRequest.from(optionId, concertBookingRequest.seatId()));
+                                             @RequestBody ConcertBookingRequest concertBookingRequest) {
+        return bookConcertUseCase.excute(queueTokeinId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
     }
 }
