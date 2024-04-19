@@ -2,14 +2,10 @@ package hhplus.concert.api.concert.dto.response.concerts;
 
 import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
-import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@NoArgsConstructor(access = PRIVATE, force = true)
 public record ConcertsResponse(List<ConcertDto> concerts) {
 
     public static ConcertsResponse from(List<Concert> concerts) {

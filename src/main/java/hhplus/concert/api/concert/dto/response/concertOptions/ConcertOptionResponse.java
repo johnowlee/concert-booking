@@ -2,15 +2,11 @@ package hhplus.concert.api.concert.dto.response.concertOptions;
 
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static lombok.AccessLevel.PRIVATE;
-
-@NoArgsConstructor(access = PRIVATE, force = true)
 public record ConcertOptionResponse(Long concertOptioinId,
                                     String title,
                                     String place,
