@@ -3,7 +3,6 @@ package hhplus.concert.domain.concert.components;
 import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.repositories.ConcertReaderRepository;
-import hhplus.concert.domain.user.repositories.UserReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

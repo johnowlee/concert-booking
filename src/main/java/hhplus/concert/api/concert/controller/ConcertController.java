@@ -1,7 +1,7 @@
 package hhplus.concert.api.concert.controller;
 
 import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.dto.response.BookingResultResponse;
+import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
 import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionResponse;
 import hhplus.concert.api.concert.dto.response.concerts.ConcertsResponse;
 import hhplus.concert.api.concert.usecase.BookConcertUseCase;
