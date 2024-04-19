@@ -24,9 +24,4 @@ public class BookingCoreWriterRepository implements BookingWriterRepository {
     public List<BookingSeat> saveAllBookingSeat(List<BookingSeat> bookingSeats) {
         return bookingSeatJpaRepository.saveAll(bookingSeats);
     }
-
-    @Override
-    public BookingSeat saveBookingSeat(BookingSeat bookingSeat) {
-        return bookingSeatJpaRepository.save(BookingSeat.toBookingSeatEntity(bookingSeat)).toBookingSeat();
-    }
 }

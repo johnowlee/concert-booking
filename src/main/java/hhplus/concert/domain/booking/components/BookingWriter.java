@@ -21,8 +21,4 @@ public class BookingWriter {
     public List<BookingSeat> saveAllBookingSeat(List<BookingSeat> bookingSeats) {
         return bookingWriterRepository.saveAllBookingSeat(bookingSeats);
     }
-
-    public BookingSeat saveBookingSeat(BookingSeat bookingSeat) {
-        return bookingWriterRepository.saveBookingSeat(bookingSeat);
-    }
 }

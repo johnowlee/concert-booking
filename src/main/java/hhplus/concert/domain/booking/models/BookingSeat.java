@@ -32,22 +32,4 @@ public class BookingSeat {
         this.booking = booking;
         this.seat = seat;
     }
-
-    public BookingSeat toBookingSeat() {
-        return BookingSeat.builder()
-//                .bookingSeatId(id)
-                .booking(booking.toBooking())
-//                .seat(seatEntity.toSeat())
-                .build();
-    }
-
-    @Builder
-    public static BookingSeat toBookingSeatEntity(BookingSeat bookingSeat) {
-        return builder()
-//                .id(bookingSeat.getBookingSeatId())
-//                .bookingEntity(Booking.toBookingEntity(bookingSeat.getBooking()))
-//                .seatEntity(SeatEntity.toSeatEntity(bookingSeat.getSeat()))
-                .build();
-    }
-
 }

@@ -11,6 +11,4 @@ public interface BookingWriterRepository {
     public Booking bookConcert(Booking booking);
 
     public List<BookingSeat> saveAllBookingSeat(List<BookingSeat> bookingSeats);
-
-    BookingSeat saveBookingSeat(BookingSeat bookingSeat);
 }

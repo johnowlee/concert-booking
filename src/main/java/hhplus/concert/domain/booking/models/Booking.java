@@ -31,38 +31,19 @@ public class Booking {
     private User user;
 
     @OneToMany(mappedBy = "booking")
-    private List<BookingSeat> bookingSeatEntities = new ArrayList<>();
+    private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @OneToOne(mappedBy = "booking")
     private Payment payment;
 
-    public Booking toBooking() {
-        return Booking.builder()
-                .id(id)
-                .bookingStatus(bookingStatus)
-                .bookingDateTime(bookingDateTime)
-                .concertTitle(concertTitle)
-//                .user(user.toUser())
-                .build();
-    }
-
-    public static Booking toBookingEntity(Booking booking) {
-        return builder()
-                .bookingStatus(BookingStatus.INCOMPLETE)
-                .bookingDateTime(booking.getBookingDateTime())
-                .concertTitle(booking.getConcertTitle())
-//                .userEntity(User.toUserEntity(booking.getUser()))
-                .build();
-    }
-
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeatEntities, Payment payment) {
+    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeats, Payment payment) {
         this.id = id;
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
         this.user = user;
-        this.bookingSeatEntities = bookingSeatEntities;
+        this.bookingSeats = bookingSeats;
         this.payment = payment;
     }
 }
