@@ -13,4 +13,8 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
             " left join fetch b.payment p" +
             " where u.id = :userId")
     List<Booking> findBookingsByUserId(Long userId);
+
+    @Query("select b from Booking b" +
+            " join fetch b.user u")
+    Booking findBookingById(Long userId);
 }

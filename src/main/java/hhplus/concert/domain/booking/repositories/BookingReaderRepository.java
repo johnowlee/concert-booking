@@ -9,5 +9,5 @@ public interface BookingReaderRepository {
 
     List<Booking> getBookingsByUserId(Long userId);
 
-    Booking getBookingsByBookingId(Long bookingId);
+    Booking getBookingById(Long id);
 }

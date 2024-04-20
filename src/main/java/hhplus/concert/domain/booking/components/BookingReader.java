@@ -17,9 +17,7 @@ public class BookingReader {
         return bookingReaderRepository.getBookingsByUserId(userId);
     }
 
-    public Booking getBookingByBookingId(Long bookingId) {
-        return bookingReaderRepository.getBookingsByBookingId(bookingId);
+    public Booking getBookingById(Long id) {
+        return bookingReaderRepository.getBookingById(id);
     }
-
-
 }
