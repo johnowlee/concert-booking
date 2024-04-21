@@ -37,7 +37,7 @@ public class BookConcertUseCase {
     @Transactional
     public BookingResultResponse excute(String queueTokeinId, ConcertBookingRequest request) {
         // 토큰아이디로 유저 조회
-        User user = userReader.getUserByUserId(2L);
+        User user = userReader.getUserById(2L);
         // 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
 

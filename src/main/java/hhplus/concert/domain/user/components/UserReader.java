@@ -11,7 +11,7 @@ public class UserReader {
 
     private final UserReaderRepository userReaderRepository;
 
-    public User getUserByUserId(Long userId) {
-        return userReaderRepository.getUserByUserId(userId);
+    public User getUserById(Long userId) {
+        return userReaderRepository.getUserById(userId);
     }
 }

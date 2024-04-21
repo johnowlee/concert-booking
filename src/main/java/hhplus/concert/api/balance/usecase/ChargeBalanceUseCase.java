@@ -17,7 +17,7 @@ public class ChargeBalanceUseCase {
     private final UserReader userReader;
 
     public BalanceChargeResponse excute(Long userId, long amount) {
-        User user = userReader.getUserByUserId(userId);
+        User user = userReader.getUserById(userId);
         user.chargeBalance(amount);
         return BalanceChargeResponse.from(SUCCESS, user.getBalance());
     }

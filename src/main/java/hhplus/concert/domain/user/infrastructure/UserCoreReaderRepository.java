@@ -14,7 +14,7 @@ public class UserCoreReaderRepository implements UserReaderRepository {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public User getUserByUserId(Long userId) {
+    public User getUserById(Long userId) {
         return userJpaRepository.findById(userId)
                 .orElseThrow(NoSuchElementException::new);
     }
