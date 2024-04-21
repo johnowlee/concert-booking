@@ -15,7 +15,7 @@ public class QueueController {
 
     private final GetQueueByUserIdUseCase getQueueByUserIdUseCase;
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/users/{userId}")
     public QueueResponse queue(@PathVariable Long userId) {
         return getQueueByUserIdUseCase.excute(userId);
     }
