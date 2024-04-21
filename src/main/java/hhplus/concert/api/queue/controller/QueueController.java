@@ -1,7 +1,7 @@
 package hhplus.concert.api.queue.controller;
 
-import hhplus.concert.api.fakeStore.FakeStore;
-import hhplus.concert.api.fakeStore.dto.response.user.QueueResponse;
+import hhplus.concert.api.queue.dto.response.QueueResponse;
+import hhplus.concert.api.queue.usecase.GetQueueByUserIdUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/queue")
 public class QueueController {
 
-    private final FakeStore fakeStore;
+    private final GetQueueByUserIdUseCase getQueueByUserIdUseCase;
 
-    @GetMapping("{id}")
-    public QueueResponse queue(@PathVariable Long id) {
-        return fakeStore.createFakeQueue();
+    @GetMapping("/users/{id}")
+    public QueueResponse queue(@PathVariable Long userId) {
+        return getQueueByUserIdUseCase.excute(userId);
     }
 
 }

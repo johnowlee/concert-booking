@@ -45,10 +45,10 @@ public class BookConcertUseCase {
         List<Long> seatIds = parseSeatIds(request.seatId());
 
 
-        // 1. 예약테이블 일단 먼저 저장
+        // 1. 예약테이블 일단 저장
         Booking savedBooking = bookingWriter.bookConcert(buildBooking(concertOption, user));
         // 2. 예약좌석매핑 테이블 저장
-        List<BookingSeat> savedBookingSeats = bookingWriter.saveAllBookingSeat(createBookingSeats(seatIds, savedBooking));
+        bookingWriter.saveAllBookingSeat(createBookingSeats(seatIds, savedBooking));
         // 3. 좌석정보 조회
         List<Seat> seats = seatReader.getSeatsByIds(seatIds);
 

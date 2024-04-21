@@ -2,10 +2,12 @@ package hhplus.concert.domain.queue.model;
 
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "queue")
 public class Queue {
 

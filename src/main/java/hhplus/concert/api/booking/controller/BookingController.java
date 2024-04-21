@@ -2,11 +2,10 @@ package hhplus.concert.api.booking.controller;
 
 import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
 import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
+import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
-import hhplus.concert.api.fakeStore.FakeStore;
-import hhplus.concert.api.fakeStore.dto.request.QueueTokenRequest;
-import hhplus.concert.api.fakeStore.dto.response.booking.PaymentResponse;
+import hhplus.concert.api.booking.usecase.PayBookingUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,9 +14,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/bookings")
 public class BookingController {
 
-    private final FakeStore fakeStore;
     private final GetBookingsByUserIdUseCase getBookingsByUserIdUseCase;
     private final GetBookingByIdUseCase getBookingByIdUseCase;
+    private final PayBookingUseCase payBookingUseCase;
 
     @GetMapping("/users/{id}")
     public BookingsResponse bookings(@PathVariable Long id) {
@@ -30,8 +29,8 @@ public class BookingController {
     }
 
     @GetMapping("{id}/payment")
-    public PaymentResponse booking(@RequestHeader("Queue-Token") QueueTokenRequest queueTokenRequest,
+    public PaymentResponse booking(@RequestHeader("Queue-Token") String queueTokeinId,
                                    @PathVariable Long id) {
-        return fakeStore.getPaymentResponse(queueTokenRequest, id);
+        return payBookingUseCase.excute(queueTokeinId, id);
     }
 }
