@@ -41,7 +41,7 @@ public class GetQueueByUserIdUseCase {
             QueueStatus status = isProcessable ? PROCESSING : WAITING;
             long position = isProcessable ? 0 : queueReader.getWaitingPosition();
 
-            queue = queueWriter.saveQueue(Queue.createQueue(GetUUID.excute(userId), userReader.getUserById(userId), position, status));
+            queue = queueWriter.saveQueue(Queue.createQueue(userReader.getUserById(userId), position, status));
         }
         return QueueResponse.from(queue);
     }

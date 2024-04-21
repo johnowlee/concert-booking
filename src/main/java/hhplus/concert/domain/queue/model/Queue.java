@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -38,13 +39,17 @@ public class Queue {
         this.status = status;
     }
 
-    public static Queue createQueue(String id, User user, long position, QueueStatus status) {
+    public static Queue createQueue(User user, long position, QueueStatus status) {
         return builder()
-                .id(id)
+                .id(generateUUID(user.getId()))
                 .user(user)
                 .position(position)
                 .updateAt(LocalDateTime.now())
                 .status(status)
                 .build();
+    }
+
+    private static String generateUUID(Long userId) {
+        return UUID.randomUUID() + "_" + userId;
     }
 }
