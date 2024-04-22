@@ -11,7 +11,9 @@ public interface QueueReaderRepository {
 
     List<Queue> getQueuesByStatusAndPosition(QueueStatus status, long position);
 
-    long getFirstPositionByStatus(QueueStatus status);
+    Long getFirstPositionByStatus(QueueStatus status);
 
-    long getLastPositionByStatus(QueueStatus status);
+    Long getLastPositionByStatus(QueueStatus status);
+
+    Queue getQueueById(String id);
 }

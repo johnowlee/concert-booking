@@ -30,9 +30,9 @@ public class ConcertController {
     }
 
     @PostMapping("/option/{optionId}/booking")
-    public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueTokeinId,
+    public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueId,
                                              @PathVariable Long optionId,
                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return bookConcertUseCase.excute(queueTokeinId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
+        return bookConcertUseCase.excute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
     }
 }

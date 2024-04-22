@@ -1,5 +1,6 @@
 package hhplus.concert.domain.queue.model;
 
+import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,5 +52,9 @@ public class Queue {
 
     private static String generateUUID(Long userId) {
         return UUID.randomUUID() + "_" + userId;
+    }
+
+    public void changeQueueStatus(QueueStatus status) {
+        this.status = status;
     }
 }

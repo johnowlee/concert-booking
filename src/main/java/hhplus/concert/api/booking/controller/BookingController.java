@@ -29,8 +29,8 @@ public class BookingController {
     }
 
     @GetMapping("{id}/payment")
-    public PaymentResponse booking(@RequestHeader("Queue-Token") String queueTokeinId,
-                                   @PathVariable Long id) {
-        return payBookingUseCase.excute(queueTokeinId, id);
+    public PaymentResponse booking(@PathVariable Long id,
+                                   @RequestHeader("Queue-Token") String queueId) {
+        return payBookingUseCase.excute(id, queueId);
     }
 }

@@ -8,11 +8,13 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.booking.models.BookingStatus;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
-import hhplus.concert.domain.concert.components.ConcertReader;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.user.components.UserReader;
+import hhplus.concert.domain.queue.components.QueGenerator;
+import hhplus.concert.domain.queue.components.QueueReader;
+import hhplus.concert.domain.queue.components.QueueValidator;
+import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -24,20 +26,39 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static hhplus.concert.api.common.ResponseResult.FAILURE;
+import static hhplus.concert.domain.queue.model.QueueStatus.WAITING;
+
 @Repository
 @RequiredArgsConstructor
 public class BookConcertUseCase {
 
-    private final UserReader userReader;
-    private final ConcertReader concertReader;
     private final ConcertOptionReader concertOptionReader;
     private final BookingWriter bookingWriter;
     private final SeatReader seatReader;
+    private final QueueReader queueReader;
+    private final QueGenerator queGenerator;
+    private final QueueValidator queueValidator;
 
     @Transactional
-    public BookingResultResponse excute(String queueTokeinId, ConcertBookingRequest request) {
-        // 토큰아이디로 유저 조회
-        User user = userReader.getUserById(2L);
+    public BookingResultResponse excute(String queueId, ConcertBookingRequest request) {
+        // queue 조회
+        // 대기열 검증
+        Queue queue = queueReader.getQueueById(queueId);
+        if (queue == null) {
+            throw new RuntimeException("대기열 Token이 존재하지 않습니다.");
+        }
+
+        // 대기열 만료 검증
+        if (queueValidator.isExpired(queue)) {
+            // queue 생성
+            queue = queGenerator.getQueue(queue.getUser());
+            // 대기상태면? 실패-대기.
+            if (queue.getStatus() == WAITING) {
+                return BookingResultResponse.of(FAILURE, null, null, null, null);
+            }
+        }
+
         // 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
 
@@ -46,13 +67,13 @@ public class BookConcertUseCase {
 
 
         // 1. 예약테이블 일단 저장
-        Booking savedBooking = bookingWriter.bookConcert(buildBooking(concertOption, user));
+        Booking savedBooking = bookingWriter.bookConcert(buildBooking(concertOption, queue.getUser()));
         // 2. 예약좌석매핑 테이블 저장
         bookingWriter.saveAllBookingSeat(createBookingSeats(seatIds, savedBooking));
         // 3. 좌석정보 조회
         List<Seat> seats = seatReader.getSeatsByIds(seatIds);
 
-        return BookingResultResponse.of(ResponseResult.SUCCESS, user, savedBooking, concertOption, seats);
+        return BookingResultResponse.of(ResponseResult.SUCCESS, queue.getUser(), savedBooking, concertOption, seats);
     }
 
 

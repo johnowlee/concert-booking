@@ -1,6 +1,7 @@
 package hhplus.concert.domain.concert.models;
 
 import hhplus.concert.domain.booking.models.BookingSeat;
+import hhplus.concert.domain.booking.models.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -40,5 +41,9 @@ public class Seat {
         this.seatBookingStatus = seatBookingStatus;
         this.bookingSeats = bookingSeats;
         this.concertOption = concertOption;
+    }
+
+    public void changeBookingStatus(SeatBookingStatus status) {
+        this.seatBookingStatus = status;
     }
 }

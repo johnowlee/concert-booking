@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 import java.util.Optional;
 
-public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
+public interface QueueJpaRepository extends JpaRepository<Queue, String> {
 
     @Query("select q from Queue q" +
             " join fetch q.user u " +
@@ -20,9 +20,12 @@ public interface QueueJpaRepository extends JpaRepository<Queue, Long> {
 
     List<Queue> findAllByStatusAndPosition(QueueStatus status, long position);
 
-    @Query("select min(q.position) from Queue q where q.status = :status group by q.position")
-    long findFirstPositionByStatus(QueueStatus status);
+    @Query("select q.position from Queue q where q.status = :status order by q.position asc limit 1")
+    Optional<Long> findFirstPositionByStatus(QueueStatus status);
 
-    @Query("select max(q.position) from Queue q where q.status = :status group by q.position")
-    long findLastPositionByStatus(QueueStatus status);
+    @Query("select q.position from Queue q where q.status = :status order by q.position desc limit 1")
+    Optional<Long> findLastPositionByStatus(QueueStatus status);
+
+    @Query("select q from Queue q join fetch q.user where q.id = :id")
+    Optional<Queue> findById(String id);
 }

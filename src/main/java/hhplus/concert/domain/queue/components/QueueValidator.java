@@ -26,6 +26,5 @@ public class QueueValidator {
         return queues.stream()
                 .filter(q -> !isExpired(q))
                 .collect(Collectors.toList()).size() < MAX_PROCESSABLE_COUNT.getValue();
-
     }
 }
