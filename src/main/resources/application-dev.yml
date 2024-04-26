@@ -16,7 +16,8 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 
+
 server:
   servlet:
     context-path: /
-  port: 8080
+  port: 8081
