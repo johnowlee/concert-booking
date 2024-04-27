@@ -299,7 +299,19 @@ https://github.com/WonhoLeeDev/hhplus-concert/milestones?with_issues=no
 
 ![API Swagger UI](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/API%20Swagger%20UI.png)
 
+***********************************
 
+### 브랜치 전략
 
+`main`
+- 배포 운영환경 branch
 
+`stage`
+- QA환경 branch
+- QA 테스트 수행
+- 개발환경 branch에서 완료되면 병합
+
+`develop`
+- 개발환경 branch
+- 개발 feature별로 분기 가능
 
