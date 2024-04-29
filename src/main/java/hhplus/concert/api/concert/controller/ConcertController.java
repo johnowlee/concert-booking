@@ -38,7 +38,7 @@ public class ConcertController {
     }
 
 
-    @PostMapping("/option/{optionId}/booking")
+    @PostMapping("/options/{optionId}/booking")
     public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueId,
                                              @PathVariable Long optionId,
                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
