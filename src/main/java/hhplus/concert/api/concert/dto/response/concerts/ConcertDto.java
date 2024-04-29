@@ -1,15 +1,11 @@
 package hhplus.concert.api.concert.dto.response.concerts;
 
-import java.util.List;
+import hhplus.concert.domain.concert.models.Concert;
 
 public record ConcertDto(Long concertId,
                          String title,
-                         String organizer,
-                         List<ConcertOptionDto> concertOptions) {
-    public static ConcertDto of(Long concertId,
-                                  String title,
-                                  String organizer,
-                                  List<ConcertOptionDto> concertOptions) {
-        return new ConcertDto(concertId, title, organizer, concertOptions);
+                         String organizer) {
+    public static ConcertDto from(Concert concert) {
+        return new ConcertDto(concert.getId(), concert.getTitle(), concert.getOrganizer());
     }
 }
