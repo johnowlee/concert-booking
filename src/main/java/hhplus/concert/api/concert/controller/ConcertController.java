@@ -32,7 +32,7 @@ public class ConcertController {
         return getConcertOptionsUseCase.excute(id);
     }
 
-    @GetMapping("/option/{id}")
+    @GetMapping("/options/{id}")
     public ConcertOptionResponse concertOption(@PathVariable Long id) {
         return getConcertOptionUseCase.excute(id);
     }
