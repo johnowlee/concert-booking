@@ -16,7 +16,7 @@ public class BalanceHistoryWriter {
 
     private final BalanceHistoryWriterRepository balanceHistoryWriterRepository;
 
-    public BalanceHistory saveBalanceUseHistory(User user, long amount) {
-        return balanceHistoryWriterRepository.save(createBalanceHistory(user, amount, USE));
+    public BalanceHistory saveBalanceUseHistory(User user, long amount, TransactionType transactionType) {
+        return balanceHistoryWriterRepository.save(createBalanceHistory(user, amount, transactionType));
     }
 }
