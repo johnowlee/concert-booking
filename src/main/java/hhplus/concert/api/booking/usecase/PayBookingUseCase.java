@@ -2,6 +2,7 @@ package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.balance.models.TransactionType;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.components.BookingValidator;
 import hhplus.concert.domain.booking.models.Booking;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static hhplus.concert.api.common.ResponseResult.FAILURE;
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
+import static hhplus.concert.domain.balance.models.TransactionType.*;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 import static hhplus.concert.domain.queue.model.QueueStatus.EXPIRED;
@@ -66,7 +68,7 @@ public class PayBookingUseCase {
         queue.getUser().useBalance(amount);
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceUseHistory(queue.getUser(), amount);
+        balanceHistoryWriter.saveBalanceUseHistory(queue.getUser(), amount, USE);
 
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);

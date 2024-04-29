@@ -8,29 +8,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record ConcertOptionResponse(Long concertOptioinId,
-                                    String title,
                                     String place,
                                     LocalDateTime dateTime,
-                                    String organizer,
                                     List<SeatDto> seats) {
     public static ConcertOptionResponse from(ConcertOption concertOption) {
         return new ConcertOptionResponse(
                 concertOption.getId(),
-                concertOption.getConcert().getTitle(),
                 concertOption.getPlace(),
                 concertOption.getConcertDateTime(),
-                concertOption.getConcert().getOrganizer(),
-                createSeatDtos(concertOption.getSeats())
+                toSeatDtos(concertOption.getSeats())
         );
     }
 
-    private static List<SeatDto> createSeatDtos(List<Seat> seats) {
+    private static List<SeatDto> toSeatDtos(List<Seat> seats) {
         return seats.stream()
-                .map(s -> toSeatDto(s))
+                .map(s -> SeatDto.from(s))
                 .collect(Collectors.toList());
-    }
-
-    private static SeatDto toSeatDto(Seat s) {
-        return SeatDto.of(s.getId(), s.getSeatNo(), s.getSeatBookingStatus());
     }
 }

@@ -7,6 +7,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -31,5 +34,18 @@ public class BookingSeat {
         this.id = id;
         this.booking = booking;
         this.seat = seat;
+    }
+
+    public static BookingSeat buildBookingSeat(Booking booking, Seat seat) {
+        return builder()
+                .booking(booking)
+                .seat(seat)
+                .build();
+    }
+
+    public static List<BookingSeat> createBookingSeats(List<Seat> seats, Booking booking) {
+        return seats.stream()
+                .map(s -> BookingSeat.buildBookingSeat(booking, s))
+                .collect(Collectors.toList());
     }
 }

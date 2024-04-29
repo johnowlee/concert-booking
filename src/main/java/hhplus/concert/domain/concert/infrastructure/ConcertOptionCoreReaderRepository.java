@@ -5,6 +5,7 @@ import hhplus.concert.domain.concert.repositories.ConcertOptionReaderRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Repository
@@ -17,5 +18,10 @@ public class ConcertOptionCoreReaderRepository implements ConcertOptionReaderRep
     public ConcertOption getConcertOptionById(Long id) {
         return concertOptionJpaRepository.findConcertOptionById(id)
                 .orElseThrow(NoSuchElementException::new);
+    }
+
+    @Override
+    public List<ConcertOption> getConcertOptionsByConcertId(Long concertId) {
+        return concertOptionJpaRepository.findAllByConcertId(concertId);
     }
 }

@@ -1,12 +1,10 @@
 package hhplus.concert.api.concert.usecase;
 
-import hhplus.concert.api.common.ResponseResult;
 import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
 import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.booking.models.BookingStatus;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
@@ -15,18 +13,12 @@ import hhplus.concert.domain.queue.components.QueGenerator;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueValidator;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static hhplus.concert.api.common.ResponseResult.FAILURE;
 import static hhplus.concert.domain.queue.model.QueueStatus.WAITING;
 
 @Repository
@@ -42,7 +34,7 @@ public class BookConcertUseCase {
 
     @Transactional
     public BookingResultResponse excute(String queueId, ConcertBookingRequest request) {
-        // queue 조회
+        // 1. queue 조회
         // 대기열 검증
         Queue queue = queueReader.getQueueById(queueId);
         if (queue == null) {
@@ -55,57 +47,19 @@ public class BookConcertUseCase {
             queue = queGenerator.getQueue(queue.getUser());
             // 대기상태면? 실패-대기.
             if (queue.getStatus() == WAITING) {
-                return BookingResultResponse.of(FAILURE, null, null, null, null);
+                return BookingResultResponse.fail();
             }
         }
 
-        // 콘서트 옵션 id로 콘서트 옵션 조회
+        // 2. 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
-
-
-        List<Long> seatIds = parseSeatIds(request.seatId());
-
-
-        // 1. 예약테이블 일단 저장
-        Booking savedBooking = bookingWriter.bookConcert(buildBooking(concertOption, queue.getUser()));
-        // 2. 예약좌석매핑 테이블 저장
-        bookingWriter.saveAllBookingSeat(createBookingSeats(seatIds, savedBooking));
         // 3. 좌석정보 조회
-        List<Seat> seats = seatReader.getSeatsByIds(seatIds);
+        List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
+        // 4. 예약테이블 저장
+        Booking savedBooking = bookingWriter.bookConcert(Booking.buildBooking(concertOption, queue.getUser()));
+        // 5. 예약좌석매핑 테이블 저장
+        bookingWriter.saveAllBookingSeat(BookingSeat.createBookingSeats(seats, savedBooking));
 
-        return BookingResultResponse.of(ResponseResult.SUCCESS, queue.getUser(), savedBooking, concertOption, seats);
-    }
-
-
-
-    private static Booking buildBooking(ConcertOption concertOption, User user) {
-        Booking booking = Booking.builder()
-                                .bookingStatus(BookingStatus.INCOMPLETE)
-                                .bookingDateTime(LocalDateTime.now())
-                                .concertTitle(concertOption.getConcert().getTitle())
-                                .user(user)
-                                .build();
-        return booking;
-    }
-
-    // booking_seat 생성
-    private static List<BookingSeat> createBookingSeats(List<Long> seatIds, Booking savedBooking) {
-        List<BookingSeat> bookingSeats = new ArrayList<>();
-        for (Long seatId : seatIds) {
-            Seat seat = Seat.builder()
-                    .id(seatId)
-                    .build();
-
-            BookingSeat bookingSeat = BookingSeat.builder()
-                    .booking(savedBooking)
-                    .seat(seat)
-                    .build();
-            bookingSeats.add(bookingSeat);
-        }
-        return bookingSeats;
-    }
-
-    private static List<Long> parseSeatIds(String seatIds) {
-        return Arrays.stream(seatIds.split(",")).map(s -> Long.parseLong(s)).collect(Collectors.toList());
+        return BookingResultResponse.succeed(queue.getUser(), savedBooking, concertOption, seats);
     }
 }

@@ -1,5 +1,6 @@
 package hhplus.concert.domain.booking.models;
 
+import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
@@ -64,5 +65,15 @@ public class Booking {
         this.bookingSeats.stream()
                 .map(BookingSeat::getSeat)
                 .forEach(seat -> seat.changeBookingStatus(status));
+    }
+
+    public static Booking buildBooking(ConcertOption concertOption, User user) {
+        Booking booking = Booking.builder()
+                .bookingStatus(BookingStatus.INCOMPLETE)
+                .bookingDateTime(LocalDateTime.now())
+                .concertTitle(concertOption.getConcert().getTitle())
+                .user(user)
+                .build();
+        return booking;
     }
 }
