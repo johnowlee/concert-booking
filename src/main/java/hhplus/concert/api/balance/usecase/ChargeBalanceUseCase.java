@@ -23,7 +23,7 @@ public class ChargeBalanceUseCase {
         User user = userReader.getUserById(userId);
         user.chargeBalance(amount);
 
-        balanceHistoryWriter.saveBalanceUseHistory(user, amount, CHARGE);
+        balanceHistoryWriter.saveBalanceHistory(user, amount, CHARGE);
         return BalanceChargeResponse.from(SUCCESS, user.getBalance());
     }
 }

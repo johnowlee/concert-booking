@@ -68,7 +68,7 @@ public class PayBookingUseCase {
         queue.getUser().useBalance(amount);
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceUseHistory(queue.getUser(), amount, USE);
+        balanceHistoryWriter.saveBalanceHistory(queue.getUser(), amount, USE);
 
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
