@@ -10,4 +10,6 @@ public interface BookingReaderRepository {
     List<Booking> getBookingsByUserId(Long userId);
 
     Booking getBookingById(Long id);
+
+    List<Booking> getBookingsBySeatIds(List<Long> ids);
 }
