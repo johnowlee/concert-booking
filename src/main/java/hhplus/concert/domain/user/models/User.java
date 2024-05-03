@@ -27,6 +27,10 @@ public class User {
     private String name;
     private long balance;
 
+    @Column(name = "versions")
+    @Version
+    private Long version;
+
     @OneToMany(mappedBy = "user")
     private List<Queue> queue = new ArrayList<>();
 

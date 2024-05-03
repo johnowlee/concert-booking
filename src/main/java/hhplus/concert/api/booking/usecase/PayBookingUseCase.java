@@ -2,9 +2,7 @@ package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
-import hhplus.concert.domain.balance.models.TransactionType;
 import hhplus.concert.domain.booking.components.BookingReader;
-import hhplus.concert.domain.booking.components.BookingValidator;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
@@ -34,7 +32,6 @@ public class PayBookingUseCase {
     private final QueueValidator queueValidator;
     private final QueGenerator queGenerator;
     private final BookingReader bookingReader;
-    private final BookingValidator bookingValidator;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
 
@@ -48,7 +45,7 @@ public class PayBookingUseCase {
 
         // 예약시간초과 검증
         Booking booking = bookingReader.getBookingById(id);
-        if (bookingValidator.isExpired(booking)) {
+        if (booking.isBookingDateTimeExpired()) {
             throw new RuntimeException("예약시간이 만료되었습니다. 예약을 다시 진행해 주세요.");
         }
 
@@ -68,7 +65,7 @@ public class PayBookingUseCase {
         queue.getUser().useBalance(amount);
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceUseHistory(queue.getUser(), amount, USE);
+        balanceHistoryWriter.saveBalanceHistory(queue.getUser(), amount, USE);
 
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
