@@ -15,7 +15,7 @@ public class GetConcertsUseCase {
 
     private final ConcertReader concertReader;
 
-    public ConcertsResponse excute() {
+    public ConcertsResponse execute() {
         List<Concert> concerts = concertReader.getConcerts();
         return ConcertsResponse.from(concerts);
     }

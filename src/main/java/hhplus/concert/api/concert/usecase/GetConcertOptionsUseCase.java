@@ -12,7 +12,7 @@ public class GetConcertOptionsUseCase {
 
     private final ConcertOptionReader concertOptionReader;
 
-    public ConcertOptionsResponse excute(Long concertId) {
+    public ConcertOptionsResponse execute(Long concertId) {
         return ConcertOptionsResponse.from(concertOptionReader.getConcertOptionsByConcertId(concertId));
     }
 }
