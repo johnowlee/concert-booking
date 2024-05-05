@@ -12,7 +12,7 @@ import hhplus.concert.domain.concert.components.SeatValidator;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.queue.components.QueGenerator;
+import hhplus.concert.domain.queue.components.QueueGenerator;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.model.Queue;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +31,7 @@ public class BookConcertUseCase {
     private final BookingWriter bookingWriter;
     private final SeatReader seatReader;
     private final QueueReader queueReader;
-    private final QueGenerator queGenerator;
+    private final QueueGenerator queueGenerator;
     private final BookingReader bookingReader;
     private final SeatValidator seatValidator;
 
@@ -47,7 +47,7 @@ public class BookConcertUseCase {
         // 대기열 만료 검증
         if (queue.isExpired()) {
             // queue 생성
-            queue = queGenerator.getQueue(queue.getUser());
+            queue = queueGenerator.getQueue(queue.getUser());
             // 대기상태면? 실패-대기.
             if (queue.getStatus() == WAITING) {
                 return BookingResultResponse.fail();

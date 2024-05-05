@@ -1,7 +1,7 @@
 package hhplus.concert.api.queue.usecase;
 
 import hhplus.concert.api.queue.dto.response.QueueResponse;
-import hhplus.concert.domain.queue.components.QueGenerator;
+import hhplus.concert.domain.queue.components.QueueGenerator;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.user.components.UserReader;
@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GetQueueByUserIdUseCase {
 
     private final QueueReader queueReader;
-    private final QueGenerator queGenerator;
+    private final QueueGenerator queueGenerator;
     private final UserReader userReader;
 
     @Transactional
@@ -27,7 +27,7 @@ public class GetQueueByUserIdUseCase {
         // queue 검증
         if (queue == null || queue.isExpired()) {
             // queue 생성
-            queue = queGenerator.getQueue(userReader.getUserById(userId));
+            queue = queueGenerator.getQueue(userReader.getUserById(userId));
         }
         return QueueResponse.of(queue, queueReader.getRealWaitingPosition(queue.getPosition()));
     }
