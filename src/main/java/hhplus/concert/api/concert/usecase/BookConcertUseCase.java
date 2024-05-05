@@ -38,7 +38,7 @@ public class BookConcertUseCase {
     private final SeatValidator seatValidator;
 
     @Transactional
-    public BookingResultResponse excute(String queueId, ConcertBookingRequest request) {
+    public BookingResultResponse execute(String queueId, ConcertBookingRequest request) {
         // 1. queue 조회
         // 대기열 검증
         Queue queue = queueReader.getQueueById(queueId);
@@ -55,16 +55,16 @@ public class BookConcertUseCase {
                 return BookingResultResponse.fail();
             }
         }
-        
+        // 2. 좌석정보 조회
+        List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
+
         // 예약상태, 좌석상태 검증
         List<Booking> bookingsBySeats = bookingReader.getBookingsBySeatIds(request.parsedSeatIds());
         seatValidator.validateSeatsBookable(bookingsBySeats);
 
-        // 2. 콘서트 옵션 id로 콘서트 옵션 조회
+        // 3. 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
 
-        // 3. 좌석정보 조회
-        List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
 
         // 4. 예약테이블 저장
         Booking savedBooking = bookingWriter.bookConcert(Booking.buildBooking(concertOption, queue.getUser()));
@@ -73,8 +73,12 @@ public class BookConcertUseCase {
         bookingWriter.saveAllBookingSeat(BookingSeat.createBookingSeats(seats, savedBooking));
 
         // 좌석 예약상태 update
-        seats.stream().forEach(s -> s.changeBookingStatus(SeatBookingStatus.PROCESSING));
+        updateSeatBookingStatus(seats, SeatBookingStatus.PROCESSING);
 
         return BookingResultResponse.succeed(queue.getUser(), savedBooking, concertOption, seats);
+    }
+
+    private static void updateSeatBookingStatus(List<Seat> seats, SeatBookingStatus status) {
+        seats.stream().forEach(s -> s.changeBookingStatus(status));
     }
 }

@@ -42,6 +42,6 @@ public class ConcertController {
     public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueId,
                                              @PathVariable Long optionId,
                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return bookConcertUseCase.excute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
+        return bookConcertUseCase.execute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
     }
 }

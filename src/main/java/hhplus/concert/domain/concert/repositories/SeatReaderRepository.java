@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface SeatReaderRepository {
 
-    public List<Seat> getSeatsByIds(List<Long> id);
+    public List<Seat> getSeatsByIds(List<Long> ids);
 }

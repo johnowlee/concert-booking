@@ -14,7 +14,7 @@ public class SeatCoreReaderRepository implements SeatReaderRepository {
     private final SeatJpaRepository seatJpaRepository;
 
     @Override
-    public List<Seat> getSeatsByIds(List<Long> id) {
-        return seatJpaRepository.findAllById(id);
+    public List<Seat> getSeatsByIds(List<Long> ids) {
+        return seatJpaRepository.findAllByIds(ids);
     }
 }
