@@ -3,7 +3,6 @@ package hhplus.concert.api.queue.usecase;
 import hhplus.concert.api.queue.dto.response.QueueResponse;
 import hhplus.concert.domain.queue.components.QueGenerator;
 import hhplus.concert.domain.queue.components.QueueReader;
-import hhplus.concert.domain.queue.components.QueueValidator;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.user.components.UserReader;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ public class GetQueueByUserIdUseCase {
     private final QueueReader queueReader;
     private final QueGenerator queGenerator;
     private final UserReader userReader;
-    private final QueueValidator queueValidator;
 
     @Transactional
     public QueueResponse excute(Long userId) {
@@ -27,7 +25,7 @@ public class GetQueueByUserIdUseCase {
         Queue queue = queueReader.getProcessingQueueByUserId(userId);
 
         // queue 검증
-        if (!queueValidator.isQueueValid(queue)) {
+        if (queue == null || queue.isExpired()) {
             // queue 생성
             queue = queGenerator.getQueue(userReader.getUserById(userId));
         }

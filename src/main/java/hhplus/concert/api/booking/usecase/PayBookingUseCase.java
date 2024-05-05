@@ -50,7 +50,7 @@ public class PayBookingUseCase {
         }
 
         // 대기열 만료 검증
-        if (queueValidator.isExpired(queue)) {
+        if (queue.isExpired()) {
             // queue 생성
             queue = queGenerator.getQueue(queue.getUser());
 
