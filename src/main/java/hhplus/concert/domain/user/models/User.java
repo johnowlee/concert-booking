@@ -1,5 +1,7 @@
 package hhplus.concert.domain.user.models;
 
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.balance.models.BalanceHistory;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.payment.models.Payment;
@@ -60,17 +62,17 @@ public class User {
 
     public void chargeBalance(long amount) {
         if (amount <= 0 ) {
-            throw new IllegalArgumentException("충전금액은 0보다 커야합니다.");
+            throw new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT);
         }
         this.balance += amount;
     }
 
     public void useBalance(long amount) {
         if (this.balance < amount) {
-            throw new IllegalStateException("잔액이 부족합니다.");
+            throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
         }
         if (amount <= 0 ) {
-            throw new IllegalArgumentException("사용금액은 0보다 커야합니다.");
+            throw new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT);
         }
         this.balance -= amount;
     }
