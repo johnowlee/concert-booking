@@ -54,4 +54,13 @@ class ChargeBalanceUseCaseTest {
         assertEquals(user.getVersion() + 1, UpdatedUser.getVersion());
         assertEquals(user.getBalance() + 10000, UpdatedUser.getBalance());
     }
+
+    @Test
+    void insert() {
+        for (int i = 0; i < 9000; i++) {
+            chargeBalanceUseCase.execute(1L, 1);
+            chargeBalanceUseCase.execute(2L, 1);
+        }
+
+    }
 }
