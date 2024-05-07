@@ -1,6 +1,5 @@
 package hhplus.concert.domain.queue.model;
 
-import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
