@@ -6,9 +6,8 @@ import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
-import hhplus.concert.domain.queue.components.QueGenerator;
+import hhplus.concert.domain.queue.components.QueueGenerator;
 import hhplus.concert.domain.queue.components.QueueReader;
-import hhplus.concert.domain.queue.components.QueueValidator;
 import hhplus.concert.domain.queue.model.Queue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static hhplus.concert.api.common.ResponseResult.FAILURE;
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
-import static hhplus.concert.domain.balance.models.TransactionType.*;
+import static hhplus.concert.domain.balance.models.TransactionType.USE;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 import static hhplus.concert.domain.queue.model.QueueStatus.EXPIRED;
@@ -29,14 +28,13 @@ import static hhplus.concert.domain.queue.model.QueueStatus.WAITING;
 public class PayBookingUseCase {
 
     private final QueueReader queueReader;
-    private final QueueValidator queueValidator;
-    private final QueGenerator queGenerator;
+    private final QueueGenerator queueGenerator;
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
 
     @Transactional
-    public PaymentResponse excute(Long id, String queueId) {
+    public PaymentResponse execute(Long id, String queueId) {
         // 대기열 검증
         Queue queue = queueReader.getQueueById(queueId);
         if (queue == null) {
@@ -50,9 +48,9 @@ public class PayBookingUseCase {
         }
 
         // 대기열 만료 검증
-        if (queueValidator.isExpired(queue)) {
+        if (queue.isExpired()) {
             // queue 생성
-            queue = queGenerator.getQueue(queue.getUser());
+            queue = queueGenerator.getQueue(queue.getUser());
 
             // 대기상태면? 실패-대기.
             if (queue.getStatus() == WAITING) {

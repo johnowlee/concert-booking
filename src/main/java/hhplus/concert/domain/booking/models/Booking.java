@@ -5,7 +5,10 @@ import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -13,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static hhplus.concert.domain.booking.models.BookingManager.BOOKING_EXPIRY_MINUTES;
-import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 
 @Entity
 @Getter

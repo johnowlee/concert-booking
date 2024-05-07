@@ -20,17 +20,17 @@ public class BookingController {
 
     @GetMapping("/users/{id}")
     public BookingsResponse bookings(@PathVariable Long id) {
-        return getBookingsByUserIdUseCase.excute(id);
+        return getBookingsByUserIdUseCase.execute(id);
     }
 
     @GetMapping("{id}")
     public BookingResponse booking(@PathVariable Long id) {
-        return getBookingByIdUseCase.excute(id);
+        return getBookingByIdUseCase.execute(id);
     }
 
     @GetMapping("{id}/payment")
     public PaymentResponse booking(@PathVariable Long id,
                                    @RequestHeader("Queue-Token") String queueId) {
-        return payBookingUseCase.excute(id, queueId);
+        return payBookingUseCase.execute(id, queueId);
     }
 }

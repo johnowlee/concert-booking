@@ -24,17 +24,17 @@ public class ConcertController {
 
     @GetMapping
     public ConcertsResponse concerts() {
-        return getConcertsUseCase.excute();
+        return getConcertsUseCase.execute();
     }
 
     @GetMapping("{id}/options")
     public ConcertOptionsResponse concertOptions(@PathVariable Long id) {
-        return getConcertOptionsUseCase.excute(id);
+        return getConcertOptionsUseCase.execute(id);
     }
 
     @GetMapping("/options/{id}")
     public ConcertOptionResponse concertOption(@PathVariable Long id) {
-        return getConcertOptionUseCase.excute(id);
+        return getConcertOptionUseCase.execute(id);
     }
 
 
@@ -42,6 +42,6 @@ public class ConcertController {
     public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueId,
                                              @PathVariable Long optionId,
                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return bookConcertUseCase.excute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
+        return bookConcertUseCase.execute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
     }
 }

@@ -20,4 +20,8 @@ public class BookingReader {
     public Booking getBookingById(Long id) {
         return bookingReaderRepository.getBookingById(id);
     }
+
+    public List<Booking> getBookingsBySeatIds(List<Long> seatIds) {
+        return bookingReaderRepository.getBookingsBySeatIds(seatIds);
+    }
 }

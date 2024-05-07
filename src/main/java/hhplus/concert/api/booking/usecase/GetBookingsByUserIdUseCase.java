@@ -13,7 +13,7 @@ public class GetBookingsByUserIdUseCase {
 
     private final BookingReader bookingReader;
 
-    public BookingsResponse excute(Long userId) {
+    public BookingsResponse execute(Long userId) {
         return BookingsResponse.from(bookingReader.getBookingsByUserId(userId));
     }
 }

@@ -8,8 +8,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
+import static hhplus.concert.domain.queue.model.QueueManager.QUEUE_EXPIRY_MINUTES;
 
 @Entity
 @Getter
@@ -56,5 +59,9 @@ public class Queue {
 
     public void changeQueueStatus(QueueStatus status) {
         this.status = status;
+    }
+
+    public boolean isExpired() {
+        return Duration.between(this.getUpdateAt(), LocalDateTime.now()).toMinutes() > QUEUE_EXPIRY_MINUTES.toLong();
     }
 }

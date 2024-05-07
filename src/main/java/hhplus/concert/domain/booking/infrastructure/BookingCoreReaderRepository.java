@@ -26,4 +26,8 @@ public class BookingCoreReaderRepository implements BookingReaderRepository {
                 .orElseThrow(NoSuchElementException::new);
     }
 
+    @Override
+    public List<Booking> getBookingsBySeatIds(List<Long> ids) {
+        return bookingJpaRepository.findBookingsBySeatIds(ids);
+    }
 }
