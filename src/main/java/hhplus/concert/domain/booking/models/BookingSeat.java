@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class BookingSeat {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booking_seat_id")
     private Long id;
 

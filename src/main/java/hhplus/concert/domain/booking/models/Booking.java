@@ -24,7 +24,7 @@ import static hhplus.concert.domain.booking.models.BookingManager.BOOKING_EXPIRY
 public class Booking {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "booking_id")
     private Long id;
 

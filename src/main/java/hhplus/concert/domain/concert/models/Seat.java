@@ -1,7 +1,6 @@
 package hhplus.concert.domain.concert.models;
 
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.booking.models.BookingStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -18,7 +16,8 @@ import java.util.stream.Collectors;
 @Table(name = "seat")
 public class Seat {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seat_id")
     private Long id;
 

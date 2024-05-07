@@ -16,7 +16,7 @@ import java.util.List;
 public class Concert {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "concert_id")
     private Long id;
 
