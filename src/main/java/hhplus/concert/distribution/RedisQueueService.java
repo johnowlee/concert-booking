@@ -1,6 +1,7 @@
 package hhplus.concert.distribution;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -8,62 +9,88 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import static hhplus.concert.distribution.QueuePolicy.*;
+import static hhplus.concert.distribution.TokenResponse.*;
+import static hhplus.concert.distribution.TokenKey.*;
+
 @Service
 @RequiredArgsConstructor
-public class NewRedisQueueService {
+@Slf4j
+public class RedisQueueService {
 
-    private final RedisTemplate<String, String> redisTemplate;
-    private static final String ACTIVE_KEY = "active";
-    private static final String WAITING_KEY = "waiting";
-    private static final int MAX_CONCURRENT_USERS = 50;
-    private static final long MAX_WORKING_SEC = 20; // 10분
+    private final RedisTemplate<String, String> redis;
 
-    public AccessToken tryAccess() {
+    public TokenResponse createQueueToken() {
         String token = UUID.randomUUID().toString();
-        Long currentSize = redisTemplate.opsForSet().size(ACTIVE_KEY);
 
-        if (currentSize == null || currentSize < MAX_CONCURRENT_USERS) {
-            // 사용자 접속 허용 및 TTL 설정
-            redisTemplate.opsForSet().add(ACTIVE_KEY, token);
-
-            // active 사용자별로 key 생성(만료시간체크용)
-            redisTemplate.opsForValue().set(token, "activeUsers", MAX_WORKING_SEC, TimeUnit.SECONDS);
-
-            return new AccessToken(token, ACTIVE_KEY); // 접속 성공
+        if (isAccessible()) {
+            addTokenToActive(token);
+            setTokenAsActiveUser(token);
+            return createActiveTokenResponse(token, ACTIVE_KEY);
         } else {
-            // 대기열에 추가
-            redisTemplate.opsForZSet().add(WAITING_KEY, token, System.currentTimeMillis());
-            return new AccessToken(token, WAITING_KEY); // 대기열로 이동
+            addTokenToWaiting(token);
+            return createWaitingTokenResponse(token, WAITING_KEY, getWaitingNumber(token));
         }
     }
 
-    public void releaseAccess(Long userId) {
-        // 접속 종료 시 사용자 제거
-        redisTemplate.opsForZSet().remove(WAITING_KEY, userId);
+    public TokenResponse findToken(String token) {
+        if (isActiveToken(token)) {
+            return createActiveTokenResponse(token, ACTIVE_KEY);
+        } else {
+            return createWaitingTokenResponse(token, WAITING_KEY, getWaitingNumber(token));
+        }
     }
 
-    public void finishWorking(String token) {
-        // 작업완료 시 Active 사용자 제거
-        redisTemplate.opsForSet().remove(ACTIVE_KEY, token);
+    public void expire(String token) {
+        removeTokenFromActive(token);
+        moveFirstWaiterToActive();
+    }
 
-        //
-        // Waiting 첫번째 대기자 제거 및 제거된 대기자 ACTIVE
+    private void moveFirstWaiterToActive() {
         Set<String> result = getFirstWaiter();
         if (result != null && !result.isEmpty()) {
             String firstWaiter = result.iterator().next();// 첫 번째 요소 반환
-            redisTemplate.opsForZSet().remove(WAITING_KEY, firstWaiter);// waiting 제거
-            redisTemplate.opsForSet().add(ACTIVE_KEY, firstWaiter);// active
+            removeTokenFromWaiting(firstWaiter);// waiting 제거
+            addTokenToActive(firstWaiter);
         }
     }
 
-    public Set<String> getFirstWaiter() {
-        return redisTemplate.opsForZSet().range(WAITING_KEY, 0, 0);
+    public void addTokenToActive(String token) {
+        redis.opsForSet().add(ACTIVE_KEY.getValue(), token);
     }
 
+    public void removeTokenFromActive(String token) {
+        redis.opsForSet().remove(ACTIVE_KEY.getValue(), token);
+    }
 
-    public Long getQueuePosition(String token) {
+    public void addTokenToWaiting(String token) {
+        redis.opsForZSet().add(WAITING_KEY.getValue(), token, System.currentTimeMillis());
+    }
+
+    public void removeTokenFromWaiting(String firstWaiter) {
+        redis.opsForZSet().remove(WAITING_KEY.getValue(), firstWaiter);
+    }
+
+    public void setTokenAsActiveUser(String token) {
+        redis.opsForValue().set(token, "active", MAX_WORKING_SEC.getValue(), TimeUnit.SECONDS);
+    }
+
+    private boolean isAccessible() {
+        Long concurrentSize = redis.opsForSet().size(ACTIVE_KEY.getValue());
+        return concurrentSize == null || concurrentSize < MAX_CONCURRENT_USERS.getValue();
+    }
+
+    public Set<String> getFirstWaiter() {
+        return redis.opsForZSet().range(WAITING_KEY.getValue(), 0, 0);
+    }
+
+    public Long getWaitingNumber(String token) {
         // 사용자의 대기 순번 조회
-        Long rank = redisTemplate.opsForZSet().rank(WAITING_KEY, token);
+        Long rank = redis.opsForZSet().rank(WAITING_KEY.getValue(), token);
         return rank != null ? rank + 1 : null; // 순번은 1부터 시작하므로 1을 더해줌
+    }
+
+    public boolean isActiveToken(String token) {
+        return redis.hasKey(token);
     }
 }

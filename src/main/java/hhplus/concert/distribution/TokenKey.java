@@ -1,11 +1,11 @@
 package hhplus.concert.distribution;
 
-public enum TokenKeys {
+public enum TokenKey {
     ACTIVE_KEY("active"), WAITING_KEY("waiting");
 
     String value;
 
-    private TokenKeys(String value) {
+    private TokenKey(String value) {
         this.value = value;
     }
 

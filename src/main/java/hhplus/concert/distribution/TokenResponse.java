@@ -1,14 +1,15 @@
 package hhplus.concert.distribution;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
-public record Token(String token, String key, @JsonIgnore Long waitingNumber) {
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record TokenResponse(String token, String key, Long waitingNumber) {
 
-    public static Token createActiveToken(String token, TokenKey tokenKey) {
-        return new Token(token, tokenKey.getValue(), null);
+    public static TokenResponse createActiveTokenResponse(String token, TokenKey tokenKey) {
+        return new TokenResponse(token, tokenKey.getValue(), null);
     }
 
-    public static Token createWaitingToken(String token, TokenKey tokenKey, Long waitingNumber) {
-        return new Token(token, tokenKey.getValue(), waitingNumber);
+    public static TokenResponse createWaitingTokenResponse(String token, TokenKey tokenKey, Long waitingNumber) {
+        return new TokenResponse(token, tokenKey.getValue(), waitingNumber);
     }
 }
