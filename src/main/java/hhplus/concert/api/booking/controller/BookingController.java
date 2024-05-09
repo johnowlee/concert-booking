@@ -1,5 +1,6 @@
 package hhplus.concert.api.booking.controller;
 
+import hhplus.concert.api.booking.dto.request.PaymentRequest;
 import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
 import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
@@ -7,6 +8,7 @@ import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,18 +21,19 @@ public class BookingController {
     private final PayBookingUseCase payBookingUseCase;
 
     @GetMapping("/users/{id}")
-    public BookingsResponse bookings(@PathVariable Long id) {
-        return getBookingsByUserIdUseCase.execute(id);
+    public ResponseEntity<BookingsResponse> bookings(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getBookingsByUserIdUseCase.execute(id));
     }
 
     @GetMapping("{id}")
-    public BookingResponse booking(@PathVariable Long id) {
-        return getBookingByIdUseCase.execute(id);
+    public ResponseEntity<BookingResponse> booking(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getBookingByIdUseCase.execute(id));
     }
 
-    @GetMapping("{id}/payment")
-    public PaymentResponse booking(@PathVariable Long id,
-                                   @RequestHeader("Queue-Token") String queueId) {
-        return payBookingUseCase.execute(id, queueId);
+    @PostMapping("{id}/payment")
+    public ResponseEntity<PaymentResponse> payment(@PathVariable Long id,
+                                   @RequestHeader("Queue-Token") String token,
+                                   @RequestBody PaymentRequest paymentRequest) {
+        return ResponseEntity.ok().body(payBookingUseCase.execute(id, token, paymentRequest.userId()));
     }
 }
