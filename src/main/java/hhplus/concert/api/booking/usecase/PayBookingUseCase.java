@@ -1,6 +1,8 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.distribution.RedisQueueService;
 import hhplus.concert.distribution.TokenKey;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
@@ -44,7 +46,7 @@ public class PayBookingUseCase {
 
         // 예약시간초과 검증
         if (booking.isBookingDateTimeExpired()) {
-            throw new RuntimeException("예약시간이 만료되었습니다. 예약을 다시 진행해 주세요.");
+            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
         }
 
         User user = userReader.getUserById(userId);
