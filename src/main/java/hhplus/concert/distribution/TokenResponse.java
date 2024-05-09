@@ -6,10 +6,10 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 public record TokenResponse(String token, String key, Long waitingNumber) {
 
     public static TokenResponse createActiveTokenResponse(String token, TokenKey tokenKey) {
-        return new TokenResponse(token, tokenKey.getValue(), null);
+        return new TokenResponse(token, tokenKey.toString(), null);
     }
 
     public static TokenResponse createWaitingTokenResponse(String token, TokenKey tokenKey, Long waitingNumber) {
-        return new TokenResponse(token, tokenKey.getValue(), waitingNumber);
+        return new TokenResponse(token, tokenKey.toString(), waitingNumber);
     }
 }
