@@ -2,6 +2,8 @@ package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
+import hhplus.concert.distribution.RedisQueueService;
+import hhplus.concert.distribution.TokenKey;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
@@ -12,16 +14,13 @@ import hhplus.concert.domain.concert.components.SeatValidator;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.queue.components.QueueGenerator;
-import hhplus.concert.domain.queue.components.QueueReader;
-import hhplus.concert.domain.queue.model.Queue;
+import hhplus.concert.domain.user.components.UserReader;
+import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static hhplus.concert.domain.queue.model.QueueStatus.WAITING;
 
 @Repository
 @RequiredArgsConstructor
@@ -30,50 +29,42 @@ public class BookConcertUseCase {
     private final ConcertOptionReader concertOptionReader;
     private final BookingWriter bookingWriter;
     private final SeatReader seatReader;
-    private final QueueReader queueReader;
-    private final QueueGenerator queueGenerator;
     private final BookingReader bookingReader;
     private final SeatValidator seatValidator;
+    private final UserReader userReader;
+    private final RedisQueueService redisQueueService;
 
     @Transactional
-    public BookingResultResponse execute(String queueId, ConcertBookingRequest request) {
-        // 1. queue 조회
-        // 대기열 검증
-        Queue queue = queueReader.getQueueById(queueId);
-        if (queue == null) {
-            throw new RuntimeException("대기열 Token이 존재하지 않습니다.");
+    public BookingResultResponse execute(String token, Long optionId, ConcertBookingRequest request) {
+        // 1. 대기열 조회
+        String key = redisQueueService.findToken(token).key();
+        if (key.equals(TokenKey.WAITING.toString())) {
+            return BookingResultResponse.fail();
         }
+        // 2. 유저 조회
+        User user = userReader.getUserById(request.userId());
 
-        // 대기열 만료 검증
-        if (queue.isExpired()) {
-            // queue 생성
-            queue = queueGenerator.getQueue(queue.getUser());
-            // 대기상태면? 실패-대기.
-            if (queue.getStatus() == WAITING) {
-                return BookingResultResponse.fail();
-            }
-        }
-        // 2. 좌석정보 조회
+        // 3. 좌석정보 조회
         List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
 
-        // 예약상태, 좌석상태 검증
+        // 4. 예약상태, 좌석상태 검증
         List<Booking> bookingsBySeats = bookingReader.getBookingsBySeatIds(request.parsedSeatIds());
         seatValidator.validateSeatsBookable(bookingsBySeats);
 
-        // 3. 콘서트 옵션 id로 콘서트 옵션 조회
-        ConcertOption concertOption = concertOptionReader.getConcertOptionById(request.concertOptionId());
+        // 5. 콘서트 옵션 id로 콘서트 옵션 조회
+        ConcertOption concertOption = concertOptionReader.getConcertOptionById(optionId);
 
 
-        // 4. 예약테이블 저장
-        Booking savedBooking = bookingWriter.bookConcert(Booking.buildBooking(concertOption, queue.getUser()));
+        // 6. 예약테이블 저장
+        Booking savedBooking = bookingWriter.bookConcert(Booking.buildBooking(concertOption, user));
 
-        // 5. 예약좌석매핑 테이블 저장
+        // 7. 예약좌석매핑 테이블 저장
         bookingWriter.saveAllBookingSeat(BookingSeat.createBookingSeats(seats, savedBooking));
 
-        // 좌석 예약상태 update
+        // 8. 좌석 예약상태 update
         updateSeatBookingStatus(seats, SeatBookingStatus.PROCESSING);
 
-        return BookingResultResponse.succeed(queue.getUser(), savedBooking, concertOption, seats);
+        return BookingResultResponse.succeed(user, savedBooking, concertOption, seats);
     }
 
     private static void updateSeatBookingStatus(List<Seat> seats, SeatBookingStatus status) {

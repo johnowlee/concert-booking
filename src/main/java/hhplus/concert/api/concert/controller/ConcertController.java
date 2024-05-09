@@ -10,6 +10,7 @@ import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -23,25 +24,25 @@ public class ConcertController {
     private final BookConcertUseCase bookConcertUseCase;
 
     @GetMapping
-    public ConcertsResponse concerts() {
-        return getConcertsUseCase.execute();
+    public ResponseEntity<ConcertsResponse> concerts() {
+        return ResponseEntity.ok().body(getConcertsUseCase.execute());
     }
 
     @GetMapping("{id}/options")
-    public ConcertOptionsResponse concertOptions(@PathVariable Long id) {
-        return getConcertOptionsUseCase.execute(id);
+    public ResponseEntity<ConcertOptionsResponse> concertOptions(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getConcertOptionsUseCase.execute(id));
     }
 
     @GetMapping("/options/{id}")
-    public ConcertOptionResponse concertOption(@PathVariable Long id) {
-        return getConcertOptionUseCase.execute(id);
+    public ResponseEntity<ConcertOptionResponse> concertOption(@PathVariable Long id) {
+        return ResponseEntity.ok().body(getConcertOptionUseCase.execute(id));
     }
 
 
     @PostMapping("/options/{optionId}/booking")
-    public BookingResultResponse bookConcert(@RequestHeader("Queue-Token") String queueId,
-                                             @PathVariable Long optionId,
-                                             @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return bookConcertUseCase.execute(queueId, ConcertBookingRequest.of(optionId, concertBookingRequest.seatId()));
+    public ResponseEntity<BookingResultResponse> bookConcert(@RequestHeader("Queue-Token") String token,
+                                                             @PathVariable Long optionId,
+                                                             @RequestBody ConcertBookingRequest concertBookingRequest) {
+        return ResponseEntity.ok().body(bookConcertUseCase.execute(token, optionId, concertBookingRequest));
     }
 }
