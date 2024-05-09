@@ -1,23 +1,26 @@
 package hhplus.concert.api.queue.controller;
 
-import hhplus.concert.api.queue.dto.response.QueueResponse;
-import hhplus.concert.api.queue.usecase.GetQueueByUserIdUseCase;
+import hhplus.concert.distribution.RedisQueueService;
+import hhplus.concert.distribution.TokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/queue")
 public class QueueController {
 
-    private final GetQueueByUserIdUseCase getQueueByUserIdUseCase;
+    private final RedisQueueService redisQueueService;
 
-    @GetMapping("/users/{userId}")
-    public QueueResponse queue(@PathVariable Long userId) {
-        return getQueueByUserIdUseCase.excute(userId);
+    @GetMapping
+    public TokenResponse findToken(@RequestHeader("Queue-Token") String token) {
+        return redisQueueService.findToken(token);
+    }
+
+    @PostMapping
+    public ResponseEntity<TokenResponse> createRedisQueue() {
+        return ResponseEntity.ok().body(redisQueueService.createQueueToken());
     }
 
 }

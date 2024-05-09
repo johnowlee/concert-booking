@@ -6,7 +6,9 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum BookingErrorCode implements ErrorCode {
     PROCESSING_BOOKING(HttpStatus.INTERNAL_SERVER_ERROR, "booking is processing in some other place"),
-    ALREADY_BOOKED(HttpStatus.INTERNAL_SERVER_ERROR, "the seat is already booked")
+    ALREADY_BOOKED(HttpStatus.INTERNAL_SERVER_ERROR, "the seat is already booked"),
+
+    EXPIRED_BOOKING_TIME(HttpStatus.INTERNAL_SERVER_ERROR, "booking time is expired")
     ;
 
     private final HttpStatus httpStatus;

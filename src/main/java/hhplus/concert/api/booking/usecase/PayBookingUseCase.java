@@ -1,14 +1,17 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BookingErrorCode;
+import hhplus.concert.distribution.RedisQueueService;
+import hhplus.concert.distribution.TokenKey;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
-import hhplus.concert.domain.queue.components.QueueGenerator;
-import hhplus.concert.domain.queue.components.QueueReader;
-import hhplus.concert.domain.queue.model.Queue;
+import hhplus.concert.domain.user.components.UserReader;
+import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,51 +22,41 @@ import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 import static hhplus.concert.domain.balance.models.TransactionType.USE;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
-import static hhplus.concert.domain.queue.model.QueueStatus.EXPIRED;
-import static hhplus.concert.domain.queue.model.QueueStatus.WAITING;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class PayBookingUseCase {
 
-    private final QueueReader queueReader;
-    private final QueueGenerator queueGenerator;
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
+    private final RedisQueueService redisQueueService;
+    private final UserReader userReader;
 
     @Transactional
-    public PaymentResponse execute(Long id, String queueId) {
+    public PaymentResponse execute(Long id, String token, Long userId) {
         // 대기열 검증
-        Queue queue = queueReader.getQueueById(queueId);
-        if (queue == null) {
-            throw new RuntimeException("대기열 Token이 존재하지 않습니다.");
+        String key = redisQueueService.findToken(token).key();
+        if (key.equals(TokenKey.WAITING.toString())) {
+            return PaymentResponse.from(FAILURE);
         }
+
+        Booking booking = bookingReader.getBookingById(id);
 
         // 예약시간초과 검증
-        Booking booking = bookingReader.getBookingById(id);
         if (booking.isBookingDateTimeExpired()) {
-            throw new RuntimeException("예약시간이 만료되었습니다. 예약을 다시 진행해 주세요.");
+            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
         }
 
-        // 대기열 만료 검증
-        if (queue.isExpired()) {
-            // queue 생성
-            queue = queueGenerator.getQueue(queue.getUser());
-
-            // 대기상태면? 실패-대기.
-            if (queue.getStatus() == WAITING) {
-                return PaymentResponse.from(FAILURE);
-            }
-        }
+        User user = userReader.getUserById(userId);
 
         // 잔액검증 및 user 잔액 update
-        long amount = booking.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
-        queue.getUser().useBalance(amount);
+        long amount = calculateAmount(booking);
+        user.useBalance(amount);
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceHistory(queue.getUser(), amount, USE);
+        balanceHistoryWriter.saveBalanceHistory(user, amount, USE);
 
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
@@ -74,9 +67,10 @@ public class PayBookingUseCase {
         // 좌석 예약상태 update
         booking.changeSeatsBookingStatus(BOOKED);
 
-        // 대기열 만료
-        queue.changeQueueStatus(EXPIRED);
-
         return PaymentResponse.from(SUCCESS);
+    }
+
+    private static int calculateAmount(Booking booking) {
+        return booking.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
     }
 }
