@@ -355,3 +355,10 @@ https://github.com/WonhoLeeDev/hhplus-concert/milestones?with_issues=no
   - 다만 충돌이 잦을 것이라 예상되는 경우 데이터의 일관성과 무결성이 보장된다.
 - 효율성
   - 자원에 Lock이 걸리기 때문에 비교적 자원의 활용에 관한 효율성이 낮다. 
+
+***********************************
+### 인덱스 적용
+https://velog.io/@wonholee/DB-%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9D%B8%EB%8D%B1%EC%8A%A4-%EB%8F%84%EC%9E%85%EA%B8%B0
+***********************************
+### 대기열 구현 - Redis
+https://velog.io/@wonholee/Redis-%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4-%EB%8C%80%EA%B8%B0%EC%97%B4%EA%B5%AC%ED%98%84
