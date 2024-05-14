@@ -1,7 +1,7 @@
 package hhplus.concert.api.queue.controller;
 
-import hhplus.concert.distribution.RedisQueueService;
-import hhplus.concert.distribution.TokenResponse;
+import hhplus.concert.api.queue.usecase.RedisQueueService;
+import hhplus.concert.api.queue.dto.response.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +19,7 @@ public class QueueController {
     }
 
     @PostMapping
-    public ResponseEntity<TokenResponse> createRedisQueue() {
+    public ResponseEntity<TokenResponse> createToken() {
         return ResponseEntity.ok().body(redisQueueService.createQueueToken());
     }
 

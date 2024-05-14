@@ -1,6 +1,8 @@
-package hhplus.concert.distribution;
+package hhplus.concert.api.queue.usecase;
 
 import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.queue.dto.response.TokenResponse;
+import hhplus.concert.domain.queue.model.Key;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -11,11 +13,10 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
-import static hhplus.concert.distribution.QueuePolicy.MAX_CONCURRENT_USERS;
-import static hhplus.concert.distribution.QueuePolicy.MAX_WORKING_SEC;
-import static hhplus.concert.distribution.TokenKey.*;
-import static hhplus.concert.distribution.TokenResponse.createActiveTokenResponse;
-import static hhplus.concert.distribution.TokenResponse.createWaitingTokenResponse;
+import static hhplus.concert.api.queue.dto.response.TokenResponse.createActiveTokenResponse;
+import static hhplus.concert.api.queue.dto.response.TokenResponse.createWaitingTokenResponse;
+import static hhplus.concert.domain.queue.model.QueuePolicy.MAX_CONCURRENT_USERS;
+import static hhplus.concert.domain.queue.model.QueuePolicy.MAX_WORKING_SEC;
 
 @Service
 @RequiredArgsConstructor
@@ -30,16 +31,16 @@ public class RedisQueueService {
         if (isAccessible()) {
             addTokenToActive(token);
             setTokenAsActiveUser(token);
-            return createActiveTokenResponse(token, ACTIVE);
+            return createActiveTokenResponse(token, Key.ACTIVE);
         } else {
             addTokenToWaiting(token);
-            return createWaitingTokenResponse(token, WAITING, getWaitingNumber(token));
+            return createWaitingTokenResponse(token, Key.WAITING, getWaitingNumber(token));
         }
     }
 
     public TokenResponse findToken(String token) {
-        if (isActiveToken(token)) return createActiveTokenResponse(token, ACTIVE);
-        if (isWaitingToken(token)) return createWaitingTokenResponse(token, WAITING, getWaitingNumber(token));
+        if (isActiveToken(token)) return createActiveTokenResponse(token, Key.ACTIVE);
+        if (isWaitingToken(token)) return createWaitingTokenResponse(token, Key.WAITING, getWaitingNumber(token));
         throw new RestApiException(NOT_FOUND_TOKEN);
     }
 
@@ -59,19 +60,19 @@ public class RedisQueueService {
     }
 
     public void addTokenToActive(String token) {
-        redis.opsForSet().add(ACTIVE.toString(), token);
+        redis.opsForSet().add(Key.ACTIVE.toString(), token);
     }
 
     public void removeTokenFromActive(String token) {
-        redis.opsForSet().remove(ACTIVE.toString(), token);
+        redis.opsForSet().remove(Key.ACTIVE.toString(), token);
     }
 
     public void addTokenToWaiting(String token) {
-        redis.opsForZSet().add(WAITING.toString(), token, System.currentTimeMillis());
+        redis.opsForZSet().add(Key.WAITING.toString(), token, System.currentTimeMillis());
     }
 
     public void removeTokenFromWaiting(String firstWaiter) {
-        redis.opsForZSet().remove(WAITING.toString(), firstWaiter);
+        redis.opsForZSet().remove(Key.WAITING.toString(), firstWaiter);
     }
 
     public void setTokenAsActiveUser(String token) {
@@ -79,26 +80,25 @@ public class RedisQueueService {
     }
 
     private boolean isAccessible() {
-        Long concurrentSize = redis.opsForSet().size(ACTIVE.toString());
+        Long concurrentSize = redis.opsForSet().size(Key.ACTIVE.toString());
         return concurrentSize == null || concurrentSize < MAX_CONCURRENT_USERS.getValue();
     }
 
     public Set<String> getFirstWaiter() {
-        return redis.opsForZSet().range(WAITING.toString(), 0, 0);
+        return redis.opsForZSet().range(Key.WAITING.toString(), 0, 0);
     }
 
     public Long getWaitingNumber(String token) {
         // 사용자의 대기 순번 조회
-        Long rank = redis.opsForZSet().rank(WAITING.toString(), token);
+        Long rank = redis.opsForZSet().rank(Key.WAITING.toString(), token);
         return rank != null ? rank + 1 : null; // 순번은 1부터 시작하므로 1을 더해줌
     }
 
-    public boolean isActiveToken(String token) {
-        return redis.opsForSet().isMember(ACTIVE.toString(), token);
+    public Boolean isActiveToken(String token) {
+        return redis.opsForSet().isMember(Key.ACTIVE.toString(), token);
     }
 
     public boolean isWaitingToken(String token) {
-        Double score = redis.opsForZSet().score(WAITING.toString(), token);
-        return redis.opsForZSet().score(WAITING.toString(), token) != null;
+        return redis.opsForZSet().score(Key.WAITING.toString(), token) != null;
     }
 }

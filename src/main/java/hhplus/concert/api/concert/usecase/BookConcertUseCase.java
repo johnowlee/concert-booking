@@ -2,8 +2,7 @@ package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
-import hhplus.concert.distribution.RedisQueueService;
-import hhplus.concert.distribution.TokenKey;
+import hhplus.concert.api.queue.usecase.RedisQueueService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
@@ -14,6 +13,7 @@ import hhplus.concert.domain.concert.components.SeatValidator;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class BookConcertUseCase {
     public BookingResultResponse execute(String token, Long optionId, ConcertBookingRequest request) {
         // 1. 대기열 조회
         String key = redisQueueService.findToken(token).key();
-        if (key.equals(TokenKey.WAITING.toString())) {
+        if (key.equals(Key.WAITING.toString())) {
             return BookingResultResponse.fail();
         }
         // 2. 유저 조회
