@@ -1,6 +1,6 @@
 package hhplus.concert.api.queue.usecase;
 
-import hhplus.concert.api.queue.dto.response.TokenResponse;
+import hhplus.concert.api.queue.dto.response.QueueResponse;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Queue;
@@ -9,8 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-import static hhplus.concert.api.queue.dto.response.TokenResponse.createActiveTokenResponse;
-import static hhplus.concert.api.queue.dto.response.TokenResponse.createWaitingTokenResponse;
+import static hhplus.concert.api.queue.dto.response.QueueResponse.*;
 
 @Service
 @RequiredArgsConstructor
@@ -19,17 +18,25 @@ public class CreateTokenUseCase {
     private final QueueReader queueReader;
     private final QueueWriter queueWriter;
 
-    public TokenResponse execute() {
+    public QueueResponse execute() {
         String token = UUID.randomUUID().toString();
         if (queueReader.isAccessible()) {
-            Queue queue = Queue.createActiveQueue(token);
-            queueWriter.addActiveToken(queue);
-            queueWriter.createActiveKey(queue);
-            return createActiveTokenResponse(queue.getToken());
+            return activeQueue(token);
         } else {
-            Queue queue = Queue.createWaitingQueue(token);
-            queueWriter.addWaitingToken(queue);
-            return createWaitingTokenResponse(queue.getToken(), queueReader.getWaitingNumber(queue.getToken()));
+            return waitingQueue(token);
         }
+    }
+
+    private QueueResponse activeQueue(String token) {
+        Queue queue = Queue.createActiveQueue(token);
+        queueWriter.addActiveToken(queue);
+        queueWriter.createActiveKey(queue);
+        return createActiveQueueResponse(queue.getToken());
+    }
+
+    private QueueResponse waitingQueue(String token) {
+        Queue queue = Queue.createWaitingQueue(token);
+        queueWriter.addWaitingToken(queue);
+        return createWaitingQueueResponse(queue.getToken(), queueReader.getWaitingNumber(queue.getToken()));
     }
 }

@@ -2,7 +2,7 @@ package hhplus.concert.api.queue.controller;
 
 import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
-import hhplus.concert.api.queue.dto.response.TokenResponse;
+import hhplus.concert.api.queue.dto.response.QueueResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +16,12 @@ public class QueueController {
     private final CreateTokenUseCase createQueueToken;
 
     @GetMapping
-    public ResponseEntity<TokenResponse> findToken(@RequestHeader("Queue-Token") String token) {
+    public ResponseEntity<QueueResponse> findToken(@RequestHeader("Queue-Token") String token) {
         return ResponseEntity.ok().body(findTokenUseCase.execute(token));
     }
 
     @PostMapping
-    public ResponseEntity<TokenResponse> createToken() {
+    public ResponseEntity<QueueResponse> createToken() {
         return ResponseEntity.ok().body(createQueueToken.execute());
     }
 
