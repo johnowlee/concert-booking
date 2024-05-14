@@ -3,13 +3,12 @@ package hhplus.concert.api.booking.usecase;
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
-import hhplus.concert.api.queue.usecase.RedisQueueService;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
-import hhplus.concert.domain.queue.model.Key;
+import hhplus.concert.domain.queue.service.TokenValidator;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -31,14 +30,13 @@ public class PayBookingUseCase {
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
-    private final RedisQueueService redisQueueService;
+    private final TokenValidator tokenValidator;
     private final UserReader userReader;
 
     @Transactional
     public PaymentResponse execute(Long id, String token, Long userId) {
         // 대기열 검증
-        String key = redisQueueService.findToken(token).key();
-        if (key.equals(Key.WAITING.toString())) {
+        if (!tokenValidator.isValid(token)) {
             return PaymentResponse.from(FAILURE);
         }
 

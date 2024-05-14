@@ -6,11 +6,11 @@ import hhplus.concert.domain.queue.model.Key;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public record TokenResponse(String token, String key, Long waitingNumber) {
 
-    public static TokenResponse createActiveTokenResponse(String token, Key tokenKey) {
-        return new TokenResponse(token, tokenKey.toString(), null);
+    public static TokenResponse createActiveTokenResponse(String token) {
+        return new TokenResponse(token, Key.ACTIVE.toString(), null);
     }
 
-    public static TokenResponse createWaitingTokenResponse(String token, Key tokenKey, Long waitingNumber) {
-        return new TokenResponse(token, tokenKey.toString(), waitingNumber);
+    public static TokenResponse createWaitingTokenResponse(String token, Long waitingNumber) {
+        return new TokenResponse(token, Key.WAITING.toString(), waitingNumber);
     }
 }
