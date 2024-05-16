@@ -59,9 +59,13 @@ public class Booking {
 
     // 예약만료시간 체크
     public void validateBookingDateTime() {
-        if (getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong()) {
+        if (isBookingDateTimeExpired()) {
             throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
         }
+    }
+
+    public boolean isBookingDateTimeExpired() {
+        return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
     }
 
     private long getMinutesSinceBooking() {
