@@ -6,7 +6,7 @@ public interface QueueReaderRepository {
 
     Long getSetSize(String key);
 
-    boolean containsValue(String key, String value);
+    Boolean containsValue(String key, String value);
     Set<String> getValuesByRange(String key, long start, long end);
 
     Long getRankByValue(String key, String value);

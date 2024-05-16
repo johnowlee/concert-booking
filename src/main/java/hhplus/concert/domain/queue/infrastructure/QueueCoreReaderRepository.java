@@ -19,7 +19,7 @@ public class QueueCoreReaderRepository implements QueueReaderRepository {
     }
 
     @Override
-    public boolean containsValue(String key, String value) {
+    public Boolean containsValue(String key, String value) {
         return redisTemplate.opsForSet().isMember(key, value);
     }
 
