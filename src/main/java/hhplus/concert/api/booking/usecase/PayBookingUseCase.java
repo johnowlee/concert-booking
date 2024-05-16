@@ -35,10 +35,8 @@ public class PayBookingUseCase {
 
     @Transactional
     public PaymentResponse execute(Long id, String token, Long userId) {
-        // 대기열 검증
-        if (!tokenValidator.isValid(token)) {
-            return PaymentResponse.from(FAILURE);
-        }
+        // 토큰 검증
+        tokenValidator.validateToken(token);
 
         Booking booking = bookingReader.getBookingById(id);
 

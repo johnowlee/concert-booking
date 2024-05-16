@@ -35,10 +35,9 @@ public class BookConcertUseCase {
 
     @Transactional
     public BookingResultResponse execute(String token, Long optionId, ConcertBookingRequest request) {
-        // 1. 대기열 조회
-        if (!tokenValidator.isValid(token)) {
-            return BookingResultResponse.fail();
-        }
+        // 1. 토큰 검증
+        tokenValidator.validateToken(token);
+
         // 2. 유저 조회
         User user = userReader.getUserById(request.userId());
 

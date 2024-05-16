@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 
 @Service
 @RequiredArgsConstructor
@@ -13,9 +14,8 @@ public class TokenValidator {
 
     private final QueueReader queueReader;
 
-    public boolean isValid(String token) {
-        if(queueReader.isActiveToken(token)) return true;
-        if(queueReader.isWaitingToken(token)) return false;
-        throw new RestApiException(NOT_FOUND_TOKEN);
+    public void validateToken(String token) {
+        if (queueReader.isWaitingToken(token)) throw new RestApiException(WAITING_TOKEN);
+        if (queueReader.isActiveToken(token) == null) throw new RestApiException(NOT_FOUND_TOKEN);
     }
 }
