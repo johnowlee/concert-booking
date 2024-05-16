@@ -4,6 +4,7 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
@@ -85,5 +86,9 @@ public class Booking {
                 .user(user)
                 .build();
         return booking;
+    }
+
+    public int getTotalPrice() {
+        return this.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
     }
 }

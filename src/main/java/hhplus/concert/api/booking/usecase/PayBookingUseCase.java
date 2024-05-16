@@ -46,7 +46,7 @@ public class PayBookingUseCase {
         User user = userReader.getUserById(userId);
 
         // 잔액검증 및 user 잔액 update
-        long amount = calculateAmount(booking);
+        long amount = booking.getTotalPrice();
         user.useBalance(amount);
 
         // 잔액내역 save
@@ -62,9 +62,5 @@ public class PayBookingUseCase {
         booking.changeSeatsBookingStatus(BOOKED);
 
         return PaymentResponse.from(SUCCESS);
-    }
-
-    private static int calculateAmount(Booking booking) {
-        return booking.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
     }
 }
