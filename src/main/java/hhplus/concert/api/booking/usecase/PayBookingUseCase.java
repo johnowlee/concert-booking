@@ -41,9 +41,7 @@ public class PayBookingUseCase {
         Booking booking = bookingReader.getBookingById(id);
 
         // 예약시간초과 검증
-        if (booking.isBookingDateTimeExpired()) {
-            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
-        }
+        booking.validateBookingDateTime();
 
         User user = userReader.getUserById(userId);
 

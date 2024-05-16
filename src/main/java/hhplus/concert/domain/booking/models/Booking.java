@@ -1,5 +1,7 @@
 package hhplus.concert.domain.booking.models;
 
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.payment.models.Payment;
@@ -55,8 +57,14 @@ public class Booking {
     }
 
     // 예약만료시간 체크
-    public boolean isBookingDateTimeExpired() {
-        return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes() > BOOKING_EXPIRY_MINUTES.toLong();
+    public void validateBookingDateTime() {
+        if (getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong()) {
+            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
+        }
+    }
+
+    private long getMinutesSinceBooking() {
+        return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes();
     }
 
     public void changeBookingStatus(BookingStatus status) {
