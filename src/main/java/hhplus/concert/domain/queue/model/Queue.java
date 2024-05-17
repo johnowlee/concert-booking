@@ -1,66 +1,30 @@
 package hhplus.concert.domain.queue.model;
 
-import hhplus.concert.domain.user.models.User;
-import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.util.UUID;
-
-import static hhplus.concert.domain.queue.model.QueueManager.QUEUE_EXPIRY_MINUTES;
-
-@Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "queue")
 public class Queue {
+    Key key;
+    String token;
+    long waitingNumber;
+    double score;
 
-    @Id
-    @Column(name = "queue_id")
-    private String id;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
-
-    private long position;
-    private LocalDateTime updateAt;
-
-    @Enumerated(EnumType.STRING)
-    private QueueStatus status;
-
-    @Builder
-    private Queue(String id, User user, long position, LocalDateTime updateAt, QueueStatus status) {
-        this.id = id;
-        this.user = user;
-        this.position = position;
-        this.updateAt = updateAt;
-        this.status = status;
+    public String getKeyName() {
+        return key.toString();
     }
 
-    public static Queue createQueue(User user, long position, QueueStatus status) {
-        return builder()
-                .id(generateUUID(user.getId()))
-                .user(user)
-                .position(position)
-                .updateAt(LocalDateTime.now())
-                .status(status)
-                .build();
+    private Queue(Key key, String token, long waitingNumber, double score) {
+        this.key = key;
+        this.token = token;
+        this.waitingNumber = waitingNumber;
+        this.score = score;
     }
 
-    private static String generateUUID(Long userId) {
-        return UUID.randomUUID() + "_" + userId;
+    public static Queue createActiveQueue(String token) {
+        return new Queue(Key.ACTIVE, token, 0, 0);
     }
 
-    public void changeQueueStatus(QueueStatus status) {
-        this.status = status;
-    }
-
-    public boolean isExpired() {
-        return Duration.between(this.getUpdateAt(), LocalDateTime.now()).toMinutes() > QUEUE_EXPIRY_MINUTES.toLong();
+    public static Queue createWaitingQueue(String token) {
+        return new Queue(Key.WAITING, token, 0, System.currentTimeMillis());
     }
 }

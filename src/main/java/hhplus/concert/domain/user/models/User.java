@@ -5,7 +5,6 @@ import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.balance.models.BalanceHistory;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.payment.models.Payment;
-import hhplus.concert.domain.queue.model.Queue;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -34,9 +33,6 @@ public class User {
     private Long version;
 
     @OneToMany(mappedBy = "user")
-    private List<Queue> queue = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user")
     private List<BalanceHistory> balanceHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
@@ -47,14 +43,12 @@ public class User {
 
     @Builder
     private User(Long id, String name, long balance,
-                 List<Queue> queue,
                  List<BalanceHistory> balanceHistories,
                  List<Booking> bookings,
                  List<Payment> payments) {
         this.id = id;
         this.name = name;
         this.balance = balance;
-        this.queue = queue;
         this.balanceHistories = balanceHistories;
         this.bookings = bookings;
         this.payments = payments;

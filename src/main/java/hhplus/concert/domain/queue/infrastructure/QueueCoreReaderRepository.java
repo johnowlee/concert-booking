@@ -1,45 +1,40 @@
 package hhplus.concert.domain.queue.infrastructure;
 
-import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueueStatus;
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Set;
 
 @Repository
 @RequiredArgsConstructor
-@Slf4j
 public class QueueCoreReaderRepository implements QueueReaderRepository {
 
-    private final QueueJpaRepository queueJpaRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Queue getProcessingQueueByUserId(Long userId) {
-        return queueJpaRepository.findLastProcessingQueueByUserId(userId, QueueStatus.PROCESSING)
-                .orElse(null);
+    public Long getSetSize(String key) {
+        return redisTemplate.opsForSet().size(key);
     }
 
     @Override
-    public List<Queue> getQueuesByStatusAndPosition(QueueStatus status, long position) {
-        return queueJpaRepository.findAllByStatusAndPosition(status, position);
+    public Boolean containsValue(String key, String value) {
+        return redisTemplate.opsForSet().isMember(key, value);
     }
 
     @Override
-    public Long getFirstPositionByStatus(QueueStatus status) {
-        return queueJpaRepository.findFirstPositionByStatus(status).orElse(0L);
+    public Set<String> getValuesByRange(String key, long start, long end) {
+        return redisTemplate.opsForZSet().range(key, start, end);
     }
 
     @Override
-    public Long getLastPositionByStatus(QueueStatus status) {
-        return queueJpaRepository.findLastPositionByStatus(status).orElse(0L);
+    public Long getRankByValue(String key, String value) {
+        return redisTemplate.opsForZSet().rank(key, value);
     }
 
     @Override
-    public Queue getQueueById(String id) {
-        return queueJpaRepository.findById(id)
-                .orElse(null);
+    public Double getScoreByValue(String key, String value) {
+        return redisTemplate.opsForZSet().score(key, value);
     }
 }

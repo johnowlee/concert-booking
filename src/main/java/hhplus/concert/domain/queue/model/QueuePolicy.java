@@ -1,4 +1,4 @@
-package hhplus.concert.distribution;
+package hhplus.concert.domain.queue.model;
 
 public enum QueuePolicy {
     MAX_CONCURRENT_USERS(50), MAX_WORKING_SEC(600);

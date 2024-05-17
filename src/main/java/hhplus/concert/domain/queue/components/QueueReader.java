@@ -1,41 +1,39 @@
 package hhplus.concert.domain.queue.components;
 
-import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueueStatus;
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
+import java.util.Set;
+
+import static hhplus.concert.domain.queue.model.QueuePolicy.MAX_CONCURRENT_USERS;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class QueueReader {
 
     private final QueueReaderRepository queueReaderRepository;
 
-    public Queue getProcessingQueueByUserId(Long userId) {
-        return queueReaderRepository.getProcessingQueueByUserId(userId);
+    public Boolean isAccessible() {
+        Long concurrentSize = queueReaderRepository.getSetSize(Key.ACTIVE.toString());
+        return concurrentSize == null || concurrentSize < MAX_CONCURRENT_USERS.getValue();
     }
 
-    public List<Queue> getProcessingQueues() {
-        return queueReaderRepository.getQueuesByStatusAndPosition(QueueStatus.PROCESSING, 0);
+    public Boolean isActiveToken(String token) {
+        return queueReaderRepository.containsValue(Key.ACTIVE.toString(), token);
     }
 
-    public long getLastWaitingPosition() {
-        return queueReaderRepository.getLastPositionByStatus(QueueStatus.WAITING);
+    public Boolean isWaitingToken(String token) {
+        return queueReaderRepository.getScoreByValue(Key.WAITING.toString(), token) != null;
     }
 
-    public long getRealWaitingPosition(long waitingPosition) {
-            if (getLastWaitingPosition() == waitingPosition) {
-                return 1;
-            }
-        return waitingPosition - queueReaderRepository.getFirstPositionByStatus(QueueStatus.WAITING) + 1;
+    public Long getWaitingNumber(String token) {
+        Long rank = queueReaderRepository.getRankByValue(Key.WAITING.toString(), token);
+        return rank != null ? rank + 1 : null; // 순번은 1부터 시작하므로 1을 더해줌
     }
 
-    public Queue getQueueById(String id) {
-        return queueReaderRepository.getQueueById(id);
+    public Set<String> getFirstWaiter() {
+        return queueReaderRepository.getValuesByRange(Key.WAITING.toString(), 0, 0);
     }
 }

@@ -1,19 +1,14 @@
 package hhplus.concert.domain.queue.repositories;
 
-import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueueStatus;
-
-import java.util.List;
+import java.util.Set;
 
 public interface QueueReaderRepository {
 
-    Queue getProcessingQueueByUserId(Long userId);
+    Long getSetSize(String key);
 
-    List<Queue> getQueuesByStatusAndPosition(QueueStatus status, long position);
+    Boolean containsValue(String key, String value);
+    Set<String> getValuesByRange(String key, long start, long end);
 
-    Long getFirstPositionByStatus(QueueStatus status);
-
-    Long getLastPositionByStatus(QueueStatus status);
-
-    Queue getQueueById(String id);
+    Long getRankByValue(String key, String value);
+    Double getScoreByValue(String key, String value);
 }

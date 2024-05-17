@@ -1,10 +1,16 @@
 package hhplus.concert.api.queue.dto.response;
 
-import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueueStatus;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import hhplus.concert.domain.queue.model.Key;
 
-public record QueueResponse(String queueId, QueueStatus queueStatus, Long position) {
-    public static QueueResponse of(Queue queue, long realWaitingPosition) {
-        return new QueueResponse(queue.getId(), queue.getStatus(), realWaitingPosition);
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public record QueueResponse(String token, String key, Long waitingNumber) {
+
+    public static QueueResponse createActiveQueueResponse(String token) {
+        return new QueueResponse(token, Key.ACTIVE.toString(), null);
+    }
+
+    public static QueueResponse createWaitingQueueResponse(String token, Long waitingNumber) {
+        return new QueueResponse(token, Key.WAITING.toString(), waitingNumber);
     }
 }

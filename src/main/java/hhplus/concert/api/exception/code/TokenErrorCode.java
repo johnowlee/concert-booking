@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum TokenErrorCode implements ErrorCode {
     NOT_FOUND_TOKEN(HttpStatus.INTERNAL_SERVER_ERROR, "token does not exist"),
+    WAITING_TOKEN(HttpStatus.INTERNAL_SERVER_ERROR, "token's status is WAITING"),
     ;
 
     private final HttpStatus httpStatus;

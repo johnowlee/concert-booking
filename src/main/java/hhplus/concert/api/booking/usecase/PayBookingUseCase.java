@@ -1,15 +1,13 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
-import hhplus.concert.distribution.RedisQueueService;
-import hhplus.concert.distribution.TokenKey;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
+import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.api.common.ResponseResult.FAILURE;
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 import static hhplus.concert.domain.balance.models.TransactionType.USE;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
@@ -31,46 +28,40 @@ public class PayBookingUseCase {
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
-    private final RedisQueueService redisQueueService;
+    private final TokenValidator tokenValidator;
     private final UserReader userReader;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public PaymentResponse execute(Long id, String token, Long userId) {
-        // 대기열 검증
-        String key = redisQueueService.findToken(token).key();
-        if (key.equals(TokenKey.WAITING.toString())) {
-            return PaymentResponse.from(FAILURE);
-        }
+        // 토큰 검증
+        tokenValidator.validateToken(token);
 
         Booking booking = bookingReader.getBookingById(id);
 
         // 예약시간초과 검증
-        if (booking.isBookingDateTimeExpired()) {
-            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
-        }
+        booking.validateBookingDateTime();
 
         User user = userReader.getUserById(userId);
 
         // 잔액검증 및 user 잔액 update
-        long amount = calculateAmount(booking);
+        long amount = booking.getTotalPrice();
         user.useBalance(amount);
+
+        // 결제 완료 이벤트 발행
+        eventPublisher.publish(PaymentCompleteEvent.of(user, booking));
 
         // 잔액내역 save
         balanceHistoryWriter.saveBalanceHistory(user, amount, USE);
-
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
 
+
         // 예약 상태 update
         booking.changeBookingStatus(COMPLETE);
-
         // 좌석 예약상태 update
         booking.changeSeatsBookingStatus(BOOKED);
 
         return PaymentResponse.from(SUCCESS);
-    }
-
-    private static int calculateAmount(Booking booking) {
-        return booking.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
     }
 }

@@ -1,5 +1,6 @@
-package hhplus.concert.distribution;
+package hhplus.concert.domain.queue.event;
 
+import hhplus.concert.domain.queue.service.RedisKeyEventService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +16,10 @@ public class RedisKeyExpirationListener implements MessageListener {
     @Resource
     private RedisMessageListenerContainer redisMessageListenerContainer;
 
-    private final RedisQueueService redisQueueService;
+    private final RedisKeyEventService redisKeyEventService;
 
-    public RedisKeyExpirationListener(RedisQueueService redisQueueService) {
-        this.redisQueueService = redisQueueService;
+    public RedisKeyExpirationListener(RedisKeyEventService redisKeyEventService) {
+        this.redisKeyEventService = redisKeyEventService;
     }
 
     @PostConstruct
@@ -32,6 +33,6 @@ public class RedisKeyExpirationListener implements MessageListener {
         String expiredKey = message.toString();
         log.info("Expired key={}", expiredKey);
         // 여기에서 만료된 키에 대한 로직을 처리합니다.
-        redisQueueService.expire(expiredKey);
+        redisKeyEventService.expire(expiredKey);
     }
 }
