@@ -1,14 +1,13 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.components.PaymentWriter;
+import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
 import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.api.common.ResponseResult.FAILURE;
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 import static hhplus.concert.domain.balance.models.TransactionType.USE;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
@@ -32,6 +30,7 @@ public class PayBookingUseCase {
     private final BalanceHistoryWriter balanceHistoryWriter;
     private final TokenValidator tokenValidator;
     private final UserReader userReader;
+    private final EventPublisher eventPublisher;
 
     @Transactional
     public PaymentResponse execute(Long id, String token, Long userId) {
@@ -49,15 +48,17 @@ public class PayBookingUseCase {
         long amount = booking.getTotalPrice();
         user.useBalance(amount);
 
+        // 결제 완료 이벤트 발행
+        eventPublisher.publish(PaymentCompleteEvent.of(user, booking));
+
         // 잔액내역 save
         balanceHistoryWriter.saveBalanceHistory(user, amount, USE);
-
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
 
+
         // 예약 상태 update
         booking.changeBookingStatus(COMPLETE);
-
         // 좌석 예약상태 update
         booking.changeSeatsBookingStatus(BOOKED);
 
