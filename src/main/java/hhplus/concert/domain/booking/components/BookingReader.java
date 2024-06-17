@@ -1,5 +1,7 @@
 package hhplus.concert.domain.booking.components;
 
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.repositories.BookingReaderRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +20,8 @@ public class BookingReader {
     }
 
     public Booking getBookingById(Long id) {
-        return bookingReaderRepository.getBookingById(id);
+        return bookingReaderRepository.getBookingById(id)
+                .orElseThrow(() -> new RestApiException(BookingErrorCode.NOT_FOUND_BOOKING));
     }
 
     public List<Booking> getBookingsBySeatIds(List<Long> seatIds) {
