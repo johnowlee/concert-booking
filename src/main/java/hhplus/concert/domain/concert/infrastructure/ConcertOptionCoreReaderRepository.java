@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -15,9 +15,8 @@ public class ConcertOptionCoreReaderRepository implements ConcertOptionReaderRep
     private final ConcertOptionJpaRepository concertOptionJpaRepository;
 
     @Override
-    public ConcertOption getConcertOptionById(Long id) {
-        return concertOptionJpaRepository.findConcertOptionById(id)
-                .orElseThrow(NoSuchElementException::new);
+    public Optional<ConcertOption> getConcertOptionById(Long id) {
+        return concertOptionJpaRepository.findConcertOptionById(id);
     }
 
     @Override
