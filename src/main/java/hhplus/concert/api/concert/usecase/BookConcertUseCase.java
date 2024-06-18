@@ -12,7 +12,6 @@ import hhplus.concert.domain.concert.components.SeatValidator;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.queue.service.TokenValidator;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -31,13 +30,9 @@ public class BookConcertUseCase {
     private final BookingReader bookingReader;
     private final SeatValidator seatValidator;
     private final UserReader userReader;
-    private final TokenValidator tokenValidator;
 
     @Transactional
-    public BookingResultResponse execute(String token, Long optionId, ConcertBookingRequest request) {
-        // 1. 토큰 검증
-        tokenValidator.validateToken(token);
-
+    public BookingResultResponse execute(Long optionId, ConcertBookingRequest request) {
         // 2. 유저 조회
         User user = userReader.getUserById(request.userId());
 

@@ -9,6 +9,7 @@ import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -40,9 +41,9 @@ public class ConcertController {
 
 
     @PostMapping("/options/{optionId}/booking")
-    public ResponseEntity<BookingResultResponse> bookConcert(@RequestHeader("Queue-Token") String token,
+    public ResponseEntity<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
                                                              @PathVariable Long optionId,
                                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return ResponseEntity.ok().body(bookConcertUseCase.execute(token, optionId, concertBookingRequest));
+        return ResponseEntity.ok().body(bookConcertUseCase.execute(optionId, concertBookingRequest));
     }
 }

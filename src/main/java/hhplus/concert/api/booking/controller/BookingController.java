@@ -7,6 +7,7 @@ import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
+import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +33,8 @@ public class BookingController {
 
     @PostMapping("{id}/payment")
     public ResponseEntity<PaymentResponse> payment(@PathVariable Long id,
-                                   @RequestHeader("Queue-Token") String token,
+                                   QueueTokenRequest queueTokenRequest,
                                    @RequestBody PaymentRequest paymentRequest) {
-        return ResponseEntity.ok().body(payBookingUseCase.execute(id, token, paymentRequest.userId()));
+        return ResponseEntity.ok().body(payBookingUseCase.execute(id, paymentRequest.userId()));
     }
 }

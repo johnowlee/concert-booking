@@ -1,5 +1,6 @@
 package hhplus.concert.api.queue.controller;
 
+import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
 import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
 import hhplus.concert.api.queue.dto.response.QueueResponse;
@@ -16,8 +17,8 @@ public class QueueController {
     private final CreateTokenUseCase createQueueToken;
 
     @GetMapping
-    public ResponseEntity<QueueResponse> findToken(@RequestHeader("Queue-Token") String token) {
-        return ResponseEntity.ok().body(findTokenUseCase.execute(token));
+    public ResponseEntity<QueueResponse> findToken(QueueTokenRequest tokenRequest) {
+        return ResponseEntity.ok().body(findTokenUseCase.execute(tokenRequest.token()));
     }
 
     @PostMapping
