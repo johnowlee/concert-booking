@@ -9,7 +9,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static hhplus.concert.domain.booking.models.BookingManager.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
