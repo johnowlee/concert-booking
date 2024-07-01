@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static hhplus.concert.domain.booking.models.BookingManager.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
 
 @Entity
 @Getter

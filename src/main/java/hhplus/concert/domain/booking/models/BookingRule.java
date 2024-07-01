@@ -1,11 +1,11 @@
 package hhplus.concert.domain.booking.models;
 
-public enum BookingManager {
+public enum BookingRule {
     BOOKING_EXPIRY_MINUTES(5);
 
     int value;
 
-    private BookingManager(int value) {
+    private BookingRule(int value) {
         this.value = value;
     }
 
