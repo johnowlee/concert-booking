@@ -21,6 +21,13 @@ jobs:
     - name: application.yml 파일 만들기
       run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./src/main/resources/application-dev.yml
 
+    - name: MySQL 세팅
+      uses: mirromutth/mysql-action@v1.1
+      with:
+        mysql database: ${{ secrets.MYSQL_DB }}
+        mysql user: ${{ secrets.MYSQL_USERNAME }}
+        mysql password: ${{ secrets.MYSQL_PASSWORD }}
+
     - name: gradlew 실행 권한추가, 테스트 및 빌드하기
       run: |
         chmod +x ./gradlew
