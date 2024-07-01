@@ -9,6 +9,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
@@ -34,7 +36,7 @@ class UserReaderTest {
                 .name(name)
                 .build();
 
-        given(userReaderRepository.getUserById(userId)).willReturn(expected);
+        given(userReaderRepository.getUserById(userId)).willReturn(Optional.ofNullable(expected));
 
         // when
         User result = userReader.getUserById(userId);
