@@ -3,13 +3,11 @@ package hhplus.concert.domain.queue.components;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.model.QueuePolicy;
 import hhplus.concert.domain.queue.repositories.QueueWriterRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.TimeUnit;
@@ -27,12 +25,6 @@ class QueueWriterTest {
 
     @Mock
     QueueWriterRepository queueWriterRepository;
-
-    @BeforeEach
-    void setUp() {
-        queueWriterRepository = Mockito.mock(QueueWriterRepository.class);
-        queueWriter = new QueueWriter(queueWriterRepository);
-    }
 
     @DisplayName("Set에 Active 대기열 토큰을 추가한다.")
     @Test
