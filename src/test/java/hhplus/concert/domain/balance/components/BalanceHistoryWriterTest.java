@@ -44,7 +44,6 @@ class BalanceHistoryWriterTest {
 
         // then
         assertThat(result).isEqualTo(expectedBalanceHistory);
-        verify(balanceHistoryWriterRepository).save(any(BalanceHistory.class));
         verify(balanceHistoryWriterRepository, times(1)).save(any(BalanceHistory.class));
     }
 
