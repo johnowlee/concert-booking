@@ -12,12 +12,6 @@ public abstract class BookingCommonUtil {
         return seats.get(0).getConcertOption();
     }
 
-    public static List<String> getSeatNoFromSeats(List<Seat> seats) {
-        return seats.stream()
-                .map(s -> s.getSeatNo())
-                .collect(Collectors.toList());
-    }
-
     public static List<Seat> getSeatsFromBooking(Booking booking) {
         return booking.getBookingSeats().stream()
                 .map(bs -> bs.getSeat())
