@@ -21,9 +21,9 @@ public class BookingController {
     private final GetBookingByIdUseCase getBookingByIdUseCase;
     private final PayBookingUseCase payBookingUseCase;
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<BookingsResponse> bookings(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getBookingsByUserIdUseCase.execute(id));
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<BookingsResponse> bookings(@PathVariable Long userId) {
+        return ResponseEntity.ok().body(getBookingsByUserIdUseCase.execute(userId));
     }
 
     @GetMapping("{id}")
