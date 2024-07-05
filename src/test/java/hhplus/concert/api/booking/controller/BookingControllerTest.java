@@ -114,9 +114,10 @@ class BookingControllerTest {
         given(payBookingUseCase.execute(1L, 10L)).willReturn(paymentResponse);
 
         // expected
-        mockMvc.perform(post("/bookings/{id}/payment", 1L, "token")
+        mockMvc.perform(post("/bookings/{id}/payment", 1L)
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(new PaymentRequest(10L)))
+                        .header("Queue-Token", "token")
                 )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.paymentResult").value(ResponseResult.SUCCESS.name()));
