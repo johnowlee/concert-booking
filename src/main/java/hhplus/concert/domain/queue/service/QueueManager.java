@@ -19,7 +19,7 @@ public class QueueManager {
 
     public Queue getQueueByToken(String token) {
         if (queueReader.isActiveToken(token)) {
-            return Queue.createQueue(token);
+            return Queue.createActiveQueue(token);
         }
         if (queueReader.isWaitingToken(token)) {
             Long waitingNumber = queueReader.getWaitingNumber(token);
