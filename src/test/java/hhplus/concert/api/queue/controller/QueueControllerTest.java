@@ -5,6 +5,7 @@ import hhplus.concert.api.queue.dto.response.QueueResponse;
 import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
 import hhplus.concert.domain.queue.model.Key;
+import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.service.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -46,7 +47,7 @@ class QueueControllerTest {
     public void findToken_active() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createActiveQueueResponse(token);
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createActiveQueue(token));
         given(findTokenUseCase.execute(token)).willReturn(queueResponse);
 
         // expected
@@ -64,7 +65,7 @@ class QueueControllerTest {
     public void findToken_waiting() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createWaitingQueueResponse(token, 5L);
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
         given(findTokenUseCase.execute(token)).willReturn(queueResponse);
 
         // expected
@@ -83,7 +84,7 @@ class QueueControllerTest {
     public void createToken_active() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createActiveQueueResponse(token);
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createActiveQueue(token));
         given(createQueueToken.execute()).willReturn(queueResponse);
 
         // expected
@@ -100,7 +101,7 @@ class QueueControllerTest {
     public void createToken_waiting() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createWaitingQueueResponse(token, 5L);
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
         given(createQueueToken.execute()).willReturn(queueResponse);
 
         // expected
