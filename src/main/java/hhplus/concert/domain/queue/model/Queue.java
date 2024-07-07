@@ -3,6 +3,8 @@ package hhplus.concert.domain.queue.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.UUID;
+
 @Getter
 public class Queue {
     Key key;
@@ -20,6 +22,13 @@ public class Queue {
         this.token = token;
         this.waitingNumber = waitingNumber;
         this.score = score;
+    }
+
+    public static Queue createNewQueueByKey(Key key) {
+        return Queue.builder()
+                .key(key)
+                .token(UUID.randomUUID().toString())
+                .build();
     }
 
     public static Queue createQueue(String token) {
