@@ -31,12 +31,6 @@ public class Queue {
                 .build();
     }
 
-    public static Queue createQueue(String token) {
-        return Queue.builder()
-                .token(token)
-                .build();
-    }
-
     public static Queue createActiveQueue(String token) {
         return Queue.builder()
                 .key(Key.ACTIVE)
