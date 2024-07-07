@@ -19,6 +19,7 @@ public class CreateTokenUseCase {
     private final QueueWriter queueWriter;
 
     public QueueResponse execute() {
+        // TODO: QueueManager로 구현
         String token = UUID.randomUUID().toString();
         if (queueReader.isAccessible()) {
             return activeQueue(token);
@@ -35,7 +36,7 @@ public class CreateTokenUseCase {
     }
 
     private QueueResponse waitingQueue(String token) {
-        Queue queue = Queue.createWaitingQueue(token);
+        Queue queue = Queue.createWaitingQueue(token, null);
         queueWriter.addWaitingToken(queue);
         return createWaitingQueueResponse(queue.getToken(), queueReader.getWaitingNumber(queue.getToken()));
     }
