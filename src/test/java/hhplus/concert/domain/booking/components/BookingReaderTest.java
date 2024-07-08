@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -66,7 +67,7 @@ class BookingReaderTest {
                 .user(User.builder().id(2L).build())
                 .build();
 
-        given(bookingReaderRepository.getBookingById(1L)).willReturn(expectedBooking);
+        given(bookingReaderRepository.getBookingById(1L)).willReturn(Optional.ofNullable(expectedBooking));
 
         // when
         Booking result = bookingReader.getBookingById(1L);

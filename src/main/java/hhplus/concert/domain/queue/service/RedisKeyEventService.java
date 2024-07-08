@@ -35,7 +35,7 @@ public class RedisKeyEventService {
     }
 
     public void removeTokenFromWaiting(String token) {
-        queueWriter.removeWaitingToken(Queue.createWaitingQueue(token));
+        queueWriter.removeWaitingToken(Queue.createWaitingQueue(token, null));
     }
 
     public void addTokenToActive(String token) {

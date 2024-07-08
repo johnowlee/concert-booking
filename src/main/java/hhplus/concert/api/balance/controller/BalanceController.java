@@ -22,7 +22,7 @@ public class BalanceController {
         return ResponseEntity.ok().body(getBalanceUseCase.execute(userId));
     }
 
-    @PostMapping("{userId}")
+    @PatchMapping("{userId}")
     public ResponseEntity<BalanceChargeResponse> charge(@PathVariable Long userId, @RequestBody BalanceChargeRequest balanceChargeRequest) {
         return ResponseEntity.ok().body(chargeBalanceUseCase.execute(userId, balanceChargeRequest.balance()));
     }

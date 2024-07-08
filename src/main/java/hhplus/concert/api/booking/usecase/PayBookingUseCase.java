@@ -6,7 +6,6 @@ import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.payment.components.PaymentWriter;
 import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
-import hhplus.concert.domain.queue.service.TokenValidator;
 import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -28,14 +27,11 @@ public class PayBookingUseCase {
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceHistoryWriter balanceHistoryWriter;
-    private final TokenValidator tokenValidator;
     private final UserReader userReader;
     private final EventPublisher eventPublisher;
 
     @Transactional
-    public PaymentResponse execute(Long id, String token, Long userId) {
-        // 토큰 검증
-        tokenValidator.validateToken(token);
+    public PaymentResponse execute(Long id, Long userId) {
 
         Booking booking = bookingReader.getBookingById(id);
 

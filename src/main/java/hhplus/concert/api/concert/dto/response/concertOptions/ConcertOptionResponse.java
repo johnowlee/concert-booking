@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record ConcertOptionResponse(Long concertOptioinId,
+public record ConcertOptionResponse(Long concertOptionId,
                                     String place,
                                     LocalDateTime dateTime,
                                     List<SeatDto> seats) {
