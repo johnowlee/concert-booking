@@ -28,17 +28,17 @@ public class BookingManager {
     }
 
     private void checkAnyBookedSeat(List<Booking> bookingsBySeats) {
-        bookingsBySeats.forEach(booking -> booking.getBookingSeats().stream()
-                .filter(bookingSeat -> bookingSeat.getSeat().getSeatBookingStatus() == SeatBookingStatus.BOOKED)
+        bookingsBySeats.stream()
+                .flatMap(booking -> booking.getBookingSeats().stream())
+                .filter(bookingSeat -> bookingSeat.getSeat().isBooked())
                 .findAny()
                 .ifPresent(bs -> {
                     log.error("BookingErrorCode.ALREADY_BOOKED 발생");
                     throw new RestApiException(BookingErrorCode.ALREADY_BOOKED);
-                })
-        );
+                });
     }
 
     public void changeSeatBookingStatus(List<Seat> seats, SeatBookingStatus status) {
-        seats.stream().forEach(s -> s.changeBookingStatus(status));
+        seats.forEach(s -> s.changeBookingStatus(status));
     }
 }

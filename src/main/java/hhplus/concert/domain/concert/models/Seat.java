@@ -46,4 +46,8 @@ public class Seat {
     public void changeBookingStatus(SeatBookingStatus status) {
         this.seatBookingStatus = status;
     }
+
+    public boolean isBooked() {
+        return this.seatBookingStatus == SeatBookingStatus.BOOKED;
+    }
 }
