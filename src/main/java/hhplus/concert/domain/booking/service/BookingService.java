@@ -18,7 +18,8 @@ import java.util.List;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class BookingManager {
+public class BookingService {
+
     private final BookingWriter bookingWriter;
 
     public Booking book(ConcertOption concertOption, User user, List<Seat> seats) {
