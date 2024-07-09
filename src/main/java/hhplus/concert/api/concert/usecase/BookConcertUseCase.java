@@ -4,6 +4,7 @@ import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.booking.service.BookingManager;
 import hhplus.concert.domain.booking.service.BookingService;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.SeatReader;
@@ -26,13 +27,14 @@ public class BookConcertUseCase {
     private final BookingReader bookingReader;
     private final UserReader userReader;
     private final BookingService bookingService;
+    private final BookingManager bookingManager;
 
     @Transactional
     public BookingResultResponse execute(Long optionId, ConcertBookingRequest request) {
 
         // 1. 예약상태, 좌석상태 검증
         List<Booking> bookingsBySeats = bookingReader.getBookingsBySeatIds(request.parsedSeatIds());
-        bookingService.validateBookable(bookingsBySeats);
+        bookingManager.validateBookable(bookingsBySeats);
 
         // 2. 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(optionId);
