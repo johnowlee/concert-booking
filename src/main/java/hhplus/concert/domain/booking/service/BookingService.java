@@ -6,6 +6,7 @@ import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.concert.service.SeatManager;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import java.util.List;
 public class BookingService {
 
     private final BookingWriter bookingWriter;
-    private final BookingManager bookingManager;
+    private final SeatManager seatManager;
 
     public Booking book(ConcertOption concertOption, User user, List<Seat> seats) {
         Booking booking = Booking.buildBooking(concertOption, user);
@@ -30,8 +31,8 @@ public class BookingService {
         // 예약좌석매핑 테이블 저장
         bookingWriter.saveAllBookingSeat(BookingSeat.createBookingSeats(seats, savedBooking));
 
-        // 좌석 예약상태 update
-        bookingManager.changeSeatBookingStatus(seats, SeatBookingStatus.PROCESSING);
+        // 좌석들 예약 진행 중으로 상태 변경
+        seatManager.markAllSeatsAsProcessing(seats);
         return savedBooking;
     }
 }

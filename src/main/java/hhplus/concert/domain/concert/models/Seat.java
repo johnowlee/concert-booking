@@ -47,6 +47,10 @@ public class Seat {
         this.seatBookingStatus = status;
     }
 
+    public void markAsProcessing() {
+        this.seatBookingStatus = SeatBookingStatus.PROCESSING;
+    }
+
     public void markAsBooked() {
         this.seatBookingStatus = SeatBookingStatus.BOOKED;
     }

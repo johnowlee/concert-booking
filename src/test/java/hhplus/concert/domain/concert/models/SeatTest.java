@@ -45,9 +45,23 @@ class SeatTest {
 
 
         // when
-        seat.changeBookingStatus(SeatBookingStatus.BOOKED);
+        seat.markAsBooked();
 
         // then
         Assertions.assertTrue(seat.isBooked());
+    }
+
+    @Test
+    public void testMarkAsProcessing() {
+        // given
+        Seat seat = Seat.builder()
+                .seatBookingStatus(SeatBookingStatus.AVAILABLE)
+                .build();
+
+        // when
+        seat.markAsProcessing();
+
+        // then
+        Assertions.assertEquals(SeatBookingStatus.PROCESSING, seat.getSeatBookingStatus());
     }
 }
