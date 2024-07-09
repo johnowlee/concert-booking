@@ -41,10 +41,10 @@ public class Payment {
         this.booking = booking;
     }
 
-    public static Payment createBookingPayment(Booking booking, long amount) {
+    public static Payment createBookingPayment(Booking booking) {
         return Payment.builder()
                 .paymentDateTime(LocalDateTime.now())
-                .paymentAmount(amount)
+                .paymentAmount(booking.getTotalPrice())
                 .user(booking.getUser())
                 .booking(booking)
                 .build();

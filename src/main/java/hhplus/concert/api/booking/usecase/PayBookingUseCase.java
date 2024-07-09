@@ -35,7 +35,7 @@ public class PayBookingUseCase {
         balanceService.use(userId, booking);
 
         // 결제 내역 save
-        paymentWriter.payBooking(booking, booking.getTotalPrice());
+        paymentWriter.payBooking(booking);
 
         // 예약 완료
         booking.markAsComplete();
