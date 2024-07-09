@@ -51,14 +51,14 @@ class BookingTest {
         assertFalse(booking.isBookingDateTimeExpired());
     }
 
-    @DisplayName("예약상태 변경에 성공한다")
+    @DisplayName("예약상태를 COMPLETE 상태로 변경에 성공한다")
     @Test
-    void changeBookingStatus_Success() {
+    void changeBookingStatusToComplete_Success() {
         // given
         Booking booking = Booking.builder().bookingStatus(BookingStatus.INCOMPLETE).build();
 
         // when
-        booking.changeBookingStatus(BookingStatus.COMPLETE);
+        booking.markAsComplete();
 
         // then
         assertThat(booking.getBookingStatus()).isEqualTo(BookingStatus.COMPLETE);
