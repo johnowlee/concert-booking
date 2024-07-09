@@ -10,14 +10,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ConcurrentModificationException;
-
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
-import static hhplus.concert.domain.balance.models.TransactionType.CHARGE;
 
 @Service
 @RequiredArgsConstructor
@@ -34,7 +30,7 @@ public class ChargeBalanceUseCase {
             User user = userReader.getUserById(userId);
             user.chargeBalance(amount);
             em.flush();
-            balanceHistoryWriter.saveBalanceHistory(user, amount, CHARGE);
+            balanceHistoryWriter.saveBalanceChargeHistory(user, amount);
             return BalanceChargeResponse.from(SUCCESS, user.getBalance());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);

@@ -38,10 +38,10 @@ public class BalanceHistory {
         this.user = user;
     }
 
-    public static BalanceHistory createBalanceHistory(User user, long amount, TransactionType transactionType) {
+    public static BalanceHistory createBalanceChargeHistory(User user, long amount) {
         return builder()
                 .amount(amount)
-                .transactionType(transactionType)
+                .transactionType(TransactionType.CHARGE)
                 .transactionDateTime(LocalDateTime.now())
                 .user(user)
                 .build();
