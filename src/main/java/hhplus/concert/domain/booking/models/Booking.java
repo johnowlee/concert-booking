@@ -76,12 +76,6 @@ public class Booking {
         this.bookingStatus = BookingStatus.COMPLETE;
     }
 
-    public void changeSeatsBookingStatusToBooked() {
-        this.bookingSeats.stream()
-                .map(BookingSeat::getSeat)
-                .forEach(seat -> seat.changeBookingStatus(SeatBookingStatus.BOOKED));
-    }
-
     public static Booking buildBooking(ConcertOption concertOption, User user) {
         Booking booking = Booking.builder()
                 .bookingStatus(BookingStatus.INCOMPLETE)

@@ -63,26 +63,4 @@ class BookingTest {
         // then
         assertThat(booking.getBookingStatus()).isEqualTo(BookingStatus.COMPLETE);
     }
-
-    @DisplayName("좌석예약상태 변경에 성공한다")
-    @Test
-    void changeSeatsBookingStatus_Success() {
-        // given
-        Seat seat1 = Seat.builder().seatBookingStatus(SeatBookingStatus.AVAILABLE).build();
-        Seat seat2 = Seat.builder().seatBookingStatus(SeatBookingStatus.AVAILABLE).build();
-
-        BookingSeat bookingSeat1 = BookingSeat.builder().seat(seat1).build();
-        BookingSeat bookingSeat2 = BookingSeat.builder().seat(seat2).build();
-
-        List<BookingSeat> bookingSeats = List.of(bookingSeat1, bookingSeat2);
-        Booking booking = Booking.builder().bookingSeats(bookingSeats).build();
-
-        // when
-        booking.changeSeatsBookingStatusToBooked();
-
-        // then
-        booking.getBookingSeats().stream()
-                .map(BookingSeat::getSeat)
-                .forEach(seat -> assertThat(seat.getSeatBookingStatus()).isEqualTo(SeatBookingStatus.BOOKED));
-    }
 }
