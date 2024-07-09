@@ -3,6 +3,7 @@ package hhplus.concert.domain.booking.service;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import lombok.extern.slf4j.Slf4j;
@@ -40,5 +41,11 @@ public class BookingManager {
 
     public void changeSeatBookingStatus(List<Seat> seats, SeatBookingStatus status) {
         seats.forEach(s -> s.changeBookingStatus(status));
+    }
+
+    public void reserveAllSeats(Booking booking) {
+        booking.getBookingSeats().stream()
+                .map(BookingSeat::getSeat)
+                .forEach(seat -> seat.markAsBooked());
     }
 }

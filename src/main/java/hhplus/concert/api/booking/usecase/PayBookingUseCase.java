@@ -4,6 +4,7 @@ import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.booking.service.BookingManager;
 import hhplus.concert.domain.payment.components.PaymentWriter;
 import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
 import hhplus.concert.domain.support.event.EventPublisher;
@@ -16,8 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 import static hhplus.concert.domain.balance.models.TransactionType.USE;
-import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
-import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 
 @Service
 @RequiredArgsConstructor
@@ -29,6 +28,7 @@ public class PayBookingUseCase {
     private final BalanceHistoryWriter balanceHistoryWriter;
     private final UserReader userReader;
     private final EventPublisher eventPublisher;
+    private final BookingManager bookingManager;
 
     @Transactional
     public PaymentResponse execute(Long id, Long userId) {
@@ -53,10 +53,11 @@ public class PayBookingUseCase {
         paymentWriter.payBooking(booking, amount);
 
 
-        // 예약 상태 update
+        // 예약 완료
         booking.markAsComplete();
-        // 좌석 예약상태 update
-        booking.changeSeatsBookingStatusToBooked();
+
+        // 좌석 예약
+        bookingManager.reserveAllSeats(booking);
 
         return PaymentResponse.from(SUCCESS);
     }

@@ -47,6 +47,10 @@ public class Seat {
         this.seatBookingStatus = status;
     }
 
+    public void markAsBooked() {
+        this.seatBookingStatus = SeatBookingStatus.BOOKED;
+    }
+
     public boolean isBooked() {
         return this.seatBookingStatus == SeatBookingStatus.BOOKED;
     }

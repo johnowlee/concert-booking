@@ -20,6 +20,20 @@ class SeatTest {
     }
 
     @Test
+    public void testMarkAsBooked() {
+        // given
+        Seat seat = Seat.builder()
+                .seatBookingStatus(SeatBookingStatus.AVAILABLE)
+                .build();
+
+        // when
+        seat.markAsBooked();
+
+        // then
+        Assertions.assertEquals(SeatBookingStatus.BOOKED, seat.getSeatBookingStatus());
+    }
+
+    @Test
     public void testIsBooked() {
         // expected
         Seat seat = Seat.builder()
