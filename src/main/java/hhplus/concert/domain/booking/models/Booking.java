@@ -76,10 +76,10 @@ public class Booking {
         this.bookingStatus = BookingStatus.COMPLETE;
     }
 
-    public void changeSeatsBookingStatus(SeatBookingStatus status) {
+    public void changeSeatsBookingStatusToBooked() {
         this.bookingSeats.stream()
                 .map(BookingSeat::getSeat)
-                .forEach(seat -> seat.changeBookingStatus(status));
+                .forEach(seat -> seat.changeBookingStatus(SeatBookingStatus.BOOKED));
     }
 
     public static Booking buildBooking(ConcertOption concertOption, User user) {

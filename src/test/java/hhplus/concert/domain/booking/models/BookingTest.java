@@ -78,7 +78,7 @@ class BookingTest {
         Booking booking = Booking.builder().bookingSeats(bookingSeats).build();
 
         // when
-        booking.changeSeatsBookingStatus(SeatBookingStatus.BOOKED);
+        booking.changeSeatsBookingStatusToBooked();
 
         // then
         booking.getBookingSeats().stream()

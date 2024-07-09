@@ -56,7 +56,7 @@ public class PayBookingUseCase {
         // 예약 상태 update
         booking.markAsComplete();
         // 좌석 예약상태 update
-        booking.changeSeatsBookingStatus(BOOKED);
+        booking.changeSeatsBookingStatusToBooked();
 
         return PaymentResponse.from(SUCCESS);
     }
