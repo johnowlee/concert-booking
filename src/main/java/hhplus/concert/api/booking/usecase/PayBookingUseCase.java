@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static hhplus.concert.api.common.ResponseResult.SUCCESS;
-import static hhplus.concert.domain.balance.models.TransactionType.USE;
 
 @Service
 @RequiredArgsConstructor
@@ -48,7 +47,7 @@ public class PayBookingUseCase {
         eventPublisher.publish(PaymentCompleteEvent.of(user, booking));
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceHistory(user, amount, USE);
+        balanceHistoryWriter.saveBalanceUseHistory(user, amount);
         // 결제 내역 save
         paymentWriter.payBooking(booking, amount);
 

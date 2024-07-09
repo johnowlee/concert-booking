@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceHistory;
+import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceUseHistory;
 
 @Component
 @RequiredArgsConstructor
@@ -17,6 +18,10 @@ public class BalanceHistoryWriter {
 
     public BalanceHistory saveBalanceHistory(User user, long amount, TransactionType transactionType) {
         return balanceHistoryWriterRepository.save(createBalanceHistory(user, amount, transactionType));
+    }
+
+    public BalanceHistory saveBalanceUseHistory(User user, long amount) {
+        return balanceHistoryWriterRepository.save(createBalanceUseHistory(user, amount));
     }
 
 }

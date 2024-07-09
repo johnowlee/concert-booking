@@ -46,4 +46,13 @@ public class BalanceHistory {
                 .user(user)
                 .build();
     }
+
+    public static BalanceHistory createBalanceUseHistory(User user, long amount) {
+        return builder()
+                .amount(amount)
+                .transactionType(TransactionType.USE)
+                .transactionDateTime(LocalDateTime.now())
+                .user(user)
+                .build();
+    }
 }

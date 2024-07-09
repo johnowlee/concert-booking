@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceHistory;
+import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceUseHistory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -44,6 +45,24 @@ class BalanceHistoryWriterTest {
 
         // then
         assertThat(result).isEqualTo(expectedBalanceHistory);
+        verify(balanceHistoryWriterRepository, times(1)).save(any(BalanceHistory.class));
+    }
+
+    @DisplayName("인자값이 모두 유효하면, BalanceUseHistory 데이터 저장에 성공한다.")
+    @Test
+    void saveBalanceUseHistory_Success_ifWithValidArguments() {
+        // given
+        User user = User.builder().build();
+        long amount = 10000L;
+        BalanceHistory expected = createBalanceUseHistory(user, amount);
+
+        given(balanceHistoryWriterRepository.save(any(BalanceHistory.class))).willReturn(expected);
+
+        // when
+        BalanceHistory result = balanceHistoryWriter.saveBalanceUseHistory(user, amount);
+
+        // then
+        assertThat(result).isEqualTo(expected);
         verify(balanceHistoryWriterRepository, times(1)).save(any(BalanceHistory.class));
     }
 
