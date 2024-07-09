@@ -6,20 +6,6 @@ import org.junit.jupiter.api.Test;
 class SeatTest {
 
     @Test
-    public void testChangeBookingStatus() {
-        // given
-        Seat seat = Seat.builder()
-                .seatBookingStatus(SeatBookingStatus.AVAILABLE)
-                .build();
-
-        // when
-        seat.changeBookingStatus(SeatBookingStatus.BOOKED);
-
-        // then
-        Assertions.assertEquals(SeatBookingStatus.BOOKED, seat.getSeatBookingStatus());
-    }
-
-    @Test
     public void testMarkAsBooked() {
         // given
         Seat seat = Seat.builder()

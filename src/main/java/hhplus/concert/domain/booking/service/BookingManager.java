@@ -39,10 +39,6 @@ public class BookingManager {
                 });
     }
 
-    public void changeSeatBookingStatus(List<Seat> seats, SeatBookingStatus status) {
-        seats.forEach(s -> s.changeBookingStatus(status));
-    }
-
     public void reserveAllSeats(Booking booking) {
         booking.getBookingSeats().stream()
                 .map(BookingSeat::getSeat)

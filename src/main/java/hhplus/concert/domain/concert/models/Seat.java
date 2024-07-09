@@ -43,10 +43,6 @@ public class Seat {
         this.concertOption = concertOption;
     }
 
-    public void changeBookingStatus(SeatBookingStatus status) {
-        this.seatBookingStatus = status;
-    }
-
     public void markAsProcessing() {
         this.seatBookingStatus = SeatBookingStatus.PROCESSING;
     }
