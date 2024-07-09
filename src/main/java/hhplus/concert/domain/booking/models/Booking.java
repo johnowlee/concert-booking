@@ -72,8 +72,8 @@ public class Booking {
         return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes();
     }
 
-    public void changeBookingStatus(BookingStatus status) {
-        this.bookingStatus = status;
+    public void markAsComplete() {
+        this.bookingStatus = BookingStatus.COMPLETE;
     }
 
     public void changeSeatsBookingStatus(SeatBookingStatus status) {
