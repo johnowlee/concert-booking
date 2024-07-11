@@ -4,8 +4,6 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -15,17 +13,20 @@ import java.util.List;
 @Slf4j
 public class BookingManager {
 
-    public void validateBookable(List<Booking> bookingsBySeats) {
-        checkAnyProcessingBooking(bookingsBySeats);
-        checkAnyBookedSeat(bookingsBySeats);
+    public void validateBookable(List<Booking> bookings) {
+        checkAnyProcessingBooking(bookings);
+        checkAnyBookedSeat(bookings);
     }
 
-    private void checkAnyProcessingBooking(List<Booking> bookingsBySeats) {
-        boolean hasAnyBooking = bookingsBySeats.stream().anyMatch(b -> !b.isBookingDateTimeExpired());
-        if (hasAnyBooking) {
+    private void checkAnyProcessingBooking(List<Booking> bookings) {
+        if (hasPendingBooking(bookings)) {
             log.error("BookingErrorCode.PROCESSING_BOOKING 발생");
             throw new RestApiException(BookingErrorCode.PROCESSING_BOOKING);
         }
+    }
+
+    private static boolean hasPendingBooking(List<Booking> bookings) {
+        return bookings.stream().anyMatch(b -> !b.isBookingDateTimeExpired());
     }
 
     private void checkAnyBookedSeat(List<Booking> bookingsBySeats) {
