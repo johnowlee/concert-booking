@@ -14,19 +14,12 @@ import java.util.List;
 public class BookingManager {
 
     public void validateBookable(List<Booking> bookings) {
-        checkAnyProcessingBooking(bookings);
+        checkAnyPendingBooking(bookings);
         checkAnyBookedSeat(bookings);
     }
 
-    private void checkAnyProcessingBooking(List<Booking> bookings) {
-        if (hasPendingBooking(bookings)) {
-            log.error("BookingErrorCode.PROCESSING_BOOKING 발생");
-            throw new RestApiException(BookingErrorCode.PROCESSING_BOOKING);
-        }
-    }
-
-    private static boolean hasPendingBooking(List<Booking> bookings) {
-        return bookings.stream().anyMatch(b -> !b.isBookingDateTimeExpired());
+    private void checkAnyPendingBooking(List<Booking> bookings) {
+        bookings.forEach(Booking::validatePending);
     }
 
     private void checkAnyBookedSeat(List<Booking> bookingsBySeats) {

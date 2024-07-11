@@ -3,7 +3,6 @@ package hhplus.concert.domain.booking.models;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
@@ -12,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MI
 
 @Entity
 @Getter
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "booking")
 public class Booking {
@@ -66,6 +67,17 @@ public class Booking {
 
     public boolean isBookingDateTimeExpired() {
         return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
+    }
+
+    public void validatePending() {
+        if (isBookingDateTimeValid()) {
+            log.error("BookingErrorCode.PROCESSING_BOOKING 발생");
+            throw new RestApiException(BookingErrorCode.PROCESSING_BOOKING);
+        }
+    }
+
+    private boolean isBookingDateTimeValid() {
+        return getMinutesSinceBooking() <= BOOKING_EXPIRY_MINUTES.toLong();
     }
 
     private long getMinutesSinceBooking() {
