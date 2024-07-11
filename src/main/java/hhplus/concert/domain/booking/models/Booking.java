@@ -61,18 +61,19 @@ public class Booking {
     // 예약만료시간 체크
     public void validateBookingDateTime() {
         if (isBookingDateTimeExpired()) {
+            log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
             throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
         }
     }
 
-    public boolean isBookingDateTimeExpired() {
+    private boolean isBookingDateTimeExpired() {
         return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
     }
 
     public void validatePending() {
         if (isBookingDateTimeValid()) {
-            log.error("BookingErrorCode.PROCESSING_BOOKING 발생");
-            throw new RestApiException(BookingErrorCode.PROCESSING_BOOKING);
+            log.info("BookingErrorCode.PENDING_BOOKING 발생");
+            throw new RestApiException(BookingErrorCode.PENDING_BOOKING);
         }
     }
 
