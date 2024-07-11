@@ -12,7 +12,7 @@ import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 
 @Component
 @RequiredArgsConstructor
-public class QueueManager {
+public class QueueService {
 
     private final QueueReader queueReader;
     private final QueueWriter queueWriter;
