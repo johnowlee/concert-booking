@@ -4,10 +4,12 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
+import hhplus.concert.domain.concert.models.Seat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @Slf4j
@@ -37,5 +39,11 @@ public class BookingManager {
         booking.getBookingSeats().stream()
                 .map(BookingSeat::getSeat)
                 .forEach(seat -> seat.markAsBooked());
+    }
+
+    public List<BookingSeat> createBookingSeats(List<Seat> seats, Booking booking) {
+        return seats.stream()
+                .map(s -> BookingSeat.buildBookingSeat(booking, s))
+                .collect(Collectors.toList());
     }
 }
