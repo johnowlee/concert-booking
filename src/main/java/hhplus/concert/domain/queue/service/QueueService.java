@@ -36,14 +36,14 @@ public class QueueService {
     }
 
     private Queue createWaitingQueue() {
-        Queue queue = Queue.createNewQueueByKey(Key.WAITING);
+        Queue queue = Queue.createNewWaitingQueue();
         queueWriter.addWaitingToken(queue);
         Long waitingNumber = queueReader.getWaitingNumber(queue.getToken());
         return Queue.createWaitingQueue(queue.getToken(), waitingNumber);
     }
 
     private Queue createActiveQueue() {
-        Queue queue = Queue.createNewQueueByKey(Key.ACTIVE);
+        Queue queue = Queue.createNewActiveQueue();
         queueWriter.addActiveToken(queue);
         queueWriter.createActiveKey(queue);
         return queue;

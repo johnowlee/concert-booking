@@ -24,9 +24,16 @@ public class Queue {
         this.score = score;
     }
 
-    public static Queue createNewQueueByKey(Key key) {
+    public static Queue createNewActiveQueue() {
         return Queue.builder()
-                .key(key)
+                .key(Key.ACTIVE)
+                .token(UUID.randomUUID().toString())
+                .build();
+    }
+
+    public static Queue createNewWaitingQueue() {
+        return Queue.builder()
+                .key(Key.WAITING)
                 .token(UUID.randomUUID().toString())
                 .build();
     }
