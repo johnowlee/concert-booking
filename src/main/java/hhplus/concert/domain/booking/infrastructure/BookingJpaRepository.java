@@ -15,8 +15,8 @@ public interface BookingJpaRepository extends JpaRepository<Booking, Long> {
     List<Booking> findBookingsByUserId(Long userId);
 
     @Query("select b from Booking b" +
-            " left join b.bookingSeats bs" +
-            " left join bs.seat s" +
+            " join b.bookingSeats bs" +
+            " join bs.seat s" +
             " where s.id in :ids")
     List<Booking> findBookingsBySeatIds(List<Long> ids);
 }
