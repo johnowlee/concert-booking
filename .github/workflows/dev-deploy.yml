@@ -11,14 +11,19 @@ jobs:
     steps:
       - name: SSH(원격 접속)로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          APPLICATION_DEV_PROPERTIES: ${{ secrets.APPLICATION_DEV_PROPERTIES }}
         with:
           host: ${{ secrets.EC2_HOST }} # EC2의 주소
           username: ${{ secrets.EC2_USERNAME }} # EC2 접속 username
           key: ${{ secrets.EC2_PRIVATE_KEY }} # EC2의 Key 파일의 내부 텍스트
+          envs: APPLICATION_DEV_PROPERTIES # 위에서 env에서 지정한 변수 값을 ssh에도 변수로 지정
           script_stop: true # 아래 script 중 실패하는 명령이 하나라도 있으면 실패로 처리
           script: |
             cd /home/ubuntu/concert-booking-server
+            rm -rf src/main/resources/application.yml # 기존 .yml 파일 날림
             git pull origin develop
+            echo "$APPLICATION_DEV_PROPERTIES" > src/main/resources/application.yml # 지정된 $APPLICATION_DEV_PROPERTIES 변수의 값으로 application.yml 파일 작성
             ./gradlew build -x test   # 일단 no test로 빌드
             sudo fuser -k -n tcp 8080 || true   # || true를 붙인 이유는 8080에 종료시킬 프로세스가 없더라도 실패로 처리하지 않기 위해서이다. 
             nohup java -jar build/libs/*SNAPSHOT.jar > ./output.log 2>&1 &  # jar 파일을 실행, ./output.log 파일에 발생하는 로그 남김. 
