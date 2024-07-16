@@ -3,7 +3,6 @@ package hhplus.concert.domain.queue.service;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
-import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -29,10 +28,7 @@ public class QueueService {
     }
 
     public Queue createNewQueue() {
-        if (queueReader.isAccessible()) {
-            return createActiveQueue();
-        }
-        return createWaitingQueue();
+        return queueReader.isAccessible() ? createActiveQueue() : createWaitingQueue();
     }
 
     private Queue createWaitingQueue() {
