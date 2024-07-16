@@ -23,6 +23,7 @@ jobs:
             cd /home/ubuntu/concert-booking-server
             rm -rf src/main/resources/application.yml # 기존 .yml 파일 날림
             git pull origin develop
+            echo "$APPLICATION_DEV_PROPERTIES" # debug
             echo "$APPLICATION_DEV_PROPERTIES" > src/main/resources/application.yml # 지정된 $APPLICATION_DEV_PROPERTIES 변수의 값으로 application.yml 파일 작성
             ./gradlew build -x test   # 일단 no test로 빌드
             sudo fuser -k -n tcp 8080 || true   # || true를 붙인 이유는 8080에 종료시킬 프로세스가 없더라도 실패로 처리하지 않기 위해서이다. 
