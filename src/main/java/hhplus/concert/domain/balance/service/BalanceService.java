@@ -25,7 +25,7 @@ public class BalanceService {
         user.useBalance(amount);
 
         // 결제 완료 이벤트 발행
-        eventPublisher.publish(PaymentCompleteEvent.of(user, booking));
+        eventPublisher.publish(PaymentCompleteEvent.from(booking));
 
         // 잔액내역 save
         balanceHistoryWriter.saveBalanceUseHistory(user, amount);
