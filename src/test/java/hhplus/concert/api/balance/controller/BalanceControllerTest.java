@@ -64,7 +64,7 @@ class BalanceControllerTest {
     @Test
     public void chargeBalance() throws Exception {
         // given
-        BalanceChargeResponse balanceChargeResponse = BalanceChargeResponse.from(ResponseResult.SUCCESS, 10000);
+        BalanceChargeResponse balanceChargeResponse = BalanceChargeResponse.success(10000);
         given(chargeBalanceUseCase.execute(anyLong(), anyLong())).willReturn(balanceChargeResponse);
 
         // expected

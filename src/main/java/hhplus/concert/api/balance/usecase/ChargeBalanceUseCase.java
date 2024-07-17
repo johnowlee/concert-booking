@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.api.common.ResponseResult.SUCCESS;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -32,7 +30,8 @@ public class ChargeBalanceUseCase {
             chargeBalance(user, amount);
 
             balanceHistoryWriter.saveBalanceChargeHistory(user, amount);
-            return BalanceChargeResponse.from(SUCCESS, user.getBalance());
+
+            return BalanceChargeResponse.success(user.getBalance());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }
