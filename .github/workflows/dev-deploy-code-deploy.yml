@@ -50,6 +50,8 @@ jobs:
       - name: S3에 프로젝트 폴더 업로드하기
         run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://concert-booking-server/$GITHUB_SHA.tar.gz
 
+      # S3에서 압축파일을 다운 받으면, 압축은 지정한 경로에 자동으로 풀림.
+      # 그 후 CodeDeploy Agent가 appspec.yml 파일을 자동으로 찾아서 읽고, 그에 따라 작업을 수행.
       - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
         run: aws deploy create-deployment
           --application-name concert-booking-server
