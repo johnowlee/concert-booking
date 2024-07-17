@@ -28,12 +28,18 @@ public class ChargeBalanceUseCase {
     public BalanceChargeResponse execute(Long userId, long amount) {
         try {
             User user = userReader.getUserById(userId);
-            user.chargeBalance(amount);
-            em.flush();
+
+            chargeBalance(user, amount);
+
             balanceHistoryWriter.saveBalanceChargeHistory(user, amount);
             return BalanceChargeResponse.from(SUCCESS, user.getBalance());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }
+    }
+
+    private void chargeBalance(User user, long amount) {
+        user.chargeBalance(amount);
+        em.flush();
     }
 }
