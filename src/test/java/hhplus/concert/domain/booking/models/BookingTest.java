@@ -2,18 +2,22 @@ package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
+import hhplus.concert.domain.concert.models.SeatPriceByGrade;
+import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class BookingTest {
@@ -54,5 +58,48 @@ class BookingTest {
         // when & then
         RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePending());
         assertEquals(BookingErrorCode.PENDING_BOOKING, exception.getErrorCode());
+    }
+
+    @DisplayName("예약좌석 수와 좌석가격의 곱의 값을 리턴한다.")
+    @Test
+    void getTotalPrice_ReturnBookingSeatsSizeTimesSeatPrice() {
+        // given
+        Booking booking = spy(Booking.class);
+        List<BookingSeat> mockedSeats = Arrays.asList(
+                mock(BookingSeat.class),
+                mock(BookingSeat.class),
+                mock(BookingSeat.class)
+        );
+        given(booking.getBookingSeats()).willReturn(mockedSeats);
+        int seatPrice = SeatPriceByGrade.A.getValue();
+
+        // when
+        int actual = booking.getTotalPrice();
+
+        // when & then
+        assertEquals((3 * seatPrice), actual);
+    }
+
+    @DisplayName("userId가 같지 않다면, 예외를 터트린다.")
+    @Test
+    void validatePayer_ShouldThrowException_WhenUserIdNotSame() {
+        // given
+        User user = User.builder().id(1L).build();
+        Booking booking = Booking.builder().user(user).build();
+
+        // when & then
+        RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePayer(2L));
+        assertEquals(BookingErrorCode.INVALID_PAYER, exception.getErrorCode());
+    }
+
+    @DisplayName("userId가 같다면, 아무일도 일어나지 않는다.")
+    @Test
+    void validatePayer_ShouldNotThrowException_WhenUserIdSame() {
+        // given
+        User user = User.builder().id(1L).build();
+        Booking booking = Booking.builder().user(user).build();
+
+        // when & then
+        booking.validatePayer(1L);
     }
 }

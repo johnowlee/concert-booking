@@ -15,9 +15,7 @@ public class BalanceService {
     private final EventPublisher eventPublisher;
     private final BalanceHistoryWriter balanceHistoryWriter;
 
-    public void use(Long userId, Booking booking) {
-        // TODO : booking.userId == userId 검증 작업
-
+    public void use(Booking booking) {
         // 잔액검증 및 user 잔액 update
         User user = booking.getUser();
         long amount = booking.getTotalPrice();

@@ -102,4 +102,10 @@ public class Booking {
     public int getTotalPrice() {
         return this.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
     }
+
+    public void validatePayer(Long userId) {
+        if (user.isNotSameUserId(userId)) {
+            throw new RestApiException(BookingErrorCode.INVALID_PAYER);
+        }
+    }
 }

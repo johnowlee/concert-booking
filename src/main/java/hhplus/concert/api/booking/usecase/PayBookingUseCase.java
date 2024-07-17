@@ -31,8 +31,11 @@ public class PayBookingUseCase {
         // 예약시간초과 검증
         booking.validateBookingDateTime();
 
+        // 결제자 ID 검증
+        booking.validatePayer(userId);
+
         // 잔액 use
-        balanceService.use(userId, booking);
+        balanceService.use(booking);
 
         // 결제 내역 save
         paymentWriter.payBooking(booking);

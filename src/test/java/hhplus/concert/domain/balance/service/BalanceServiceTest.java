@@ -28,9 +28,6 @@ class BalanceServiceTest {
     BalanceService balanceService;
 
     @Mock
-    UserReader userReader;
-
-    @Mock
     EventPublisher eventPublisher;
 
     @Mock
@@ -40,18 +37,16 @@ class BalanceServiceTest {
     @Test
     void use_ShouldSucceed() {
         // given
-        Long userId = 1L;
         User user = Mockito.mock(User.class);
         Booking booking = Mockito.mock(Booking.class);
 
-        given(userReader.getUserById(userId)).willReturn(user);
+        given(booking.getUser()).willReturn(user);
         given(booking.getTotalPrice()).willReturn(10000);
 
         // when
-        balanceService.use(userId, booking);
+        balanceService.use(booking);
 
         // then
-        then(userReader).should().getUserById(userId);
         then(user).should().useBalance(10000);
         then(eventPublisher).should().publish(any(PaymentCompleteEvent.class));
         then(balanceHistoryWriter).should().saveBalanceUseHistory(user, 10000);
@@ -61,11 +56,10 @@ class BalanceServiceTest {
     @Test
     void use_ShouldThrowException_WhenBalanceIsNotEnough() {
         // given
-        Long userId = 1L;
         User user = Mockito.mock(User.class);
         Booking booking = Mockito.mock(Booking.class);
 
-        given(userReader.getUserById(userId)).willReturn(user);
+        given(booking.getUser()).willReturn(user);
         given(booking.getTotalPrice()).willReturn(10000);
 
         willThrow(new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE))
@@ -75,12 +69,11 @@ class BalanceServiceTest {
         // when
         RestApiException exception = assertThrows(
                 RestApiException.class,
-                () -> balanceService.use(userId, booking)
+                () -> balanceService.use(booking)
         );
 
         // then
         assertEquals(BalanceErrorCode.NOT_ENOUGH_BALANCE, exception.getErrorCode());
-        then(userReader).should().getUserById(userId);
         then(user).should().useBalance(10000);
         then(eventPublisher).shouldHaveNoInteractions();
         then(balanceHistoryWriter).shouldHaveNoInteractions();
@@ -91,11 +84,10 @@ class BalanceServiceTest {
     @Test
     void use_ShouldThrowException_WhenAmountIsNegative() {
         // given
-        Long userId = 1L;
         User user = Mockito.mock(User.class);
         Booking booking = Mockito.mock(Booking.class);
 
-        given(userReader.getUserById(userId)).willReturn(user);
+        given(booking.getUser()).willReturn(user);
         given(booking.getTotalPrice()).willReturn(-10);
 
         willThrow(new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT))
@@ -105,12 +97,11 @@ class BalanceServiceTest {
         // when
         RestApiException exception = assertThrows(
                 RestApiException.class,
-                () -> balanceService.use(userId, booking)
+                () -> balanceService.use(booking)
         );
 
         // then
         assertEquals(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT, exception.getErrorCode());
-        then(userReader).should().getUserById(userId);
         then(user).should().useBalance(-10);
         then(eventPublisher).shouldHaveNoInteractions();
         then(balanceHistoryWriter).shouldHaveNoInteractions();

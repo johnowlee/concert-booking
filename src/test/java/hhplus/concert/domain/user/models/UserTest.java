@@ -2,6 +2,7 @@ package hhplus.concert.domain.user.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -85,6 +86,16 @@ class UserTest {
                 .isInstanceOf(
                         new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE).getClass()
                 );
+    }
 
+    @DisplayName("id가 다르면 true, 같으면 false를 반환한다.")
+    @Test
+    void isNotSameUserIdTest() {
+        // given
+        User user = User.builder().id(1L).build();
+
+        // when & then
+        Assertions.assertTrue(user.isNotSameUserId(2L));
+        Assertions.assertFalse(user.isNotSameUserId(1L));
     }
 }

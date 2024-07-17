@@ -70,4 +70,8 @@ public class User {
         }
         this.balance -= amount;
     }
+
+    public boolean isNotSameUserId(Long userId) {
+        return this.id != userId;
+    }
 }
