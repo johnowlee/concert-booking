@@ -19,7 +19,7 @@ jobs:
           java-version: 17
 
       - name: application.yml 파일 만들기
-        run: echo "${{ secrets.APPLICATION_DEV_PROPERTIES }}" > src/main/resources/application.yml
+        run: echo "${{ secrets.APPLICATION_DEV_PROPERTIES }}" > ./src/main/resources/application.yml
 
       - name: 테스트 및 빌드 (테스트X)
         run: ./gradlew build x test
