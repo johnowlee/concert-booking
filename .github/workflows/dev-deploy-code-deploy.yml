@@ -1,4 +1,4 @@
-name: dev github actions SCP build file to EC2
+name: dev github actions -> AWS upload S3, Code Deploy Agent deploy in EC2
 
 on:
   push:
