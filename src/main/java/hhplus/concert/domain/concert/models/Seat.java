@@ -43,7 +43,15 @@ public class Seat {
         this.concertOption = concertOption;
     }
 
-    public void changeBookingStatus(SeatBookingStatus status) {
-        this.seatBookingStatus = status;
+    public void markAsProcessing() {
+        this.seatBookingStatus = SeatBookingStatus.PROCESSING;
+    }
+
+    public void markAsBooked() {
+        this.seatBookingStatus = SeatBookingStatus.BOOKED;
+    }
+
+    public boolean isBooked() {
+        return this.seatBookingStatus == SeatBookingStatus.BOOKED;
     }
 }

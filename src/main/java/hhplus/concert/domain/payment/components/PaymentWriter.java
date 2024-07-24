@@ -12,7 +12,7 @@ public class PaymentWriter {
 
     private final PaymentWriterRepository paymentWriterRepository;
 
-    public Payment payBooking(Booking booking, long amount) {
-        return paymentWriterRepository.save(Payment.createBookingPayment(booking, amount));
+    public Payment payBooking(Booking booking) {
+        return paymentWriterRepository.save(Payment.createBookingPayment(booking));
     }
 }

@@ -3,7 +3,6 @@ package hhplus.concert.domain.booking.models;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatPriceByGrade;
 import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
@@ -12,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -22,6 +22,7 @@ import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MI
 
 @Entity
 @Getter
+@Slf4j
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "booking")
 public class Booking {
@@ -60,26 +61,32 @@ public class Booking {
     // 예약만료시간 체크
     public void validateBookingDateTime() {
         if (isBookingDateTimeExpired()) {
+            log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
             throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
         }
     }
 
-    public boolean isBookingDateTimeExpired() {
+    private boolean isBookingDateTimeExpired() {
         return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
+    }
+
+    public void validatePending() {
+        if (isBookingDateTimeValid()) {
+            log.info("BookingErrorCode.PENDING_BOOKING 발생");
+            throw new RestApiException(BookingErrorCode.PENDING_BOOKING);
+        }
+    }
+
+    private boolean isBookingDateTimeValid() {
+        return getMinutesSinceBooking() <= BOOKING_EXPIRY_MINUTES.toLong();
     }
 
     private long getMinutesSinceBooking() {
         return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes();
     }
 
-    public void changeBookingStatus(BookingStatus status) {
-        this.bookingStatus = status;
-    }
-
-    public void changeSeatsBookingStatus(SeatBookingStatus status) {
-        this.bookingSeats.stream()
-                .map(BookingSeat::getSeat)
-                .forEach(seat -> seat.changeBookingStatus(status));
+    public void markAsComplete() {
+        this.bookingStatus = BookingStatus.COMPLETE;
     }
 
     public static Booking buildBooking(ConcertOption concertOption, User user) {
