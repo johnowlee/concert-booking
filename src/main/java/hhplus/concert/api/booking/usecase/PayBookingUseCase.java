@@ -4,7 +4,6 @@ import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.balance.service.BalanceService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.booking.service.BookingManager;
 import hhplus.concert.domain.payment.components.PaymentWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +19,6 @@ public class PayBookingUseCase {
 
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
-    private final BookingManager bookingManager;
     private final BalanceService balanceService;
 
     @Transactional
@@ -44,7 +42,7 @@ public class PayBookingUseCase {
         booking.markAsComplete();
 
         // 좌석 예약
-        bookingManager.reserveAllSeats(booking);
+        booking.reserveAllSeats();
 
         return PaymentResponse.from(SUCCESS);
     }

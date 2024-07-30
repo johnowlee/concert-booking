@@ -35,12 +35,6 @@ public class BookingManager {
                 });
     }
 
-    public void reserveAllSeats(Booking booking) {
-        booking.getBookingSeats().stream()
-                .map(BookingSeat::getSeat)
-                .forEach(seat -> seat.markAsBooked());
-    }
-
     public List<BookingSeat> createBookingSeats(List<Seat> seats, Booking booking) {
         return seats.stream()
                 .map(s -> BookingSeat.buildBookingSeat(booking, s))

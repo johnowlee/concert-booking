@@ -108,4 +108,10 @@ public class Booking {
             throw new RestApiException(BookingErrorCode.INVALID_PAYER);
         }
     }
+
+    public void reserveAllSeats() {
+        bookingSeats.stream()
+                .map(BookingSeat::getSeat)
+                .forEach(seat -> seat.markAsBooked());
+    }
 }
