@@ -44,7 +44,7 @@ class BookingTest {
         when(booking.getBookingDateTime()).thenReturn(bookingDateTime);
 
         // when & then
-        booking.validatePending();
+        booking.validatePendingBooking();
     }
 
     @DisplayName("예약 가능 시간이 만료되지 않았으면, validatePending 검증에서 예외를 터트린다.")
@@ -56,7 +56,7 @@ class BookingTest {
         when(booking.getBookingDateTime()).thenReturn(bookingDateTime);
 
         // when & then
-        RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePending());
+        RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePendingBooking());
         assertEquals(BookingErrorCode.PENDING_BOOKING, exception.getErrorCode());
     }
 

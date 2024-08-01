@@ -70,7 +70,7 @@ public class Booking {
         return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
     }
 
-    public void validatePending() {
+    public void validatePendingBooking() {
         if (isBookingDateTimeValid()) {
             log.info("BookingErrorCode.PENDING_BOOKING 발생");
             throw new RestApiException(BookingErrorCode.PENDING_BOOKING);

@@ -21,7 +21,7 @@ public class BookingManager {
     }
 
     private void checkAnyPendingBooking(List<Booking> bookings) {
-        bookings.forEach(Booking::validatePending);
+        bookings.forEach(Booking::validatePendingBooking);
     }
 
     private void checkAnyBookedSeat(List<Booking> bookingsBySeats) {
