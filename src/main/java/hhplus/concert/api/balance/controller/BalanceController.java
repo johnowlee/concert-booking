@@ -5,6 +5,7 @@ import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
 import hhplus.concert.api.balance.dto.response.BalanceResponse;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +24,8 @@ public class BalanceController {
     }
 
     @PatchMapping("{userId}")
-    public ResponseEntity<BalanceChargeResponse> charge(@PathVariable Long userId, @RequestBody BalanceChargeRequest balanceChargeRequest) {
+    public ResponseEntity<BalanceChargeResponse> charge(@PathVariable Long userId,
+                                                        @Valid @RequestBody BalanceChargeRequest balanceChargeRequest) {
         return ResponseEntity.ok().body(chargeBalanceUseCase.execute(userId, balanceChargeRequest.balance()));
     }
 }
