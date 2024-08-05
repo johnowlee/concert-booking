@@ -17,12 +17,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -75,5 +75,23 @@ class BalanceControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.balance").value(10000))
                 .andExpect(jsonPath("$.chargeResult").value(ResponseResult.SUCCESS.name()));
+    }
+
+    @DisplayName("포인트를 충전할 떄 충전 금액은 양수이다.")
+    @Test
+    void chargeBalanceWithZeroPoint() throws Exception {
+        // given
+        BalanceChargeRequest request = new BalanceChargeRequest(0);
+
+        // when & then
+        mockMvc.perform(patch("/balance/{userId}", 1)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                )
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.status").value("400"))
+                .andExpect(jsonPath("$.code").value("BAD_REQUEST"))
+                .andExpect(jsonPath("$.message").value("충전금액은 양수이어야 합니다."));
     }
 }
