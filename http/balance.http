@@ -1,0 +1,10 @@
+### 잔액 조회
+GET localhost:8080/balance/1
+
+### 잔액 충전
+PATCH localhost:8080/balance/1
+Content-Type: application/json
+
+{
+  "balance": 10000
+}
