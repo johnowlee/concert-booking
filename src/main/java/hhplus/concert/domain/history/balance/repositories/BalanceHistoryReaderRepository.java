@@ -1,6 +1,6 @@
-package hhplus.concert.domain.balance.repositories;
+package hhplus.concert.domain.history.balance.repositories;
 
-import hhplus.concert.domain.balance.models.TransactionType;
+import hhplus.concert.domain.history.balance.models.TransactionType;
 
 import java.time.LocalDateTime;
 

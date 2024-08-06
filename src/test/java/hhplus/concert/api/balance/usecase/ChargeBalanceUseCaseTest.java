@@ -1,6 +1,6 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;
 import hhplus.concert.domain.user.models.User;

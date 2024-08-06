@@ -1,4 +1,4 @@
-package hhplus.concert.domain.balance.models;
+package hhplus.concert.domain.history.balance.models;
 
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;

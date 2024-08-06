@@ -1,7 +1,7 @@
-package hhplus.concert.domain.balance.infrastructure;
+package hhplus.concert.domain.history.balance.infrastructure;
 
-import hhplus.concert.domain.balance.models.BalanceHistory;
-import hhplus.concert.domain.balance.repositories.BalanceHistoryWriterRepository;
+import hhplus.concert.domain.history.balance.models.BalanceHistory;
+import hhplus.concert.domain.history.balance.repositories.BalanceHistoryWriterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

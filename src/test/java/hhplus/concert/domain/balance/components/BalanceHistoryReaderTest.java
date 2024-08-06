@@ -1,7 +1,8 @@
 package hhplus.concert.domain.balance.components;
 
-import hhplus.concert.domain.balance.models.TransactionType;
-import hhplus.concert.domain.balance.repositories.BalanceHistoryReaderRepository;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryReader;
+import hhplus.concert.domain.history.balance.models.TransactionType;
+import hhplus.concert.domain.history.balance.repositories.BalanceHistoryReaderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

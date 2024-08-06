@@ -1,7 +1,7 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
-import hhplus.concert.domain.balance.service.BalanceService;
+import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.payment.components.PaymentWriter;

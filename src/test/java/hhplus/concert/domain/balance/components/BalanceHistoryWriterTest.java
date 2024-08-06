@@ -1,7 +1,8 @@
 package hhplus.concert.domain.balance.components;
 
-import hhplus.concert.domain.balance.models.BalanceHistory;
-import hhplus.concert.domain.balance.repositories.BalanceHistoryWriterRepository;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.models.BalanceHistory;
+import hhplus.concert.domain.history.balance.repositories.BalanceHistoryWriterRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,8 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceChargeHistory;
-import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceUseHistory;
+import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceChargeHistory;
+import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceUseHistory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;

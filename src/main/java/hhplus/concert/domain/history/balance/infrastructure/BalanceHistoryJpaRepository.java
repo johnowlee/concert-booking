@@ -1,7 +1,7 @@
-package hhplus.concert.domain.balance.infrastructure;
+package hhplus.concert.domain.history.balance.infrastructure;
 
-import hhplus.concert.domain.balance.models.BalanceHistory;
-import hhplus.concert.domain.balance.models.TransactionType;
+import hhplus.concert.domain.history.balance.models.BalanceHistory;
+import hhplus.concert.domain.history.balance.models.TransactionType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

@@ -1,13 +1,13 @@
-package hhplus.concert.domain.balance.components;
+package hhplus.concert.domain.history.balance.components;
 
-import hhplus.concert.domain.balance.models.BalanceHistory;
-import hhplus.concert.domain.balance.repositories.BalanceHistoryWriterRepository;
+import hhplus.concert.domain.history.balance.models.BalanceHistory;
+import hhplus.concert.domain.history.balance.repositories.BalanceHistoryWriterRepository;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceChargeHistory;
-import static hhplus.concert.domain.balance.models.BalanceHistory.createBalanceUseHistory;
+import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceChargeHistory;
+import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceUseHistory;
 
 @Component
 @RequiredArgsConstructor
