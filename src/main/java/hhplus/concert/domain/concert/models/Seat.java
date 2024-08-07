@@ -36,16 +36,16 @@ public class Seat {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "grade")
-    private SeatGrade seatGrade;
+    private SeatGrade grade;
 
     @Builder
-    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption, SeatGrade seatGrade) {
+    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption, SeatGrade grade) {
         this.id = id;
         this.seatNo = seatNo;
         this.seatBookingStatus = seatBookingStatus;
         this.bookingSeats = bookingSeats;
         this.concertOption = concertOption;
-        this.seatGrade = seatGrade;
+        this.grade = grade;
     }
 
     public void markAsProcessing() {
@@ -58,5 +58,9 @@ public class Seat {
 
     public boolean isBooked() {
         return this.seatBookingStatus == SeatBookingStatus.BOOKED;
+    }
+
+    public int getPrice() {
+        return this.grade.price;
     }
 }
