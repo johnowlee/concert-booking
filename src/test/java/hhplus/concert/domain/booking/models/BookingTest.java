@@ -1,8 +1,9 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
-import hhplus.concert.domain.concert.models.SeatPriceByGrade;
+import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.concert.models.SeatGrade;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,21 +11,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static hhplus.concert.api.exception.code.BookingErrorCode.*;
+import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
+import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
+import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.tuple;
 
 @ExtendWith(MockitoExtension.class)
 class BookingTest {
 
-    @DisplayName("예약상태를 COMPLETE 상태로 변경에 성공한다")
+    @DisplayName("예약 상태를 COMPLETE 상태로 변경한다.")
     @Test
-    void changeBookingStatusToComplete_Success() {
+    void markAsComplete() {
         // given
         Booking booking = Booking.builder().bookingStatus(BookingStatus.INCOMPLETE).build();
 
@@ -35,71 +37,128 @@ class BookingTest {
         assertThat(booking.getBookingStatus()).isEqualTo(BookingStatus.COMPLETE);
     }
 
-    @DisplayName("예약 가능 시간이 만료되었으면, validatePending 검증에서 아무일도 일어나지 않는다.")
+    @DisplayName("예약의 예약시간이 만료되어 유효하지 않은 상태이면 예외가 발생한다.")
     @Test
-    void validatePending_ShouldNotThrowException_WhenBookingIsNotPending() {
+    void validateBookingDateTime() {
         // given
-        Booking booking = spy(Booking.class);
-        LocalDateTime bookingDateTime = LocalDateTime.now().minusMinutes(40);
-        when(booking.getBookingDateTime()).thenReturn(bookingDateTime);
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong() + 1;
+        Booking booking = Booking.builder()
+                .bookingDateTime(LocalDateTime.now().minusMinutes(expiryMinutes))
+                .build();
 
         // when & then
-        booking.validatePendingBooking();
+        assertThatThrownBy(() -> booking.validateBookingDateTime())
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(EXPIRED_BOOKING_TIME.getMessage());
     }
 
-    @DisplayName("예약 가능 시간이 만료되지 않았으면, validatePending 검증에서 예외를 터트린다.")
+
+    @DisplayName("예약의 예약시간이 유효한 상태이면 예외가 발생한다.")
     @Test
-    void validatePending_ShouldThrowException_WhenBookingIsPending() {
+    void validatePendingBooking() {
         // given
-        Booking booking = spy(Booking.class);
-        LocalDateTime bookingDateTime = LocalDateTime.now().minusMinutes(4);
-        when(booking.getBookingDateTime()).thenReturn(bookingDateTime);
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong() - 1;
+        Booking booking = Booking.builder()
+                .bookingDateTime(LocalDateTime.now().minusMinutes(expiryMinutes))
+                .build();
 
         // when & then
-        RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePendingBooking());
-        assertEquals(BookingErrorCode.PENDING_BOOKING, exception.getErrorCode());
+        assertThatThrownBy(() -> booking.validatePendingBooking())
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(PENDING_BOOKING.getMessage());
     }
 
-    @DisplayName("예약좌석 수와 좌석가격의 곱의 값을 리턴한다.")
+    @DisplayName("예약된 좌석들의 가격을 모두 더해 총 예약 금액을 가져온다.")
     @Test
-    void getTotalPrice_ReturnBookingSeatsSizeTimesSeatPrice() {
+    void getTotalPrice() {
         // given
-        Booking booking = spy(Booking.class);
-        List<BookingSeat> mockedSeats = Arrays.asList(
-                mock(BookingSeat.class),
-                mock(BookingSeat.class),
-                mock(BookingSeat.class)
-        );
-        given(booking.getBookingSeats()).willReturn(mockedSeats);
-        int seatPrice = SeatPriceByGrade.A.getValue();
+        Seat seat1 = Seat.builder()
+                .seatNo("A-1")
+                .grade(SeatGrade.A)
+                .build();
+        Seat seat2 = Seat.builder()
+                .seatNo("B-1")
+                .grade(SeatGrade.B)
+                .build();
+        BookingSeat bookingSeat1 = BookingSeat.builder()
+                .seat(seat1)
+                .build();
+        BookingSeat bookingSeat2 = BookingSeat.builder()
+                .seat(seat2)
+                .build();
+        Booking booking = Booking.builder()
+                .bookingSeats(List.of(bookingSeat1, bookingSeat2))
+                .build();
 
         // when
-        int actual = booking.getTotalPrice();
+        int result = booking.getTotalPrice();
 
-        // when & then
-        assertEquals((3 * seatPrice), actual);
+        // then
+        assertThat(result).isEqualTo(seat1.getPrice() + seat2.getPrice());
     }
 
-    @DisplayName("userId가 같지 않다면, 예외를 터트린다.")
+    @DisplayName("예약자의 userId와 같지 않다면, 예외를 터트린다.")
     @Test
-    void validatePayer_ShouldThrowException_WhenUserIdNotSame() {
+    void validatePayer() {
         // given
         User user = User.builder().id(1L).build();
         Booking booking = Booking.builder().user(user).build();
 
         // when & then
-        RestApiException exception = assertThrows(RestApiException.class, () -> booking.validatePayer(2L));
-        assertEquals(BookingErrorCode.INVALID_PAYER, exception.getErrorCode());
+        assertThatThrownBy(() -> booking.validatePayer(2L))
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(INVALID_PAYER.getMessage());
     }
 
-    @DisplayName("userId가 같다면, 아무일도 일어나지 않는다.")
+    @DisplayName("예약자의 userId와 같다면, 아무일도 일어나지 않는다.")
     @Test
-    void validatePayer_ShouldNotThrowException_WhenUserIdSame() {
+    void validatePayeWithSameUser() {
         // given
         User user = User.builder().id(1L).build();
         Booking booking = Booking.builder().user(user).build();
 
         // when & then
         booking.validatePayer(1L);
+    }
+
+    @DisplayName("좌석의 예약 상태를 모두 좌석된 상태로 변경한다.")
+    @Test
+    void reserveAllSeats() {
+        // given
+        Seat seat1 = Seat.builder()
+                .seatNo("A-1")
+                .grade(SeatGrade.A)
+                .seatBookingStatus(AVAILABLE)
+                .build();
+        Seat seat2 = Seat.builder()
+                .seatNo("B-1")
+                .grade(SeatGrade.B)
+                .seatBookingStatus(PROCESSING)
+                .build();
+        BookingSeat bookingSeat1 = BookingSeat.builder()
+                .seat(seat1)
+                .build();
+        BookingSeat bookingSeat2 = BookingSeat.builder()
+                .seat(seat2)
+                .build();
+        Booking booking = Booking.builder()
+                .bookingSeats(List.of(bookingSeat1, bookingSeat2))
+                .build();
+
+        // when
+        booking.reserveAllSeats();
+
+        // then
+        List<BookingSeat> bookingSeats = booking.getBookingSeats();
+        List<Seat> seats = bookingSeats.stream()
+                .map(BookingSeat::getSeat)
+                .collect(Collectors.toList());
+
+        assertThat(seats).hasSize(2)
+                .extracting("seatNo", "grade", "seatBookingStatus")
+                .containsExactlyInAnyOrder(
+                        tuple("A-1", SeatGrade.A, SeatBookingStatus.BOOKED),
+                        tuple("B-1", SeatGrade.B, SeatBookingStatus.BOOKED)
+                );
     }
 }
