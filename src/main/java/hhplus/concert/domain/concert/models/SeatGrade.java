@@ -9,7 +9,7 @@ public enum SeatGrade {
         this.price = price;
     }
 
-    public int getValue() {
+    public int getPrice() {
         return price;
     }
 }
