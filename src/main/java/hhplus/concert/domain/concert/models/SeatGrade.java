@@ -1,7 +1,7 @@
 package hhplus.concert.domain.concert.models;
 
 public enum SeatGrade {
-    A(30000), B(15000);
+    A(100000), B(50000), C(30000);
 
     int price;
 
