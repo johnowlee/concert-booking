@@ -34,13 +34,18 @@ public class Seat {
     @JoinColumn(name = "concert_option_id")
     private ConcertOption concertOption;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade")
+    private SeatGrade seatGrade;
+
     @Builder
-    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption) {
+    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption, SeatGrade seatGrade) {
         this.id = id;
         this.seatNo = seatNo;
         this.seatBookingStatus = seatBookingStatus;
         this.bookingSeats = bookingSeats;
         this.concertOption = concertOption;
+        this.seatGrade = seatGrade;
     }
 
     public void markAsProcessing() {
