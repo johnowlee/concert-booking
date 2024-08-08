@@ -40,12 +40,14 @@ public class User {
     @Builder
     private User(Long id, String name, long balance,
                  List<Booking> bookings,
-                 List<Payment> payments) {
+                 List<Payment> payments,
+                 Long version) {
         this.id = id;
         this.name = name;
         this.balance = balance;
         this.bookings = bookings;
         this.payments = payments;
+        this.version = version;
     }
 
     public void chargeBalance(long amount) {
