@@ -4,7 +4,7 @@ import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.components.PaymentWriter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

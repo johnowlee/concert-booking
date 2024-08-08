@@ -1,8 +1,8 @@
-package hhplus.concert.domain.payment.components;
+package hhplus.concert.domain.history.payment.components;
 
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.payment.models.Payment;
-import hhplus.concert.domain.payment.repositories.PaymentWriterRepository;
+import hhplus.concert.domain.history.payment.repositories.PaymentWriterRepository;
+import hhplus.concert.domain.history.payment.models.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

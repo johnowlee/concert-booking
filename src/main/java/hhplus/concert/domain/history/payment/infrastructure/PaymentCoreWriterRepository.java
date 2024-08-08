@@ -1,7 +1,7 @@
-package hhplus.concert.domain.payment.infrastructure;
+package hhplus.concert.domain.history.payment.infrastructure;
 
-import hhplus.concert.domain.payment.models.Payment;
-import hhplus.concert.domain.payment.repositories.PaymentWriterRepository;
+import hhplus.concert.domain.history.payment.models.Payment;
+import hhplus.concert.domain.history.payment.repositories.PaymentWriterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

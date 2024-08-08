@@ -2,7 +2,7 @@ package hhplus.concert.domain.history.balance.service;
 
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
 import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;

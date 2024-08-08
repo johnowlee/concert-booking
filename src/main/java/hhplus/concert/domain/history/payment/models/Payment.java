@@ -1,4 +1,4 @@
-package hhplus.concert.domain.payment.models;
+package hhplus.concert.domain.history.payment.models;
 
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.user.models.User;

@@ -2,7 +2,7 @@ package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.payment.models.Payment;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

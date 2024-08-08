@@ -5,7 +5,7 @@ import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.service.BalanceService;
-import hhplus.concert.domain.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
 import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;

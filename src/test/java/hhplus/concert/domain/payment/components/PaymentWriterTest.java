@@ -2,8 +2,9 @@ package hhplus.concert.domain.payment.components;
 
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.payment.models.Payment;
-import hhplus.concert.domain.payment.repositories.PaymentWriterRepository;
+import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.models.Payment;
+import hhplus.concert.domain.history.payment.repositories.PaymentWriterRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
