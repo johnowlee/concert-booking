@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "balance_history", indexes = @Index(name = "idx_balance_history", columnList = "user_id, transaction_date_time"))
-public class BalanceHistory {
+public class Balance {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,14 +31,14 @@ public class BalanceHistory {
     private User user;
 
     @Builder
-    private BalanceHistory(long amount, TransactionType transactionType, LocalDateTime transactionDateTime, User user) {
+    private Balance(long amount, TransactionType transactionType, LocalDateTime transactionDateTime, User user) {
         this.amount = amount;
         this.transactionType = transactionType;
         this.transactionDateTime = transactionDateTime;
         this.user = user;
     }
 
-    public static BalanceHistory createBalanceChargeHistory(User user, long amount) {
+    public static Balance createBalanceChargeHistory(User user, long amount) {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.CHARGE)
@@ -47,7 +47,7 @@ public class BalanceHistory {
                 .build();
     }
 
-    public static BalanceHistory createBalanceUseHistory(User user, long amount) {
+    public static Balance createBalanceUseHistory(User user, long amount) {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.USE)

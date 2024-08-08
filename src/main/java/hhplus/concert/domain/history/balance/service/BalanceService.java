@@ -1,6 +1,6 @@
 package hhplus.concert.domain.history.balance.service;
 
-import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
 import hhplus.concert.domain.support.event.EventPublisher;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class BalanceService {
 
     private final EventPublisher eventPublisher;
-    private final BalanceHistoryWriter balanceHistoryWriter;
+    private final BalanceWriter balanceWriter;
 
     public void use(Booking booking) {
         // 잔액검증 및 user 잔액 update
@@ -25,6 +25,6 @@ public class BalanceService {
         eventPublisher.publish(PaymentCompleteEvent.from(booking));
 
         // 잔액내역 save
-        balanceHistoryWriter.saveBalanceUseHistory(user, amount);
+        balanceWriter.saveBalanceUseHistory(user, amount);
     }
 }

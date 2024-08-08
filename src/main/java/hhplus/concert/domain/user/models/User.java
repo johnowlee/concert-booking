@@ -2,7 +2,7 @@ package hhplus.concert.domain.user.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.models.BalanceHistory;
+import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
 import jakarta.persistence.*;
@@ -33,7 +33,7 @@ public class User {
     private Long version;
 
     @OneToMany(mappedBy = "user")
-    private List<BalanceHistory> balanceHistories = new ArrayList<>();
+    private List<Balance> balanceHistories = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private List<Booking> bookings = new ArrayList<>();
@@ -43,7 +43,7 @@ public class User {
 
     @Builder
     private User(Long id, String name, long balance,
-                 List<BalanceHistory> balanceHistories,
+                 List<Balance> balanceHistories,
                  List<Booking> bookings,
                  List<Payment> payments) {
         this.id = id;

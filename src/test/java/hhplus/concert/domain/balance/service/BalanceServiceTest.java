@@ -2,7 +2,7 @@ package hhplus.concert.domain.balance.service;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
@@ -31,7 +31,7 @@ class BalanceServiceTest {
     EventPublisher eventPublisher;
 
     @Mock
-    BalanceHistoryWriter balanceHistoryWriter;
+    BalanceWriter balanceWriter;
 
     @DisplayName("유저의 계좌에 잔액이 차감되고 이벤트발행, balance이력 저장에 성공한다.")
     @Test
@@ -49,7 +49,7 @@ class BalanceServiceTest {
         // then
         then(user).should().useBalance(10000);
         then(eventPublisher).should().publish(any(PaymentCompleteEvent.class));
-        then(balanceHistoryWriter).should().saveBalanceUseHistory(user, 10000);
+        then(balanceWriter).should().saveBalanceUseHistory(user, 10000);
     }
 
     @DisplayName("유저의 계좌에 잔액이 사용액 보다 부족하면 예외를 발생시킨다.")
@@ -76,7 +76,7 @@ class BalanceServiceTest {
         assertEquals(BalanceErrorCode.NOT_ENOUGH_BALANCE, exception.getErrorCode());
         then(user).should().useBalance(10000);
         then(eventPublisher).shouldHaveNoInteractions();
-        then(balanceHistoryWriter).shouldHaveNoInteractions();
+        then(balanceWriter).shouldHaveNoInteractions();
 
     }
 
@@ -104,6 +104,6 @@ class BalanceServiceTest {
         assertEquals(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT, exception.getErrorCode());
         then(user).should().useBalance(-10);
         then(eventPublisher).shouldHaveNoInteractions();
-        then(balanceHistoryWriter).shouldHaveNoInteractions();
+        then(balanceWriter).shouldHaveNoInteractions();
     }
 }

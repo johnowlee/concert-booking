@@ -1,8 +1,8 @@
 package hhplus.concert.domain.balance.components;
 
-import hhplus.concert.domain.history.balance.components.BalanceHistoryReader;
+import hhplus.concert.domain.history.balance.components.BalanceReader;
 import hhplus.concert.domain.history.balance.models.TransactionType;
-import hhplus.concert.domain.history.balance.repositories.BalanceHistoryReaderRepository;
+import hhplus.concert.domain.history.balance.repositories.BalanceReaderRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -19,26 +19,26 @@ import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
-class BalanceHistoryReaderTest {
+class BalanceReaderTest {
 
     @InjectMocks
-    BalanceHistoryReader balanceHistoryReader;
+    BalanceReader balanceReader;
 
     @Mock
-    BalanceHistoryReaderRepository balanceHistoryReaderRepository;
+    BalanceReaderRepository balanceReaderRepository;
 
     @Test
     void GetAmountBySearchParam_Success() {
         // given
         long expectedAmount = 1000L;
-        given(balanceHistoryReaderRepository.getAmountBySearchParam(anyLong(), any(TransactionType.class), any(LocalDateTime.class), any(LocalDateTime.class))).willReturn(expectedAmount);
+        given(balanceReaderRepository.getAmountBySearchParam(anyLong(), any(TransactionType.class), any(LocalDateTime.class), any(LocalDateTime.class))).willReturn(expectedAmount);
 
         // when
-        long result = balanceHistoryReader.getAmountBySearchParam(1L, TransactionType.USE, LocalDateTime.now().minusDays(10), LocalDateTime.now());
+        long result = balanceReader.getAmountBySearchParam(1L, TransactionType.USE, LocalDateTime.now().minusDays(10), LocalDateTime.now());
 
         // then
         assertEquals(expectedAmount, result);
-        then(balanceHistoryReaderRepository).should(times(1)).getAmountBySearchParam(anyLong(), any(TransactionType.class), any(LocalDateTime.class), any(LocalDateTime.class));
+        then(balanceReaderRepository).should(times(1)).getAmountBySearchParam(anyLong(), any(TransactionType.class), any(LocalDateTime.class), any(LocalDateTime.class));
     }
 
 }

@@ -1,8 +1,8 @@
 package hhplus.concert.domain.balance.components;
 
-import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
-import hhplus.concert.domain.history.balance.models.BalanceHistory;
-import hhplus.concert.domain.history.balance.repositories.BalanceHistoryWriterRepository;
+import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.history.balance.repositories.BalanceWriterRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,8 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceChargeHistory;
-import static hhplus.concert.domain.history.balance.models.BalanceHistory.createBalanceUseHistory;
+import static hhplus.concert.domain.history.balance.models.Balance.createBalanceChargeHistory;
+import static hhplus.concert.domain.history.balance.models.Balance.createBalanceUseHistory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -20,13 +20,13 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
-class BalanceHistoryWriterTest {
+class BalanceWriterTest {
 
     @InjectMocks
-    BalanceHistoryWriter balanceHistoryWriter;
+    BalanceWriter balanceWriter;
 
     @Mock
-    BalanceHistoryWriterRepository balanceHistoryWriterRepository;
+    BalanceWriterRepository balanceWriterRepository;
 
     @DisplayName("인자값이 모두 유효하면, BalanceChargeHistory 데이터 저장에 성공한다.")
     @Test
@@ -34,16 +34,16 @@ class BalanceHistoryWriterTest {
         // given
         User user = User.builder().build();
         long amount = 10000L;
-        BalanceHistory expected = createBalanceChargeHistory(user, amount);
+        Balance expected = createBalanceChargeHistory(user, amount);
 
-        given(balanceHistoryWriterRepository.save(any(BalanceHistory.class))).willReturn(expected);
+        given(balanceWriterRepository.save(any(Balance.class))).willReturn(expected);
 
         // when
-        BalanceHistory result = balanceHistoryWriter.saveBalanceChargeHistory(user, amount);
+        Balance result = balanceWriter.saveBalanceChargeHistory(user, amount);
 
         // then
         assertThat(result).isEqualTo(expected);
-        verify(balanceHistoryWriterRepository, times(1)).save(any(BalanceHistory.class));
+        verify(balanceWriterRepository, times(1)).save(any(Balance.class));
     }
 
     @DisplayName("인자값이 모두 유효하면, BalanceUseHistory 데이터 저장에 성공한다.")
@@ -52,16 +52,16 @@ class BalanceHistoryWriterTest {
         // given
         User user = User.builder().build();
         long amount = 10000L;
-        BalanceHistory expected = createBalanceUseHistory(user, amount);
+        Balance expected = createBalanceUseHistory(user, amount);
 
-        given(balanceHistoryWriterRepository.save(any(BalanceHistory.class))).willReturn(expected);
+        given(balanceWriterRepository.save(any(Balance.class))).willReturn(expected);
 
         // when
-        BalanceHistory result = balanceHistoryWriter.saveBalanceUseHistory(user, amount);
+        Balance result = balanceWriter.saveBalanceUseHistory(user, amount);
 
         // then
         assertThat(result).isEqualTo(expected);
-        verify(balanceHistoryWriterRepository, times(1)).save(any(BalanceHistory.class));
+        verify(balanceWriterRepository, times(1)).save(any(Balance.class));
     }
 
     //TODO: 실패케이스 작성
