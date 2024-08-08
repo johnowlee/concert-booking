@@ -2,7 +2,6 @@ package hhplus.concert.domain.user.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
 import jakarta.persistence.*;
