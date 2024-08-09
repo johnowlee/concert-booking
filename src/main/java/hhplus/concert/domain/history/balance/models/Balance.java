@@ -1,5 +1,6 @@
 package hhplus.concert.domain.history.balance.models;
 
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -38,20 +39,20 @@ public class Balance {
         this.user = user;
     }
 
-    public static Balance createBalanceChargeHistory(User user, long amount) {
+    public static Balance createChargeBalance(User user, long amount, ClockManager clockManager) {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.CHARGE)
-                .transactionDateTime(LocalDateTime.now())
+                .transactionDateTime(clockManager.getDateTime())
                 .user(user)
                 .build();
     }
 
-    public static Balance createBalanceUseHistory(User user, long amount) {
+    public static Balance createUseBalance(User user, long amount, ClockManager clockManager) {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.USE)
-                .transactionDateTime(LocalDateTime.now())
+                .transactionDateTime(clockManager.getDateTime())
                 .user(user)
                 .build();
     }

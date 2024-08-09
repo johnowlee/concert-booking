@@ -4,6 +4,7 @@ import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.EntityManager;
@@ -22,6 +23,7 @@ public class ChargeBalanceUseCase {
     private final UserReader userReader;
     private final BalanceWriter balanceWriter;
     private final EntityManager em;
+    private final ClockManager clockManager;
 
     public BalanceChargeResponse execute(Long userId, long amount) {
         try {
@@ -29,7 +31,7 @@ public class ChargeBalanceUseCase {
 
             chargeBalance(user, amount);
 
-            balanceWriter.saveBalanceChargeHistory(user, amount);
+            balanceWriter.saveChargeBalance(user, amount, clockManager);
 
             return BalanceChargeResponse.success(user.getBalance());
         } catch (OptimisticLockException e) {
