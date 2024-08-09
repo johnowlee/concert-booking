@@ -1,68 +1,89 @@
 package hhplus.concert.domain.history.balance.components;
 
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
 import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.balance.repositories.BalanceWriterRepository;
+import hhplus.concert.domain.support.ClockManager;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.domain.history.balance.models.Balance.createBalanceChargeHistory;
-import static hhplus.concert.domain.history.balance.models.Balance.createBalanceUseHistory;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static hhplus.concert.domain.history.balance.models.TransactionType.CHARGE;
+import static hhplus.concert.domain.history.balance.models.TransactionType.USE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class BalanceWriterTest {
+@Transactional
+class BalanceWriterTest extends IntegrationTestSupport {
 
-    @InjectMocks
+    @Autowired
     BalanceWriter balanceWriter;
 
-    @Mock
-    BalanceWriterRepository balanceWriterRepository;
+    @Autowired
+    BalanceJpaRepository balanceJpaRepository;
 
-    @DisplayName("인자값이 모두 유효하면, BalanceChargeHistory 데이터 저장에 성공한다.")
+    @MockBean
+    ClockManager clockManager;
+
+    @Autowired
+    UserJpaRepository userJpaRepository;
+
+    @DisplayName("Balance 충전 내역을 저장한다.")
     @Test
-    void saveBalanceChargeHistory_Success_ifWithValidArguments() {
+    void saveChargeBalance() {
         // given
-        User user = User.builder().build();
-        long amount = 10000L;
-        Balance expected = createBalanceChargeHistory(user, amount);
+        User user = User.builder()
+                .name("jon")
+                .build();
+        User savedUser = userJpaRepository.save(user);
 
-        given(balanceWriterRepository.save(any(Balance.class))).willReturn(expected);
+        long amount = 10000L;
+        LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
+        given(clockManager.getDateTime()).willReturn(transactionDateTime);
 
         // when
-        Balance result = balanceWriter.saveBalanceChargeHistory(user, amount);
+        balanceWriter.saveChargeBalance(savedUser, amount, clockManager);
 
         // then
-        assertThat(result).isEqualTo(expected);
-        verify(balanceWriterRepository, times(1)).save(any(Balance.class));
+        List<Balance> balances = balanceJpaRepository.findAll();
+        assertThat(balances).hasSize(1)
+                .extracting("transactionType", "transactionDateTime", "amount")
+                .contains(
+                        tuple(CHARGE, transactionDateTime, 10000L)
+                );
     }
 
-    @DisplayName("인자값이 모두 유효하면, BalanceUseHistory 데이터 저장에 성공한다.")
+    @DisplayName("Balance 사용 내역을 저장한다.")
     @Test
-    void saveBalanceUseHistory_Success_ifWithValidArguments() {
+    void saveUseBalance() {
         // given
-        User user = User.builder().build();
-        long amount = 10000L;
-        Balance expected = createBalanceUseHistory(user, amount);
+        User user = User.builder()
+                .name("jon")
+                .build();
+        User savedUser = userJpaRepository.save(user);
 
-        given(balanceWriterRepository.save(any(Balance.class))).willReturn(expected);
+        long amount = 10000L;
+        LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
+        given(clockManager.getDateTime()).willReturn(transactionDateTime);
 
         // when
-        Balance result = balanceWriter.saveBalanceUseHistory(user, amount);
+        balanceWriter.saveUseBalance(savedUser, amount, clockManager);
 
         // then
-        assertThat(result).isEqualTo(expected);
-        verify(balanceWriterRepository, times(1)).save(any(Balance.class));
+        List<Balance> balances = balanceJpaRepository.findAll();
+        assertThat(balances).hasSize(1)
+                .extracting("transactionType", "transactionDateTime", "amount")
+                .contains(
+                        tuple(USE, transactionDateTime, 10000L)
+                );
     }
 
-    //TODO: 실패케이스 작성
 }
