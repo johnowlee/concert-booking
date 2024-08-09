@@ -1,43 +1,76 @@
 package hhplus.concert.domain.concert.components;
 
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.concert.infrastructure.ConcertOptionJpaRepository;
+import hhplus.concert.domain.concert.infrastructure.SeatJpaRepository;
+import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.concert.repositories.SeatReaderRepository;
+import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.concert.models.SeatGrade;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.times;
+import static hhplus.concert.domain.concert.models.SeatBookingStatus.*;
+import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
+import static hhplus.concert.domain.concert.models.SeatGrade.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
-@ExtendWith(MockitoExtension.class)
-class SeatReaderTest {
+@Transactional
+class SeatReaderTest extends IntegrationTestSupport {
 
-    @InjectMocks
+    @Autowired
     SeatReader seatReader;
 
-    @Mock
-    SeatReaderRepository seatReaderRepository;
+    @Autowired
+    SeatJpaRepository seatJpaRepository;
 
+    @Autowired
+    ConcertOptionJpaRepository concertOptionJpaRepository;
+
+    @DisplayName("좌석의 ID 목록으로 좌석들을 조회한다.")
     @Test
-    void getSeatsByIds_Success() {
+    void getSeatsByIds() {
         // given
-        List<Seat> expected = List.of(Seat.builder().build());
-        given(seatReaderRepository.getSeatsByIds(any(List.class))).willReturn(expected);
+        ConcertOption concertOption = ConcertOption.builder()
+                .place("장충체육관")
+                .build();
+        ConcertOption savedConcertOption = concertOptionJpaRepository.save(concertOption);
+
+        Seat seat1 = createSeat("A-1", BOOKED, savedConcertOption, A);
+        Seat seat2 = createSeat("A-2", PROCESSING, savedConcertOption, B);
+        Seat seat3 = createSeat("A-3", AVAILABLE, savedConcertOption, C);
+        Seat seat4 = createSeat("A-4", BOOKED, savedConcertOption, C);
+        seatJpaRepository.saveAll(List.of(seat1, seat2, seat3, seat4));
 
         // when
-        List<Seat> result = seatReader.getSeatsByIds(new ArrayList<>());
+        List<Seat> result = seatReader.getSeatsByIds(
+                List.of(seat1.getId(),
+                        seat2.getId(),
+                        seat4.getId()
+                )
+        );
 
         // then
-        assertEquals(expected, result);
-        then(seatReaderRepository).should(times(1)).getSeatsByIds(any(List.class));
+        assertThat(result).hasSize(3)
+                .extracting("id", "seatNo", "seatBookingStatus", "concertOption", "grade")
+                .containsExactlyInAnyOrder(
+                        tuple(seat1.getId(), "A-1", BOOKED, savedConcertOption, A),
+                        tuple(seat2.getId(), "A-2", PROCESSING, savedConcertOption, B),
+                        tuple(seat4.getId(), "A-4", BOOKED, savedConcertOption, C)
+                );
     }
 
+    private static Seat createSeat(String seatNo, SeatBookingStatus booked, ConcertOption savedConcertOption, SeatGrade a) {
+        return Seat.builder()
+                .seatNo(seatNo)
+                .seatBookingStatus(booked)
+                .concertOption(savedConcertOption)
+                .grade(a)
+                .build();
+    }
 }
