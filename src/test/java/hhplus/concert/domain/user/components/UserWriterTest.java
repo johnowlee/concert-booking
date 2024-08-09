@@ -1,53 +1,42 @@
 package hhplus.concert.domain.user.components;
 
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
-import hhplus.concert.domain.user.repositories.UserWriterRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class UserWriterTest {
+@Transactional
+class UserWriterTest extends IntegrationTestSupport {
 
-    @InjectMocks
+    @Autowired
     UserWriter userWriter;
 
-    @Mock
-    UserWriterRepository userWriterRepository;
+    @Autowired
+    UserJpaRepository userJpaRepository;
 
-    @DisplayName("인자값이 모두 유효하면, 유저 저장에 성공한다.")
+    @DisplayName("user를 저장한다.")
     @Test
-    void save_Success_ifWithValidArguments() {
+    void save() {
         // given
-        Long userId = 1L;
-        String name = "John Doe";
-        User expected = User.builder()
-                .id(userId)
-                .name(name)
+        User user = User.builder()
+                .name("jon")
                 .build();
-
-        given(userWriterRepository.save(any(User.class))).willReturn(expected);
 
         // when
-        User user = User.builder()
-                .id(userId)
-                .name(name)
-                .build();
-        User result = userWriter.save(user);
+        User savedUser = userWriter.save(user);
 
         // then
-        assertThat(result.getId()).isEqualTo(expected.getId());
-        assertThat(result.getName()).isEqualTo(expected.getName());
-        verify(userWriterRepository, times(1)).save(any(User.class));
+        Optional<User> result = userJpaRepository.findById(savedUser.getId());
+        assertThat(result.isPresent()).isTrue();
+        assertThat(result.get().getId()).isEqualTo(savedUser.getId());
+        assertThat(result.get().getName()).isEqualTo(savedUser.getName());
     }
 
 }
