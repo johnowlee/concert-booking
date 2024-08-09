@@ -1,4 +1,4 @@
-package hhplus.concert.domain.balance.service;
+package hhplus.concert.domain.history.balance.service;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;

@@ -1,4 +1,4 @@
-package hhplus.concert.domain.balance.components;
+package hhplus.concert.domain.history.balance.components;
 
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
