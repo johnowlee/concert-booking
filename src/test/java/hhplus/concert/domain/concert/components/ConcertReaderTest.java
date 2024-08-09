@@ -1,45 +1,54 @@
 package hhplus.concert.domain.concert.components;
 
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.concert.infrastructure.ConcertJpaRepository;
 import hhplus.concert.domain.concert.models.Concert;
-import hhplus.concert.domain.concert.repositories.ConcertReaderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.tuple;
 
-@ExtendWith(MockitoExtension.class)
-class ConcertReaderTest {
+class ConcertReaderTest extends IntegrationTestSupport {
 
-    @InjectMocks
-    private ConcertReader concertReader;
+    @Autowired
+    ConcertReader concertReader;
 
-    @Mock
-    ConcertReaderRepository concertReaderRepository;
+    @Autowired
+    ConcertJpaRepository concertJpaRepository;
 
-
-    @DisplayName("인자값이 모두 유효하면, BalanceHistory 데이터 저장에 성공한다.")
+    @DisplayName("콘서트 목록을 조회한다.")
     @Test
-    void getConcerts_Success() {
+    void getConcerts() {
         // given
-        Concert concert1 = Concert.builder().id(1L).build();
-        Concert concert2 = Concert.builder().id(2L).build();
-        List<Concert> expected = List.of(concert1, concert2);
-        given(concertReaderRepository.getConcerts()).willReturn(expected);
+        Concert concert1 = Concert.builder()
+                .title("IU concert")
+                .organizer("IU")
+                .build();
+        Concert concert2 = Concert.builder()
+                .title("NewJeans concert")
+                .organizer("NewJeans")
+                .build();
+        Concert concert3 = Concert.builder()
+                .title("AESPA concert")
+                .organizer("AESPA")
+                .build();
+        concertJpaRepository.saveAll(List.of(concert1, concert2, concert3));
 
         // when
-        List<Concert> result = concertReader.getConcerts();
+        List<Concert> concerts = concertReader.getConcerts();
 
         // then
-        assertThat(result).isEqualTo(expected);
-        assertThat(result.size()).isEqualTo(expected.size());
-        verify(concertReaderRepository).getConcerts();
+        assertThat(concerts).hasSize(3)
+                .extracting("title", "organizer")
+                .containsExactlyInAnyOrder(
+                        tuple("IU concert", "IU"),
+                        tuple("NewJeans concert", "NewJeans"),
+                        tuple("AESPA concert", "AESPA")
+                );
     }
+
 }
