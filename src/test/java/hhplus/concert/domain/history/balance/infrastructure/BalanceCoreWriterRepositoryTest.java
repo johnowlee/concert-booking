@@ -2,10 +2,12 @@ package hhplus.concert.domain.history.balance.infrastructure;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -14,6 +16,7 @@ import static hhplus.concert.domain.history.balance.models.TransactionType.CHARG
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
+@Transactional
 class BalanceCoreWriterRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
@@ -21,6 +24,9 @@ class BalanceCoreWriterRepositoryTest extends IntegrationTestSupport {
 
     @Autowired
     BalanceJpaRepository balanceJpaRepository;
+
+    @Autowired
+    UserJpaRepository userJpaRepository;
 
     @DisplayName("balance를 저장한다.")
     @Test
@@ -31,16 +37,18 @@ class BalanceCoreWriterRepositoryTest extends IntegrationTestSupport {
                 .name("jon")
                 .version(1L)
                 .build();
+        User savedUser = userJpaRepository.save(user);
+
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 8, 00, 25);
         Balance balance = Balance.builder()
-                .user(user)
+                .user(savedUser)
                 .transactionType(CHARGE)
                 .transactionDateTime(transactionDateTime)
                 .amount(10000L)
                 .build();
 
         // when
-        Balance savedBalance = balanceCoreWriterRepository.save(balance);
+        balanceCoreWriterRepository.save(balance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
