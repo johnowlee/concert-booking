@@ -1,109 +1,80 @@
 package hhplus.concert.domain.history.balance.service;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.balance.service.BalanceService;
+import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
+import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.support.event.EventPublisher;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import java.time.LocalDateTime;
+import java.util.List;
+
+import static hhplus.concert.domain.history.balance.models.TransactionType.USE;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
-@ExtendWith(MockitoExtension.class)
-class BalanceServiceTest {
+@Transactional
+class BalanceServiceTest extends IntegrationTestSupport {
 
-    @InjectMocks
+    @Autowired
     BalanceService balanceService;
 
-    @Mock
-    EventPublisher eventPublisher;
-
-    @Mock
+    @Autowired
     BalanceWriter balanceWriter;
 
-    @DisplayName("유저의 계좌에 잔액이 차감되고 이벤트발행, balance이력 저장에 성공한다.")
-    @Test
-    void use_ShouldSucceed() {
-        // given
-        User user = Mockito.mock(User.class);
-        Booking booking = Mockito.mock(Booking.class);
+    @Autowired
+    BalanceJpaRepository balanceJpaRepository;
 
-        given(booking.getUser()).willReturn(user);
+    @Autowired
+    UserJpaRepository userJpaRepository;
+
+    @MockBean
+    ClockManager clockManager;
+
+    @MockBean
+    EventPublisher eventPublisher;
+
+    @DisplayName("유저의 계좌에 잔액이 차감되고 이벤트발행 및 balance 거래 내역을 저장한다.")
+    @Test
+    void use() {
+        // given
+        User user = User.builder()
+                .name("jon")
+                .balance(20000)
+                .build();
+        User savedUser = userJpaRepository.save(user);
+        Booking booking = mock(Booking.class);
+
+        given(booking.getUser()).willReturn(savedUser);
         given(booking.getTotalPrice()).willReturn(10000);
+
+        LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
+        given(clockManager.getDateTime()).willReturn(transactionDateTime);
 
         // when
         balanceService.use(booking);
 
         // then
-        then(user).should().useBalance(10000);
-        then(eventPublisher).should().publish(any(PaymentCompleteEvent.class));
-        then(balanceWriter).should().saveBalanceUseHistory(user, 10000);
-    }
+        assertThat(user.getBalance()).isEqualTo(20000 - 10000);
+        then(eventPublisher).should(times(1)).publish(any(PaymentCompleteEvent.class));
 
-    @DisplayName("유저의 계좌에 잔액이 사용액 보다 부족하면 예외를 발생시킨다.")
-    @Test
-    void use_ShouldThrowException_WhenBalanceIsNotEnough() {
-        // given
-        User user = Mockito.mock(User.class);
-        Booking booking = Mockito.mock(Booking.class);
-
-        given(booking.getUser()).willReturn(user);
-        given(booking.getTotalPrice()).willReturn(10000);
-
-        willThrow(new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE))
-                .given(user)
-                .useBalance(10000);
-
-        // when
-        RestApiException exception = assertThrows(
-                RestApiException.class,
-                () -> balanceService.use(booking)
-        );
-
-        // then
-        assertEquals(BalanceErrorCode.NOT_ENOUGH_BALANCE, exception.getErrorCode());
-        then(user).should().useBalance(10000);
-        then(eventPublisher).shouldHaveNoInteractions();
-        then(balanceWriter).shouldHaveNoInteractions();
-
-    }
-
-    @DisplayName("사용금액이 음수이면 예외를 발생시킨다.")
-    @Test
-    void use_ShouldThrowException_WhenAmountIsNegative() {
-        // given
-        User user = Mockito.mock(User.class);
-        Booking booking = Mockito.mock(Booking.class);
-
-        given(booking.getUser()).willReturn(user);
-        given(booking.getTotalPrice()).willReturn(-10);
-
-        willThrow(new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT))
-                .given(user)
-                .useBalance(-10);
-
-        // when
-        RestApiException exception = assertThrows(
-                RestApiException.class,
-                () -> balanceService.use(booking)
-        );
-
-        // then
-        assertEquals(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT, exception.getErrorCode());
-        then(user).should().useBalance(-10);
-        then(eventPublisher).shouldHaveNoInteractions();
-        then(balanceWriter).shouldHaveNoInteractions();
+        List<Balance> balances = balanceJpaRepository.findAll();
+        assertThat(balances).hasSize(1)
+                .extracting("user", "transactionDateTime", "TransactionType", "amount")
+                .contains(
+                        tuple(savedUser, transactionDateTime, USE, 10000L)
+                );
     }
 }
