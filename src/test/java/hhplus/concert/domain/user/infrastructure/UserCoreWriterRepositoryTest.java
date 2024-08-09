@@ -26,7 +26,6 @@ class UserCoreWriterRepositoryTest extends IntegrationTestSupport {
         // given
         User user = User.builder()
                 .name("jon")
-                .version(1L)
                 .build();
 
         // when
@@ -34,7 +33,7 @@ class UserCoreWriterRepositoryTest extends IntegrationTestSupport {
 
         // then
         Optional<User> result = userJpaRepository.findById(savedUser.getId());
-        assertThat(result).isNotNull();
+        assertThat(result.isPresent()).isTrue();
         assertThat(result.get().getId()).isEqualTo(savedUser.getId());
         assertThat(result.get().getName()).isEqualTo(savedUser.getName());
     }
