@@ -23,8 +23,4 @@ public class BookingReader {
         return bookingReaderRepository.getBookingById(id)
                 .orElseThrow(() -> new RestApiException(BookingErrorCode.NOT_FOUND_BOOKING));
     }
-
-    public List<Booking> getBookingsBySeatIds(List<Long> seatIds) {
-        return bookingReaderRepository.getBookingsBySeatIds(seatIds);
-    }
 }
