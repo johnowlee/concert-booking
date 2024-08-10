@@ -1,89 +1,56 @@
 package hhplus.concert.domain.booking.components;
 
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.booking.repositories.BookingWriterRepository;
-import hhplus.concert.domain.concert.models.Concert;
-import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.tuple;
 
-@ExtendWith(MockitoExtension.class)
-class BookingWriterTest {
+@Transactional
+class BookingWriterTest extends IntegrationTestSupport {
 
-    @InjectMocks
+    @Autowired
     BookingWriter bookingWriter;
 
-    @Mock
-    BookingWriterRepository bookingWriterRepository;
+    @Autowired
+    BookingJpaRepository bookingJpaRepository;
 
-    @BeforeEach
-    void setUp() {
-        bookingWriterRepository = Mockito.mock(BookingWriterRepository.class);
-        bookingWriter = new BookingWriter(bookingWriterRepository);
-    }
+    @Autowired
+    UserJpaRepository userJpaRepository;
 
-    @DisplayName("인자값이 모두 유효하면, Booking 데이터 저장에 성공한다.")
+    @DisplayName("콘서트를 예약한다.")
     @Test
-    void bookConcert_Success_ifWithValidArguments() {
+    void bookConcert() {
         // given
-        Concert concert = Concert.builder().build();
-        User user = User.builder().build();
-        ConcertOption concertOption = ConcertOption.builder().concert(concert).build();
-        Booking expectedBooking = Booking.buildBooking(concertOption, user);
-
-        given(bookingWriterRepository.bookConcert(any(Booking.class))).willReturn(expectedBooking);
-
-        // when
-        Booking result = bookingWriter.bookConcert(Booking.buildBooking(concertOption, user));
-
-        // then
-        assertThat(result).isEqualTo(expectedBooking);
-        verify(bookingWriterRepository, times(1)).bookConcert(any(Booking.class));
-    }
-
-    @DisplayName("인자값이 모두 유효하면, BookingSeat 데이터 저장에 성공한다.")
-    @Test
-    void saveAllBookingSeat_Success_ifWithValidArguments() {
-        // given
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .seat(Seat.builder().seatNo("A").build())
-                .booking(Booking.builder().id(1L).build())
+        User user = User.builder()
+                .name("jon")
                 .build();
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .seat(Seat.builder().seatNo("B").build())
-                .booking(Booking.builder().id(1L).build())
+        User savedUser = userJpaRepository.save(user);
+
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 10, 11, 30, 30);
+        Booking booking = Booking.builder()
+                .bookingDateTime(bookingDateTime)
+                .concertTitle("IU 콘서트")
+                .user(savedUser)
                 .build();
 
-        List<BookingSeat> expectedBooking = List.of(bookingSeat1, bookingSeat2);
-
-        given(bookingWriterRepository.saveAllBookingSeat(any(List.class))).willReturn(expectedBooking);
-
         // when
-        List<BookingSeat> result = bookingWriter.saveAllBookingSeat(List.of(bookingSeat1, bookingSeat2));
+        bookingWriter.bookConcert(booking);
 
         // then
-        verify(bookingWriterRepository, times(1)).saveAllBookingSeat(any(List.class));
-        assertThat(result.size()).isEqualTo(2);
+        List<Booking> bookings = bookingJpaRepository.findAll();
+        assertThat(bookings).hasSize(1)
+                .extracting("user", "bookingDateTime", "concertTitle")
+                .contains(tuple(savedUser, bookingDateTime, "IU 콘서트"));
     }
-    //TODO: 실패케이스 작성
-
 }
