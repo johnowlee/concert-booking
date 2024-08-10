@@ -2,7 +2,6 @@ package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -43,18 +42,14 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
-    @OneToOne(mappedBy = "booking")
-    private Payment payment;
-
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeats, Payment payment) {
+    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeats) {
         this.id = id;
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
         this.user = user;
         this.bookingSeats = bookingSeats;
-        this.payment = payment;
     }
 
     public static Booking buildBooking(ConcertOption concertOption, User user) {
