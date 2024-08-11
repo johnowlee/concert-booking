@@ -3,7 +3,7 @@ package hhplus.concert.api.concert.usecase;
 import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.booking.service.BookingService;
+import hhplus.concert.domain.booking.support.BookingService;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;

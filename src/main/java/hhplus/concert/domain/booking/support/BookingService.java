@@ -1,4 +1,4 @@
-package hhplus.concert.domain.booking.service;
+package hhplus.concert.domain.booking.support;
 
 import hhplus.concert.domain.booking.components.BookingSeatReader;
 import hhplus.concert.domain.booking.components.BookingSeatWriter;
@@ -7,7 +7,7 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.concert.service.SeatManager;
+import hhplus.concert.domain.concert.support.SeatManager;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;

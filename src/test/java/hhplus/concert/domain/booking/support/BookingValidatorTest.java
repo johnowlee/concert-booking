@@ -1,4 +1,4 @@
-package hhplus.concert.domain.booking.service;
+package hhplus.concert.domain.booking.support;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.booking.models.Booking;

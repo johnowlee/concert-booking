@@ -1,4 +1,4 @@
-package hhplus.concert.domain.concert.service;
+package hhplus.concert.domain.concert.support;
 
 import hhplus.concert.domain.concert.models.Seat;
 import org.springframework.stereotype.Component;

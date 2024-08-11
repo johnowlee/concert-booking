@@ -1,4 +1,4 @@
-package hhplus.concert.domain.booking.service;
+package hhplus.concert.domain.booking.support;
 
 import hhplus.concert.domain.booking.models.Booking;
 import lombok.extern.slf4j.Slf4j;

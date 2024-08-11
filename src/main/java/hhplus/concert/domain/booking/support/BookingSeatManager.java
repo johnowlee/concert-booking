@@ -1,9 +1,9 @@
-package hhplus.concert.domain.booking.service;
+package hhplus.concert.domain.booking.support;
 
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.concert.service.SeatValidator;
+import hhplus.concert.domain.concert.support.SeatValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;

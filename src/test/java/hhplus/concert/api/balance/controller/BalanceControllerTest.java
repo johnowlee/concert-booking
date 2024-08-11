@@ -7,7 +7,7 @@ import hhplus.concert.api.balance.dto.response.BalanceResponse;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
 import hhplus.concert.api.common.ResponseResult;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

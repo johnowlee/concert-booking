@@ -1,7 +1,7 @@
 package hhplus.concert.api.queue.usecase;
 
 import hhplus.concert.api.queue.dto.response.QueueResponse;
-import hhplus.concert.domain.queue.service.QueueService;
+import hhplus.concert.domain.queue.support.QueueService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

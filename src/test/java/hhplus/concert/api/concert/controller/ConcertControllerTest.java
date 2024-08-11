@@ -17,7 +17,7 @@ import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

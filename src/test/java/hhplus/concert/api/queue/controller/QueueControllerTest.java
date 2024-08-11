@@ -6,7 +6,7 @@ import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
 import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

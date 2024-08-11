@@ -1,6 +1,6 @@
 package hhplus.concert.config;
 
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

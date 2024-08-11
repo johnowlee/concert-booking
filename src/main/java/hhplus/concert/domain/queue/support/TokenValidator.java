@@ -1,4 +1,4 @@
-package hhplus.concert.domain.queue.service;
+package hhplus.concert.domain.queue.support;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
