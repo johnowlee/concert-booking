@@ -1,9 +1,9 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
-import hhplus.concert.domain.history.balance.support.BalanceService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.history.balance.support.BalanceService;
 import hhplus.concert.domain.history.payment.components.PaymentWriter;
 import hhplus.concert.domain.support.ClockManager;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class PayBookingUseCase {
         balanceService.use(booking);
 
         // 결제 내역 save
-        paymentWriter.payBooking(booking);
+        paymentWriter.payBooking(booking, clockManager.getNowDateTime());
 
         // 예약 완료
         booking.markAsComplete();

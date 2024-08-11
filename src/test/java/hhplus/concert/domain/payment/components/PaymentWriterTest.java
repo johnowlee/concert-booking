@@ -12,6 +12,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -46,7 +47,7 @@ class PaymentWriterTest {
         given(paymentWriterRepository.save(any(Payment.class))).willReturn(expected);
 
         // when
-        Payment result = paymentWriter.payBooking(booking);
+        Payment result = paymentWriter.payBooking(booking, LocalDateTime.now());
 
         // then
         assertThat(result.getBooking().getId()).isEqualTo(expected.getBooking().getId());

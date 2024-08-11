@@ -6,13 +6,15 @@ import hhplus.concert.domain.history.payment.models.Payment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 @RequiredArgsConstructor
 public class PaymentWriter {
 
     private final PaymentWriterRepository paymentWriterRepository;
 
-    public Payment payBooking(Booking booking) {
-        return paymentWriterRepository.save(Payment.createBookingPayment(booking));
+    public Payment payBooking(Booking booking, LocalDateTime paymentDateTime) {
+        return paymentWriterRepository.save(Payment.createPayment(booking, paymentDateTime));
     }
 }
