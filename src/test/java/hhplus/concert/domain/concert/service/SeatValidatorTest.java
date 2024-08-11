@@ -1,8 +1,9 @@
-package hhplus.concert.domain.booking.service;
+package hhplus.concert.domain.concert.service;
 
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.concert.service.SeatValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
