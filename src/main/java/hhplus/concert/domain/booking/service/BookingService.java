@@ -8,6 +8,7 @@ import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.service.SeatManager;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class BookingService {
     private final SeatManager seatManager;
     private final BookingManager bookingManager;
     private final BookingSeatReader bookingSeatReader;
+    private final ClockManager clockManager;
 
     public Booking book(ConcertOption concertOption, User user, List<Seat> seats) {
         Booking booking = Booking.buildBooking(concertOption, user);
@@ -46,6 +48,6 @@ public class BookingService {
         List<Booking> bookings = bookingSeats.stream()
                 .map(BookingSeat::getBooking)
                 .collect(Collectors.toList());
-        bookingManager.validateBookable(bookings);
+        bookingManager.validateBookable(bookings, clockManager.getNowDateTime());
     }
 }

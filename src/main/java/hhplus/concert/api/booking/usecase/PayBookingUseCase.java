@@ -5,6 +5,7 @@ import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.support.ClockManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class PayBookingUseCase {
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
     private final BalanceService balanceService;
+    private final ClockManager clockManager;
 
     @Transactional
     public PaymentResponse execute(Long id, Long userId) {
@@ -27,7 +29,7 @@ public class PayBookingUseCase {
         Booking booking = bookingReader.getBookingById(id);
 
         // 예약시간초과 검증
-        booking.validateBookingDateTime();
+        booking.validateBookingDateTime(clockManager.getNowDateTime());
 
         // 결제자 ID 검증
         booking.validatePayer(userId);

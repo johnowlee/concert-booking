@@ -7,8 +7,6 @@ import hhplus.concert.domain.concert.models.SeatGrade;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -19,9 +17,7 @@ import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MI
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
 import static org.assertj.core.api.Assertions.*;
-import static org.assertj.core.api.Assertions.tuple;
 
-@ExtendWith(MockitoExtension.class)
 class BookingTest {
 
     @DisplayName("예약 상태를 COMPLETE 상태로 변경한다.")
@@ -47,7 +43,7 @@ class BookingTest {
                 .build();
 
         // when & then
-        assertThatThrownBy(() -> booking.validateBookingDateTime())
+        assertThatThrownBy(() -> booking.validateBookingDateTime(LocalDateTime.now()))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(EXPIRED_BOOKING_TIME.getMessage());
     }
@@ -63,7 +59,7 @@ class BookingTest {
                 .build();
 
         // when & then
-        assertThatThrownBy(() -> booking.validatePendingBooking())
+        assertThatThrownBy(() -> booking.validatePendingBooking(LocalDateTime.now()))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(PENDING_BOOKING.getMessage());
     }

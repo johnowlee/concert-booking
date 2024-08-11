@@ -8,6 +8,7 @@ import hhplus.concert.domain.concert.models.Seat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,13 +16,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class BookingManager {
 
-    public void validateBookable(List<Booking> bookings) {
-        checkAnyPendingBooking(bookings);
+    public void validateBookable(List<Booking> bookings, LocalDateTime localDateTime) {
+        checkAnyPendingBooking(bookings, localDateTime);
         checkAnyBookedSeat(bookings);
     }
 
-    private void checkAnyPendingBooking(List<Booking> bookings) {
-        bookings.forEach(Booking::validatePendingBooking);
+    private void checkAnyPendingBooking(List<Booking> bookings, LocalDateTime localDateTime) {
+        bookings.forEach(booking -> booking.validatePendingBooking(localDateTime));
     }
 
     private void checkAnyBookedSeat(List<Booking> bookingsBySeats) {

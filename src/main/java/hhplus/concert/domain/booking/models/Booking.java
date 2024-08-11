@@ -66,15 +66,15 @@ public class Booking {
         this.bookingStatus = BookingStatus.COMPLETE;
     }
 
-    public void validateBookingDateTime() {
-        if (isBookingDateTimeExpired()) {
+    public void validateBookingDateTime(LocalDateTime dateTime) {
+        if (isBookingDateTimeExpired(dateTime)) {
             log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
             throw new RestApiException(EXPIRED_BOOKING_TIME);
         }
     }
 
-    public void validatePendingBooking() {
-        if (isBookingDateTimeValid()) {
+    public void validatePendingBooking(LocalDateTime dateTime) {
+        if (isBookingDateTimeValid(dateTime)) {
             log.info("BookingErrorCode.PENDING_BOOKING 발생");
             throw new RestApiException(PENDING_BOOKING);
         }
@@ -98,15 +98,15 @@ public class Booking {
                 .forEach(seat -> seat.markAsBooked());
     }
 
-    private boolean isBookingDateTimeExpired() {
-        return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
+    private boolean isBookingDateTimeExpired(LocalDateTime dateTime) {
+        return getPassedMinutesSinceBookingFrom(dateTime) > BOOKING_EXPIRY_MINUTES.toLong();
     }
 
-    private boolean isBookingDateTimeValid() {
-        return getMinutesSinceBooking() <= BOOKING_EXPIRY_MINUTES.toLong();
+    private boolean isBookingDateTimeValid(LocalDateTime dateTime) {
+        return getPassedMinutesSinceBookingFrom(dateTime) <= BOOKING_EXPIRY_MINUTES.toLong();
     }
 
-    private long getMinutesSinceBooking() {
-        return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes();
+    private long getPassedMinutesSinceBookingFrom(LocalDateTime dateTime) {
+        return Duration.between(this.getBookingDateTime(), dateTime).toMinutes();
     }
 }
