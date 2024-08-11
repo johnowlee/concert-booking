@@ -1,12 +1,13 @@
 package hhplus.concert.domain.booking.service;
 
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
 import hhplus.concert.domain.concert.models.Seat;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
+import static hhplus.concert.api.exception.code.BookingErrorCode.ALREADY_BOOKED;
 
 @Slf4j
 @Component
@@ -18,7 +19,7 @@ public class SeatValidator {
                 .findAny()
                 .ifPresent(seat -> {
                     log.error("BookingErrorCode.ALREADY_BOOKED occurred for seat: {}", seat);
-                    throw new RestApiException(BookingErrorCode.ALREADY_BOOKED);
+                    throw new RestApiException(ALREADY_BOOKED);
                 });
     }
 }
