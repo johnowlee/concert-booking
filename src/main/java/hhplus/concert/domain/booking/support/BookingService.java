@@ -28,8 +28,8 @@ public class BookingService {
     private final ClockManager clockManager;
 
     public Booking book(User user, List<Seat> seats) {
-        String concertTitle = seats.get(0).getConcertOption().getConcert().getTitle();
-        Booking booking = Booking.buildBooking(concertTitle, user);
+        String concertTitle = seatManager.getConcertTitleFrom(seats);
+        Booking booking = Booking.createBooking(concertTitle, clockManager.getNowDateTime(), user);
 
         // 예약테이블 저장
         Booking savedBooking = bookingWriter.bookConcert(booking);

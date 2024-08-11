@@ -54,14 +54,13 @@ public class Booking {
         this.bookingSeats = bookingSeats;
     }
 
-    public static Booking buildBooking(String concertTitle, User user) {
-        Booking booking = Booking.builder()
+    public static Booking createBooking(String concertTitle, LocalDateTime bookingDateTime, User user) {
+        return Booking.builder()
                 .bookingStatus(INCOMPLETE)
-                .bookingDateTime(LocalDateTime.now())
+                .bookingDateTime(bookingDateTime)
                 .concertTitle(concertTitle)
                 .user(user)
                 .build();
-        return booking;
     }
 
     public void markAsComplete() {
