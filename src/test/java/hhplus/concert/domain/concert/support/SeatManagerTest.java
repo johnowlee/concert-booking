@@ -1,9 +1,6 @@
 package hhplus.concert.domain.concert.support;
 
-import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.concert.models.SeatGrade;
+import hhplus.concert.domain.concert.models.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,6 +40,28 @@ class SeatManagerTest {
                         tuple("A-3", PROCESSING, C),
                         tuple("A-4", PROCESSING, C)
                 );
+    }
+
+    @DisplayName("예약하는 좌석으로부터 콘서트의 타이틀을 조회한다.")
+    @Test
+    void getConcertTitleBy() {
+        // given
+        Concert concert = Concert.builder()
+                .title("IU 콘서트")
+                .build();
+        ConcertOption concertOption = ConcertOption.builder()
+                .concert(concert)
+                .build();
+        Seat seat1 = createSeat("A-1", BOOKED, concertOption, A);
+        Seat seat2 = createSeat("A-2", PROCESSING, concertOption, B);
+        List<Seat> seats = List.of(seat1, seat2);
+
+        // when
+        SeatManager seatManager = new SeatManager();
+        String result = seatManager.getConcertTitleFrom(seats);
+
+        // then
+        assertThat(result).isEqualTo("IU 콘서트");
     }
 
     private static Seat createSeat(String seatNo, SeatBookingStatus booked, ConcertOption savedConcertOption, SeatGrade a) {

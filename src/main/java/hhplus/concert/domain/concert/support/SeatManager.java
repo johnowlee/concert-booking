@@ -10,4 +10,8 @@ public class SeatManager {
     public void markAllSeatsAsProcessing(List<Seat> seats) {
         seats.forEach(s -> s.markAsProcessing());
     }
+
+    public String getConcertTitleFrom(List<Seat> seats) {
+        return seats.get(0).getConcertOption().getConcert().getTitle();
+    }
 }
