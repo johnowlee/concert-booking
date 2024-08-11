@@ -171,7 +171,7 @@ class ConcertControllerTest {
                 .bookingSeats(new ArrayList<>(List.of(bookingSeat)))
                 .build();
 
-        BookingResultResponse bookingResultResponse = BookingResultResponse.succeed(user, booking, concertOption, seats);
+        BookingResultResponse bookingResultResponse = BookingResultResponse.succeed(user, booking, seats);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "A1");
         given(bookConcertUseCase.execute(1L, concertBookingRequest)).willReturn(bookingResultResponse);
 

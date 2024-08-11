@@ -5,7 +5,6 @@ import hhplus.concert.domain.booking.components.BookingSeatWriter;
 import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.support.SeatManager;
 import hhplus.concert.domain.support.ClockManager;
@@ -28,8 +27,9 @@ public class BookingService {
     private final BookingSeatReader bookingSeatReader;
     private final ClockManager clockManager;
 
-    public Booking book(ConcertOption concertOption, User user, List<Seat> seats) {
-        Booking booking = Booking.buildBooking(concertOption, user);
+    public Booking book(User user, List<Seat> seats) {
+        String concertTitle = seats.get(0).getConcertOption().getConcert().getTitle();
+        Booking booking = Booking.buildBooking(concertTitle, user);
 
         // 예약테이블 저장
         Booking savedBooking = bookingWriter.bookConcert(booking);

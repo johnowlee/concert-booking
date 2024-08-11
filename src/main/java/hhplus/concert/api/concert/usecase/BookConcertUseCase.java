@@ -6,7 +6,6 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.support.BookingService;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.SeatReader;
-import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -31,18 +30,15 @@ public class BookConcertUseCase {
         // 1. 예약상태, 좌석상태 검증
         bookingService.validateBookability(request.parsedSeatIds());
 
-        // 2. 콘서트 옵션 id로 콘서트 옵션 조회
-        ConcertOption concertOption = concertOptionReader.getConcertOptionById(optionId);
-
-        // 3. 유저 조회
+        // 2. 유저 조회
         User user = userReader.getUserById(request.userId());
 
-        // 4. 좌석정보 조회
+        // 3. 좌석정보 조회
         List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
 
-        // 5. 콘서트 예약
-        Booking booking = bookingService.book(concertOption, user, seats);
+        // 4. 콘서트 예약
+        Booking booking = bookingService.book(user, seats);
 
-        return BookingResultResponse.succeed(user, booking, concertOption, seats);
+        return BookingResultResponse.succeed(user, booking, seats);
     }
 }

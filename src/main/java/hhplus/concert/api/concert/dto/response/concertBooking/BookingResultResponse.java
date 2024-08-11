@@ -2,7 +2,6 @@ package hhplus.concert.api.concert.dto.response.concertBooking;
 
 import hhplus.concert.api.common.ResponseResult;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.user.models.User;
 
@@ -20,14 +19,13 @@ public record BookingResultResponse(ResponseResult bookingResult,
     public static BookingResultResponse succeed(
                                            User user,
                                            Booking booking,
-                                           ConcertOption concertoption,
                                            List<Seat> seats) {
         return new BookingResultResponse(
                 ResponseResult.SUCCESS,
                 booking.getBookingDateTime(),
                 user.getName(),
                 booking.getConcertTitle(),
-                concertoption.getConcertDateTime(),
+                seats.get(0).getConcertOption().getConcertDateTime(),
                 getSeatNos(seats)
         );
     }

@@ -1,7 +1,6 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -18,7 +17,8 @@ import java.util.Objects;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
-import static hhplus.concert.domain.booking.models.BookingStatus.*;
+import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
+import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 
 @Entity
 @Getter
@@ -54,11 +54,11 @@ public class Booking {
         this.bookingSeats = bookingSeats;
     }
 
-    public static Booking buildBooking(ConcertOption concertOption, User user) {
+    public static Booking buildBooking(String concertTitle, User user) {
         Booking booking = Booking.builder()
                 .bookingStatus(INCOMPLETE)
                 .bookingDateTime(LocalDateTime.now())
-                .concertTitle(concertOption.getConcert().getTitle())
+                .concertTitle(concertTitle)
                 .user(user)
                 .build();
         return booking;
