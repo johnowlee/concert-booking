@@ -17,6 +17,7 @@ import java.util.List;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.BookingStatus.*;
 
 @Entity
 @Getter
@@ -54,7 +55,7 @@ public class Booking {
 
     public static Booking buildBooking(ConcertOption concertOption, User user) {
         Booking booking = Booking.builder()
-                .bookingStatus(BookingStatus.INCOMPLETE)
+                .bookingStatus(INCOMPLETE)
                 .bookingDateTime(LocalDateTime.now())
                 .concertTitle(concertOption.getConcert().getTitle())
                 .user(user)
@@ -63,7 +64,13 @@ public class Booking {
     }
 
     public void markAsComplete() {
-        this.bookingStatus = BookingStatus.COMPLETE;
+        this.bookingStatus = COMPLETE;
+    }
+
+    public void validateAlreadyBooked() {
+        if (bookingStatus == COMPLETE) {
+            throw new RestApiException(ALREADY_BOOKED);
+        }
     }
 
     public void validateBookingDateTime(LocalDateTime dateTime) {

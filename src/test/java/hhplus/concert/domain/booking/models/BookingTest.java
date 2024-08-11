@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.BookingStatus.*;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
 import static org.assertj.core.api.Assertions.*;
@@ -24,13 +25,27 @@ class BookingTest {
     @Test
     void markAsComplete() {
         // given
-        Booking booking = Booking.builder().bookingStatus(BookingStatus.INCOMPLETE).build();
+        Booking booking = Booking.builder().bookingStatus(INCOMPLETE).build();
 
         // when
         booking.markAsComplete();
 
         // then
-        assertThat(booking.getBookingStatus()).isEqualTo(BookingStatus.COMPLETE);
+        assertThat(booking.getBookingStatus()).isEqualTo(COMPLETE);
+    }
+
+    @DisplayName("booking 상태가 COMPLETE이면 예외가 발생한다.")
+    @Test
+    void validateAlreadyBooked() {
+        // given
+        Booking booking = Booking.builder()
+                .bookingStatus(COMPLETE)
+                .build();
+
+        // when & then
+        assertThatThrownBy(() -> booking.validateAlreadyBooked())
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(ALREADY_BOOKED.getMessage());
     }
 
     @DisplayName("예약의 예약시간이 만료되어 유효하지 않은 상태이면 예외가 발생한다.")
