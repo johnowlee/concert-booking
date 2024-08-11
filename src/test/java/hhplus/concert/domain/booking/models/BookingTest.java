@@ -52,13 +52,15 @@ class BookingTest {
     @Test
     void validateBookingDateTime() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong() + 1;
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
-                .bookingDateTime(LocalDateTime.now().minusMinutes(expiryMinutes))
+                .bookingDateTime(bookingDateTime)
                 .build();
 
         // when & then
-        assertThatThrownBy(() -> booking.validateBookingDateTime(LocalDateTime.now()))
+        LocalDateTime validateTime = bookingDateTime.plusMinutes(expiryMinutes);
+        assertThatThrownBy(() -> booking.validateBookingDateTime(validateTime))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(EXPIRED_BOOKING_TIME.getMessage());
     }
@@ -68,13 +70,15 @@ class BookingTest {
     @Test
     void validatePendingBooking() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong() - 1;
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
-                .bookingDateTime(LocalDateTime.now().minusMinutes(expiryMinutes))
+                .bookingDateTime(bookingDateTime)
                 .build();
 
         // when & then
-        assertThatThrownBy(() -> booking.validatePendingBooking(LocalDateTime.now()))
+        LocalDateTime validateTime = bookingDateTime.plusMinutes(expiryMinutes - 1);
+        assertThatThrownBy(() -> booking.validatePendingBooking(validateTime))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(PENDING_BOOKING.getMessage());
     }
