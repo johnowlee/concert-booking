@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -25,7 +24,7 @@ public class BookingService {
     private final BookingWriter bookingWriter;
     private final BookingSeatWriter bookingSeatWriter;
     private final SeatManager seatManager;
-    private final BookingManager bookingManager;
+    private final BookingSeatManager bookingSeatManager;
     private final BookingSeatReader bookingSeatReader;
     private final ClockManager clockManager;
 
@@ -36,18 +35,15 @@ public class BookingService {
         Booking savedBooking = bookingWriter.bookConcert(booking);
 
         // 예약좌석매핑 테이블 저장
-        bookingSeatWriter.saveBookingSeats(bookingManager.createBookingSeats(seats, savedBooking));
+        bookingSeatWriter.saveBookingSeats(bookingSeatManager.createBookingSeats(seats, savedBooking));
 
         // 좌석들 예약 진행 중으로 상태 변경
         seatManager.markAllSeatsAsProcessing(seats);
         return savedBooking;
     }
 
-    public void validateBookableBySeatIds(List<Long> seatIds) {
+    public void validateBookability(List<Long> seatIds) {
         List<BookingSeat> bookingSeats = bookingSeatReader.getBookingSeatsBySeatIds(seatIds);
-        List<Booking> bookings = bookingSeats.stream()
-                .map(BookingSeat::getBooking)
-                .collect(Collectors.toList());
-        bookingManager.validateBookable(bookings, clockManager.getNowDateTime());
+        bookingSeatManager.validateBookable(bookingSeats, clockManager.getNowDateTime());
     }
 }

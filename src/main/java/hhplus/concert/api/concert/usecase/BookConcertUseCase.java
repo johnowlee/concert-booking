@@ -29,7 +29,7 @@ public class BookConcertUseCase {
     public BookingResultResponse execute(Long optionId, ConcertBookingRequest request) {
 
         // 1. 예약상태, 좌석상태 검증
-        bookingService.validateBookableBySeatIds(request.parsedSeatIds());
+        bookingService.validateBookability(request.parsedSeatIds());
 
         // 2. 콘서트 옵션 id로 콘서트 옵션 조회
         ConcertOption concertOption = concertOptionReader.getConcertOptionById(optionId);
