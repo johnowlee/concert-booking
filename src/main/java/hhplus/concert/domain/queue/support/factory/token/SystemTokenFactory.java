@@ -1,4 +1,4 @@
-package hhplus.concert.domain.queue.support;
+package hhplus.concert.domain.queue.support.factory.token;
 
 import org.springframework.stereotype.Component;
 
