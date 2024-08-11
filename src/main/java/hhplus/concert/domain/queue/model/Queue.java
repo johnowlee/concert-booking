@@ -3,8 +3,6 @@ package hhplus.concert.domain.queue.model;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
-
 @Getter
 public class Queue {
     Key key;
@@ -24,25 +22,22 @@ public class Queue {
         this.score = score;
     }
 
-    public static Queue createNewActiveQueue() {
-        return Queue.builder()
-                .key(Key.ACTIVE)
-                .token(UUID.randomUUID().toString())
-                .build();
-    }
-
-    public static Queue createNewWaitingQueue() {
-        return Queue.builder()
-                .key(Key.WAITING)
-                .token(UUID.randomUUID().toString())
-                .build();
-    }
-
-    public static Queue createActiveQueue(String token) {
+    public static Queue createNewActiveQueue(String token) {
         return Queue.builder()
                 .key(Key.ACTIVE)
                 .token(token)
                 .build();
+    }
+
+    public static Queue createNewWaitingQueue(String token) {
+        return Queue.builder()
+                .key(Key.WAITING)
+                .token(token)
+                .build();
+    }
+
+    public static Queue createActiveQueue(String token) {
+        return createNewActiveQueue(token);
     }
 
     public static Queue createWaitingQueue(String token, Long waitingNumber) {

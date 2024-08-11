@@ -27,19 +27,19 @@ public class QueueService {
         throw new RestApiException(NOT_FOUND_TOKEN);
     }
 
-    public Queue createNewQueue() {
-        return queueReader.isAccessible() ? createActiveQueue() : createWaitingQueue();
+    public Queue createNewQueue(String token) {
+        return queueReader.isAccessible() ? createActiveQueue(token) : createWaitingQueue(token);
     }
 
-    private Queue createWaitingQueue() {
-        Queue queue = Queue.createNewWaitingQueue();
+    private Queue createWaitingQueue(String token) {
+        Queue queue = Queue.createNewWaitingQueue(token);
         queueWriter.addWaitingToken(queue);
         Long waitingNumber = queueReader.getWaitingNumber(queue.getToken());
         return Queue.createWaitingQueue(queue.getToken(), waitingNumber);
     }
 
-    private Queue createActiveQueue() {
-        Queue queue = Queue.createNewActiveQueue();
+    private Queue createActiveQueue(String token) {
+        Queue queue = Queue.createNewActiveQueue(token);
         queueWriter.addActiveToken(queue);
         queueWriter.createActiveKey(queue);
         return queue;

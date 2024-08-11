@@ -14,6 +14,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.UUID;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -98,7 +100,7 @@ class QueueServiceTest {
         given(queueReader.isAccessible()).willReturn(true);
 
         // when
-        Queue queue = queueService.createNewQueue();
+        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString());
 
         // then
         assertNotNull(queue);
@@ -119,7 +121,7 @@ class QueueServiceTest {
         given(queueReader.getWaitingNumber(anyString())).willReturn(1L);
 
         // when
-        Queue queue = queueService.createNewQueue();
+        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString());
 
         // then
         assertNotNull(queue);
