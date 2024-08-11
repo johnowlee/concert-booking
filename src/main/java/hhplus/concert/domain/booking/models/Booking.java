@@ -14,6 +14,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
@@ -115,5 +116,18 @@ public class Booking {
 
     private long getPassedMinutesSinceBookingFrom(LocalDateTime dateTime) {
         return Duration.between(this.getBookingDateTime(), dateTime).toMinutes();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Booking booking = (Booking) object;
+        return Objects.equals(id, booking.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
