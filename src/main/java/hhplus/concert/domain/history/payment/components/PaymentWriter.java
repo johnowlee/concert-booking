@@ -14,7 +14,7 @@ public class PaymentWriter {
 
     private final PaymentWriterRepository paymentWriterRepository;
 
-    public Payment payBooking(Booking booking, LocalDateTime paymentDateTime) {
+    public Payment save(Booking booking, LocalDateTime paymentDateTime) {
         return paymentWriterRepository.save(Payment.createPayment(booking, paymentDateTime));
     }
 }

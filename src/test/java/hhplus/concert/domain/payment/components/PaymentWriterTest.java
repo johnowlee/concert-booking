@@ -47,7 +47,7 @@ class PaymentWriterTest {
         given(paymentWriterRepository.save(any(Payment.class))).willReturn(expected);
 
         // when
-        Payment result = paymentWriter.payBooking(booking, LocalDateTime.now());
+        Payment result = paymentWriter.save(booking, LocalDateTime.now());
 
         // then
         assertThat(result.getBooking().getId()).isEqualTo(expected.getBooking().getId());
