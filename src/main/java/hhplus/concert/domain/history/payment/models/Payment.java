@@ -23,7 +23,7 @@ public class Payment {
 
     private LocalDateTime paymentDateTime;
 
-    private long paymentAmount;
+    private int paymentAmount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -34,7 +34,7 @@ public class Payment {
     private Booking booking;
 
     @Builder
-    private Payment(LocalDateTime paymentDateTime, long paymentAmount, User user, Booking booking) {
+    private Payment(LocalDateTime paymentDateTime, int paymentAmount, User user, Booking booking) {
         this.paymentDateTime = paymentDateTime;
         this.paymentAmount = paymentAmount;
         this.user = user;

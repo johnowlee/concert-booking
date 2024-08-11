@@ -38,7 +38,7 @@ class PaymentWriterTest {
                 .id(1L)
                 .bookingSeats(List.of(BookingSeat.builder().build()))
                 .build();
-        long amount = booking.getTotalPrice();
+        int amount = booking.getTotalPrice();
         Payment expected = Payment.builder()
                 .paymentAmount(amount)
                 .booking(booking)
