@@ -43,7 +43,7 @@ public class Balance {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.CHARGE)
-                .transactionDateTime(clockManager.getDateTime())
+                .transactionDateTime(clockManager.getNowDateTime())
                 .user(user)
                 .build();
     }
@@ -52,7 +52,7 @@ public class Balance {
         return builder()
                 .amount(amount)
                 .transactionType(TransactionType.USE)
-                .transactionDateTime(clockManager.getDateTime())
+                .transactionDateTime(clockManager.getNowDateTime())
                 .user(user)
                 .build();
     }

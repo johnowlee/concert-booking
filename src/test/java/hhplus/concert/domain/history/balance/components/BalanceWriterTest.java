@@ -47,7 +47,7 @@ class BalanceWriterTest extends IntegrationTestSupport {
 
         long amount = 10000L;
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getDateTime()).willReturn(transactionDateTime);
+        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
         balanceWriter.saveChargeBalance(savedUser, amount, clockManager);
@@ -72,7 +72,7 @@ class BalanceWriterTest extends IntegrationTestSupport {
 
         long amount = 10000L;
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getDateTime()).willReturn(transactionDateTime);
+        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
         balanceWriter.saveUseBalance(savedUser, amount, clockManager);

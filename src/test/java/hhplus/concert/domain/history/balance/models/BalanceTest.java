@@ -32,7 +32,7 @@ class BalanceTest {
                 .build();
         long amount = 10000L;
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getDateTime()).willReturn(transactionDateTime);
+        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
         Balance chargeBalance = Balance.createChargeBalance(user, amount, clockManager);
@@ -53,7 +53,7 @@ class BalanceTest {
                 .build();
         long amount = 10000L;
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getDateTime()).willReturn(transactionDateTime);
+        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
         Balance chargeBalance = Balance.createUseBalance(user, amount, clockManager);

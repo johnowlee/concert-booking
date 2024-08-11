@@ -61,7 +61,7 @@ class BalanceServiceTest extends IntegrationTestSupport {
         given(booking.getTotalPrice()).willReturn(10000);
 
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getDateTime()).willReturn(transactionDateTime);
+        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
         balanceService.use(booking);
