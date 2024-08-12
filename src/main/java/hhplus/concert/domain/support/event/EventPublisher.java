@@ -11,6 +11,6 @@ public class EventPublisher {
     private final ApplicationEventPublisher publisher;
 
     public void publish(Object event) {
-        this.publisher.publishEvent(event);
+        publisher.publishEvent(event);
     }
 }
