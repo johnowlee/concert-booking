@@ -10,43 +10,43 @@ import static hhplus.concert.domain.queue.model.Key.WAITING;
 public class Queue {
     private Key key;
     private String token;
-    private Long waitingNumber;
-    private long score;
+    private int waitingNumber;
+    private double score;
 
     public String getKeyName() {
         return key.toString();
     }
 
     @Builder
-    private Queue(Key key, String token, Long waitingNumber, long score) {
+    private Queue(Key key, String token, int waitingNumber, double score) {
         this.key = key;
         this.token = token;
         this.waitingNumber = waitingNumber;
         this.score = score;
     }
 
-    private static Queue of(Key key, String token, Long waitingNumber, long score) {
+    private static Queue of(Key key, String token, int waitingNumber, long score) {
         return builder()
                 .key(key)
                 .token(token)
                 .waitingNumber(waitingNumber)
-                .score(score)
+                .score((double) score)
                 .build();
     }
 
     public static Queue createActiveQueue(String token) {
-        return of(ACTIVE, token, null, 0);
+        return of(ACTIVE, token, 0, 0);
     }
 
     public static Queue createWaitingQueue(String token) {
-        return of(WAITING, token, null, 0);
+        return of(WAITING, token, 0, 0);
     }
 
-    public static Queue createWaitingQueue(String token, Long waitingNumber) {
+    public static Queue createWaitingQueue(String token, int waitingNumber) {
         return of(WAITING, token, waitingNumber, 0);
     }
 
-    public static Queue createNewWaitingQueue(String token, long score) {
-        return of(WAITING, token, null, score);
+    public static Queue createWaitingQueue(String token, long score) {
+        return of(WAITING, token, 0, score);
     }
 }

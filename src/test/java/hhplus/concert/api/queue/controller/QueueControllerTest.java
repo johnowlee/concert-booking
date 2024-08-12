@@ -65,7 +65,7 @@ class QueueControllerTest {
     public void findToken_waiting() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5));
         given(findTokenUseCase.execute(token)).willReturn(queueResponse);
 
         // expected
@@ -101,7 +101,7 @@ class QueueControllerTest {
     public void createToken_waiting() throws Exception {
         // given
         String token = "token";
-        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5));
         given(createQueueToken.execute()).willReturn(queueResponse);
 
         // expected

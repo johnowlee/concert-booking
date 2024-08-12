@@ -136,11 +136,11 @@ class QueueReaderTest {
     void getWaitingNumber_ReturnRank() {
         // given
         String token = "abc123";
-        Long rank = 0L;
+        long rank = 0L;
         given(queueReaderRepository.getWaitingUserRank(Key.WAITING.toString(), token)).willReturn(rank);
 
         // when
-        Long actual = queueReader.getWaitingNumber(token);
+        int actual = queueReader.getWaitingNumber(token);
 
         // then
         assertThat(actual).isEqualTo(rank + 1);
@@ -155,7 +155,7 @@ class QueueReaderTest {
         given(queueReaderRepository.getWaitingUserRank(Key.WAITING.toString(), token)).willReturn(null);
 
         // when
-        Long actual = queueReader.getWaitingNumber(token);
+        int actual = queueReader.getWaitingNumber(token);
 
         // then
         assertThat(actual).isNull();

@@ -38,12 +38,12 @@ public class QueueService {
     }
 
     private Queue createWaitingQueue(String token, long score) {
-        Queue queue = Queue.createNewWaitingQueue(token, score);
+        Queue queue = Queue.createWaitingQueue(token, score);
         queueWriter.addWaitingToken(queue);
         return Queue.createWaitingQueue(queue.getToken(), getWaitingNumber(queue.getToken()));
     }
 
-    private Long getWaitingNumber(String token) {
+    private int getWaitingNumber(String token) {
         return queueReader.getWaitingNumber(token);
     }
 }

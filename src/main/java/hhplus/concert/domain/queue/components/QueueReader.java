@@ -29,9 +29,9 @@ public class QueueReader {
         return queueReaderRepository.getWaitingUserScore(WAITING.getKeyName(), token) != null;
     }
 
-    public Long getWaitingNumber(String token) {
+    public int getWaitingNumber(String token) {
         Long rank = queueReaderRepository.getWaitingUserRank(WAITING.getKeyName(), token);
-        return rank != null ? rank + 1 : null; // 순번은 1부터 시작하므로 1을 더해줌
+        return rank != null ? (int) (rank + 1) : 0; // 순번은 1부터 시작하므로 1을 더해줌
     }
 
     public Set<String> getFirstWaiter() {

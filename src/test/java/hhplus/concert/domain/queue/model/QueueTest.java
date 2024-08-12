@@ -20,7 +20,7 @@ class QueueTest {
         // then
         assertThat(queue.getToken()).isEqualTo("ABC123");
         assertThat(queue.getKey()).isEqualTo(ACTIVE);
-        assertThat(queue.getWaitingNumber()).isNull();
+        assertThat(queue.getWaitingNumber()).isZero();
         assertThat(queue.getScore()).isZero();
     }
 
@@ -36,7 +36,7 @@ class QueueTest {
         // then
         assertThat(queue.getToken()).isEqualTo("ABC123");
         assertThat(queue.getKey()).isEqualTo(WAITING);
-        assertThat(queue.getWaitingNumber()).isNull();
+        assertThat(queue.getWaitingNumber()).isZero();
         assertThat(queue.getScore()).isZero();
     }
 
@@ -45,7 +45,7 @@ class QueueTest {
     void createWaitingQueueWithWaitingNumber() {
         // given
         String token = "ABC123";
-        Long waitingNumber = 20L;
+        int waitingNumber = 20;
 
         // when
         Queue queue = Queue.createWaitingQueue(token, waitingNumber);
@@ -53,7 +53,7 @@ class QueueTest {
         // then
         assertThat(queue.getToken()).isEqualTo("ABC123");
         assertThat(queue.getKey()).isEqualTo(WAITING);
-        assertThat(queue.getWaitingNumber()).isEqualTo(20L);
+        assertThat(queue.getWaitingNumber()).isEqualTo(20);
         assertThat(queue.getScore()).isZero();
     }
 
@@ -65,12 +65,12 @@ class QueueTest {
         long score = 1239485;
 
         // when
-        Queue queue = Queue.createNewWaitingQueue(token, score);
+        Queue queue = Queue.createWaitingQueue(token, score);
 
         // then
         assertThat(queue.getToken()).isEqualTo("ABC123");
         assertThat(queue.getKey()).isEqualTo(WAITING);
-        assertThat(queue.getWaitingNumber()).isNull();
+        assertThat(queue.getWaitingNumber()).isZero();
         assertThat(queue.getScore()).isEqualTo(1239485);
     }
 

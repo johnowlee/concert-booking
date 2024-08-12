@@ -57,7 +57,7 @@ class QueueServiceTest {
     void getQueueByToken_ShouldReturnWaitingQueue_WhenTokenIsWaiting() {
         // given
         String token = "waiting-token";
-        Long waitingNumber = 5L;
+        int waitingNumber = 5;
         given(queueReader.isActiveToken(token)).willReturn(false);
         given(queueReader.isWaitingToken(token)).willReturn(true);
         given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
@@ -118,7 +118,7 @@ class QueueServiceTest {
         doNothing().when(queueWriter).addWaitingToken(any(Queue.class));
 
         ArgumentCaptor<Queue> captor = ArgumentCaptor.forClass(Queue.class);
-        given(queueReader.getWaitingNumber(anyString())).willReturn(1L);
+        given(queueReader.getWaitingNumber(anyString())).willReturn(1);
 
         // when
         Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
