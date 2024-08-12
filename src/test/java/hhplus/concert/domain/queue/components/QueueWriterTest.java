@@ -37,7 +37,7 @@ class QueueWriterTest {
         queueWriter.addActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addTokenToSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).addUserToActiveSet(any(Queue.class));
     }
 
     @DisplayName("Set에 Active 대기열 토큰을 제거 한다.")
@@ -51,7 +51,7 @@ class QueueWriterTest {
         queueWriter.removeActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeTokenFromSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).removeUserFromActiveSet(any(Queue.class));
     }
 
     @DisplayName("Sorted Set에 Waiting 대기열 토큰을 추가 한다.")
@@ -65,7 +65,7 @@ class QueueWriterTest {
         queueWriter.addWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addTokenToSortedSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).addUserToWaitingSortedSet(any(Queue.class));
     }
 
     @DisplayName("Sorted Set에 Waiting 대기열 토큰을 제거 한다.")
@@ -79,7 +79,7 @@ class QueueWriterTest {
         queueWriter.removeWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeTokenFromSortedSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).removeUserFromWaitingSortedSet(any(Queue.class));
     }
 
     @DisplayName("Active Key 토큰을 생성 한다.")
@@ -94,6 +94,6 @@ class QueueWriterTest {
 
         // then
         verify(queueWriterRepository, times(1))
-                .createTimeoutKey(any(Queue.class), eq(QueuePolicy.MAX_WORKING_SEC.getValue()), eq(TimeUnit.SECONDS));
+                .createUserTimeout(any(Queue.class), eq(QueuePolicy.MAX_WORKING_SEC.getValue()), eq(TimeUnit.SECONDS));
     }
 }

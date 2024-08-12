@@ -15,22 +15,22 @@ public class QueueWriter {
     private final QueueWriterRepository queueWriterRepository;
 
     public void addActiveToken(Queue queue) {
-        queueWriterRepository.addTokenToSet(queue);
+        queueWriterRepository.addUserToActiveSet(queue);
     }
 
     public void removeActiveToken(Queue queue) {
-        queueWriterRepository.removeTokenFromSet(queue);
+        queueWriterRepository.removeUserFromActiveSet(queue);
     }
 
     public void addWaitingToken(Queue queue) {
-        queueWriterRepository.addTokenToSortedSet(queue);
+        queueWriterRepository.addUserToWaitingSortedSet(queue);
     }
 
     public void removeWaitingToken(Queue queue) {
-        queueWriterRepository.removeTokenFromSortedSet(queue);
+        queueWriterRepository.removeUserFromWaitingSortedSet(queue);
     }
 
     public void createActiveKey(Queue queue) {
-        queueWriterRepository.createTimeoutKey(queue, QueuePolicy.MAX_WORKING_SEC.getValue(), TimeUnit.SECONDS);
+        queueWriterRepository.createUserTimeout(queue, QueuePolicy.MAX_WORKING_SEC.getValue(), TimeUnit.SECONDS);
     }
 }

@@ -4,11 +4,11 @@ import java.util.Set;
 
 public interface QueueReaderRepository {
 
-    Long getSetSize(String key);
+    Long getActiveUserCount(String activeUserKey);
 
-    Boolean containsValue(String key, String value);
-    Set<String> getValuesByRange(String key, long start, long end);
+    Boolean isActiveUser(String activeUserKey, String token);
+    Set<String> getWaitingUsersByRange(String waitingUserKey, long start, long end);
 
-    Long getRankByValue(String key, String value);
-    Double getScoreByValue(String key, String value);
+    Long getWaitingUserRank(String waitingUserKey, String token);
+    Double getWaitingUserScore(String waitingUserKey, String token);
 }

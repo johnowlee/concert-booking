@@ -14,27 +14,27 @@ public class QueueCoreReaderRepository implements QueueReaderRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Long getSetSize(String key) {
-        return redisTemplate.opsForSet().size(key);
+    public Long getActiveUserCount(String activeUserKey) {
+        return redisTemplate.opsForSet().size(activeUserKey);
     }
 
     @Override
-    public Boolean containsValue(String key, String value) {
-        return redisTemplate.opsForSet().isMember(key, value);
+    public Boolean isActiveUser(String activeUserKey, String token) {
+        return redisTemplate.opsForSet().isMember(activeUserKey, token);
     }
 
     @Override
-    public Set<String> getValuesByRange(String key, long start, long end) {
-        return redisTemplate.opsForZSet().range(key, start, end);
+    public Set<String> getWaitingUsersByRange(String waitingUserKey, long start, long end) {
+        return redisTemplate.opsForZSet().range(waitingUserKey, start, end);
     }
 
     @Override
-    public Long getRankByValue(String key, String value) {
-        return redisTemplate.opsForZSet().rank(key, value);
+    public Long getWaitingUserRank(String waitingUserKey, String token) {
+        return redisTemplate.opsForZSet().rank(waitingUserKey, token);
     }
 
     @Override
-    public Double getScoreByValue(String key, String value) {
-        return redisTemplate.opsForZSet().score(key, value);
+    public Double getWaitingUserScore(String waitingUserKey, String token) {
+        return redisTemplate.opsForZSet().score(waitingUserKey, token);
     }
 }

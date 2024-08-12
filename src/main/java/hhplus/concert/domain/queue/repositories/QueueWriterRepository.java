@@ -6,11 +6,11 @@ import java.util.concurrent.TimeUnit;
 
 public interface QueueWriterRepository {
 
-    void addTokenToSet(Queue queue);
-    void removeTokenFromSet(Queue queue);
+    void addUserToActiveSet(Queue queue);
+    void removeUserFromActiveSet(Queue queue);
 
-    void addTokenToSortedSet(Queue queue);
-    void removeTokenFromSortedSet(Queue queue);
+    void addUserToWaitingSortedSet(Queue queue);
+    void removeUserFromWaitingSortedSet(Queue queue);
 
-    void createTimeoutKey(Queue queue, long timeout, TimeUnit timeUnit);
+    void createUserTimeout(Queue queue, long timeout, TimeUnit timeUnit);
 }
