@@ -1,138 +1,121 @@
 package hhplus.concert.domain.queue.support;
 
+import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.TokenErrorCode;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
-import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
-import java.util.UUID;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.then;
-import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
-@ExtendWith(MockitoExtension.class)
-class QueueServiceTest {
+class QueueServiceTest extends IntegrationTestSupport {
 
-    @InjectMocks
-    private QueueService queueService;
+    @MockBean
+    QueueReader queueReader;
 
-    @Mock
-    private QueueReader queueReader;
+    @MockBean
+    QueueWriter queueWriter;
 
-    @Mock
-    private QueueWriter queueWriter;
-
-    @Mock
+    @MockBean
     QueueMonitor queueMonitor;
 
-    @DisplayName("ACTIVE 상태인 token 조회 시, 해당 토큰을 반환한다.")
+    @Autowired
+    QueueService queueService;
+
+    @DisplayName("활성 유저의 토큰이면 ACTIVE 토큰을 반환한다.")
     @Test
-    void getQueueByToken_ShouldReturnActiveQueue_WhenTokenIsActive() {
+    void getQueueByTokenWhenActiveToken() {
         // given
-        String token = "active-token";
+        String token = "abc";
         given(queueReader.isActiveToken(token)).willReturn(true);
 
         // when
-        Queue queue = queueService.getQueueByToken(token);
+        Queue result = queueService.getQueueByToken(token);
 
         // then
-        assertNotNull(queue);
-        assertEquals(token, queue.getToken());
-        assertEquals(Key.ACTIVE, queue.getKey());
-        then(queueReader).should().isActiveToken(token);
+        assertThat(result.getToken()).isEqualTo("abc");
+        assertThat(result.getKeyName()).isEqualTo("ACTIVE");
     }
 
-    @DisplayName("WAITING 상태인 token 조회 시, 해당 토큰과 waiting number를 반환한다.")
+    @DisplayName("대기 유저의 토큰이면 WAITING 토큰을 반환한다.")
     @Test
-    void getQueueByToken_ShouldReturnWaitingQueue_WhenTokenIsWaiting() {
+    void getQueueByTokenWhenWaitingToken() {
         // given
-        String token = "waiting-token";
-        int waitingNumber = 5;
+        String token = "abc";
+        int waitingNumber = 10;
+        given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
         given(queueReader.isActiveToken(token)).willReturn(false);
         given(queueReader.isWaitingToken(token)).willReturn(true);
-        given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
 
         // when
-        Queue queue = queueService.getQueueByToken(token);
+        Queue result = queueService.getQueueByToken(token);
 
         // then
-        assertNotNull(queue);
-        assertEquals(token, queue.getToken());
-        assertEquals(Key.WAITING, queue.getKey());
-        assertEquals(waitingNumber, queue.getWaitingNumber());
-        then(queueReader).should().isActiveToken(token);
-        then(queueReader).should().isWaitingToken(token);
-        then(queueReader).should().getWaitingNumber(token);
+        assertThat(result.getToken()).isEqualTo("abc");
+        assertThat(result.getKeyName()).isEqualTo("WAITING");
+        assertThat(result.getWaitingNumber()).isEqualTo(10);
+        verify(queueReader, times(1)).getWaitingNumber("abc");
+
     }
 
-    @DisplayName("ACTIVE와 WAITING 상태도 아닌 찾을 수 없는 token 조회 시, 예외를 던진다.")
+    @DisplayName("토큰이 유효하지 않으면 예외가 발생한다.")
     @Test
-    void getQueueByToken_ShouldThrowException_WhenTokenIsNotFound() {
+    void getQueueByTokenWithInvalidToken() {
         // given
-        String token = "invalid-token";
+        String token = "abc";
         given(queueReader.isActiveToken(token)).willReturn(false);
         given(queueReader.isWaitingToken(token)).willReturn(false);
 
         // when & then
-        RestApiException exception = assertThrows(RestApiException.class, () -> {
-            queueService.getQueueByToken(token);
-        });
-
-        assertEquals(TokenErrorCode.NOT_FOUND_TOKEN, exception.getErrorCode());
-        then(queueReader).should().isActiveToken(token);
-        then(queueReader).should().isWaitingToken(token);
+        assertThatThrownBy(() -> queueService.getQueueByToken("abc"))
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(NOT_FOUND_TOKEN.getMessage());
     }
 
-    @DisplayName("대기할 필요가 없으면 ACTIVE 토큰을 반환한다.")
+    @DisplayName("활성 유저로 입장이 가능하면 활성 토큰이 발급된다.")
     @Test
-    void createNewQueue_ShouldReturnActiveQueue_WhenQueueIsAccessible() {
+    void createNewQueueWhenAccessible() {
         // given
+        String token = "abc";
+        long score = 123456L;
         given(queueReader.isAccessible(queueMonitor)).willReturn(true);
 
         // when
-        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
+        Queue result = queueService.createNewQueue(token, score);
 
         // then
-        assertNotNull(queue);
-        assertEquals(Key.ACTIVE, queue.getKey());
-        then(queueReader).should().isAccessible(queueMonitor);
-        then(queueWriter).should().addActiveToken(queue);
-        then(queueWriter).should().createActiveKey(queue, queueMonitor);
+        assertThat(result.getToken()).isEqualTo("abc");
+        assertThat(result.getKeyName()).isEqualTo("ACTIVE");
+        verify(queueWriter, times(1)).addActiveToken(any(Queue.class));
+        verify(queueWriter, times(1)).createActiveKey(any(Queue.class), eq(queueMonitor));
     }
 
-    @DisplayName("대기해야하면 WAITING 토큰과 waiting number를 반환한다.")
+    @DisplayName("활성 유저로 입장이 불가능하면 대기 토큰이 발급된다.")
     @Test
-    void createNewQueue_ShouldReturnWaitingQueue_WhenQueueIsNotAccessible() {
+    void createNewQueueWhenNotAccessible() {
         // given
+        String token = "abc";
+        long score = 123456L;
         given(queueReader.isAccessible(queueMonitor)).willReturn(false);
-        doNothing().when(queueWriter).addWaitingToken(any(Queue.class));
-
-        ArgumentCaptor<Queue> captor = ArgumentCaptor.forClass(Queue.class);
-        given(queueReader.getWaitingNumber(anyString())).willReturn(1);
 
         // when
-        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
+        Queue result = queueService.createNewQueue(token, score);
 
         // then
-        assertNotNull(queue);
-        assertEquals(Key.WAITING, queue.getKey());
-        assertEquals(1L, queue.getWaitingNumber());
-        then(queueReader).should().isAccessible(queueMonitor);
-        then(queueWriter).should().addWaitingToken(captor.capture());
-        then(queueReader).should().getWaitingNumber(captor.getValue().getToken());
+        assertThat(result.getToken()).isEqualTo("abc");
+        assertThat(result.getKeyName()).isEqualTo("WAITING");
+        verify(queueWriter, times(1)).addWaitingToken(any(Queue.class));
     }
 }
