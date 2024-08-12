@@ -1,12 +1,10 @@
 package hhplus.concert.domain.queue.components;
 
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueuePolicy;
 import hhplus.concert.domain.queue.repositories.QueueWriterRepository;
+import hhplus.concert.domain.queue.support.manager.TtlManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-
-import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +28,7 @@ public class QueueWriter {
         queueWriterRepository.removeUserFromWaitingSortedSet(queue);
     }
 
-    public void createActiveKey(Queue queue) {
-        queueWriterRepository.createUserTimeout(queue, QueuePolicy.MAX_WORKING_SEC.getValue(), TimeUnit.SECONDS);
+    public void createActiveKey(Queue queue, TtlManager ttlManager) {
+        queueWriterRepository.createUserTimeout(queue, ttlManager.getTtl().timeout(), ttlManager.getTtl().timeUnit());
     }
 }
