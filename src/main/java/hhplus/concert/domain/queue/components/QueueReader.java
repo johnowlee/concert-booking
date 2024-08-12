@@ -13,6 +13,7 @@ import static hhplus.concert.domain.queue.model.Key.WAITING;
 @Component
 @RequiredArgsConstructor
 public class QueueReader {
+    // TODO : 리팩토링 -> service or manager 객체 필요.
 
     private final QueueReaderRepository queueReaderRepository;
 
@@ -34,11 +35,11 @@ public class QueueReader {
         return calculateWaitingNumberBy(rank);
     }
 
-    private static int calculateWaitingNumberBy(Long rank) {
-        return rank != null ? (int) (rank + 1) : 0;
-    }
-
     public Set<String> getFirstWaiter() {
         return queueReaderRepository.getWaitingUsersByRange(WAITING.getKeyName(), 0, 0);
+    }
+
+    private static int calculateWaitingNumberBy(Long rank) {
+        return rank != null ? (int) (rank + 1) : 0;
     }
 }
