@@ -4,7 +4,7 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.support.manager.TtlManager;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ public class QueueService {
 
     private final QueueReader queueReader;
     private final QueueWriter queueWriter;
-    private final TtlManager ttlManager;
+    private final QueueMonitor queueMonitor;
 
     public Queue getQueueByToken(String token) {
         if (queueReader.isActiveToken(token)) {
@@ -35,7 +35,7 @@ public class QueueService {
     private Queue createActiveQueue(String token) {
         Queue queue = Queue.createActiveQueue(token);
         queueWriter.addActiveToken(queue);
-        queueWriter.createActiveKey(queue, ttlManager);
+        queueWriter.createActiveKey(queue, queueMonitor);
         return queue;
     }
 

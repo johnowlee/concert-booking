@@ -3,7 +3,7 @@ package hhplus.concert.domain.queue.support;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.support.manager.TtlManager;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +15,7 @@ public class RedisKeyEventService {
 
     private final QueueReader queueReader;
     private final QueueWriter queueWriter;
-    private final TtlManager ttlManager;
+    private final QueueMonitor queueMonitor;
 
     public void expire(String token) {
         removeTokenFromActive(token);
@@ -45,6 +45,6 @@ public class RedisKeyEventService {
     }
 
     private void setTokenAsActiveUser(String token) {
-        queueWriter.createActiveKey(Queue.createActiveQueue(token), ttlManager);
+        queueWriter.createActiveKey(Queue.createActiveQueue(token), queueMonitor);
     }
 }

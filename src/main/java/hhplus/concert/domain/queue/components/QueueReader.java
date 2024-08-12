@@ -31,7 +31,11 @@ public class QueueReader {
 
     public int getWaitingNumber(String token) {
         Long rank = queueReaderRepository.getWaitingUserRank(WAITING.getKeyName(), token);
-        return rank != null ? (int) (rank + 1) : 0; // 순번은 1부터 시작하므로 1을 더해줌
+        return calculateWaitingNumberBy(rank);
+    }
+
+    private static int calculateWaitingNumberBy(Long rank) {
+        return rank != null ? (int) (rank + 1) : 0;
     }
 
     public Set<String> getFirstWaiter() {

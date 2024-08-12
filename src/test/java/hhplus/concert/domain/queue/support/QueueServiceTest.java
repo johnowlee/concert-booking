@@ -6,7 +6,7 @@ import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.support.manager.TtlManager;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ class QueueServiceTest {
     private QueueWriter queueWriter;
 
     @Mock
-    TtlManager ttlManager;
+    QueueMonitor queueMonitor;
 
     @DisplayName("ACTIVE 상태인 token 조회 시, 해당 토큰을 반환한다.")
     @Test
@@ -111,7 +111,7 @@ class QueueServiceTest {
         assertEquals(Key.ACTIVE, queue.getKey());
         then(queueReader).should().isAccessible();
         then(queueWriter).should().addActiveToken(queue);
-        then(queueWriter).should().createActiveKey(queue, ttlManager);
+        then(queueWriter).should().createActiveKey(queue, queueMonitor);
     }
 
     @DisplayName("대기해야하면 WAITING 토큰과 waiting number를 반환한다.")

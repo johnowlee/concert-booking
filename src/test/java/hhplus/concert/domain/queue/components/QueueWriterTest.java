@@ -2,8 +2,8 @@ package hhplus.concert.domain.queue.components;
 
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.repositories.QueueWriterRepository;
-import hhplus.concert.domain.queue.support.manager.Ttl;
-import hhplus.concert.domain.queue.support.manager.TtlManager;
+import hhplus.concert.domain.queue.support.monitor.Ttl;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class QueueWriterTest {
     QueueWriterRepository queueWriterRepository;
 
     @Mock
-    TtlManager ttlManager;
+    QueueMonitor queueMonitor;
 
     @DisplayName("활성 유저를 활성 Key Set에 추가한다.")
     @Test
@@ -97,10 +97,10 @@ class QueueWriterTest {
         long timeout = 300L;
         TimeUnit timeUnit = SECONDS;
         Ttl ttl = new Ttl(timeout, timeUnit);
-        given(ttlManager.getTtl()).willReturn(ttl);
+        given(queueMonitor.getTtl()).willReturn(ttl);
 
         // when
-        queueWriter.createActiveKey(queue, ttlManager);
+        queueWriter.createActiveKey(queue, queueMonitor);
 
         // then
         verify(queueWriterRepository, times(1))

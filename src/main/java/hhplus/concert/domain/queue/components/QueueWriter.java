@@ -2,7 +2,7 @@ package hhplus.concert.domain.queue.components;
 
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.repositories.QueueWriterRepository;
-import hhplus.concert.domain.queue.support.manager.TtlManager;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -28,7 +28,7 @@ public class QueueWriter {
         queueWriterRepository.removeUserFromWaitingSortedSet(queue);
     }
 
-    public void createActiveKey(Queue queue, TtlManager ttlManager) {
-        queueWriterRepository.createUserTimeout(queue, ttlManager.getTtl().timeout(), ttlManager.getTtl().timeUnit());
+    public void createActiveKey(Queue queue, QueueMonitor queueMonitor) {
+        queueWriterRepository.createUserTimeout(queue, queueMonitor.getTtl().timeout(), queueMonitor.getTtl().timeUnit());
     }
 }
