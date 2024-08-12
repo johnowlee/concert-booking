@@ -100,7 +100,7 @@ class QueueServiceTest {
         given(queueReader.isAccessible()).willReturn(true);
 
         // when
-        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString());
+        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
 
         // then
         assertNotNull(queue);
@@ -121,7 +121,7 @@ class QueueServiceTest {
         given(queueReader.getWaitingNumber(anyString())).willReturn(1L);
 
         // when
-        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString());
+        Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
 
         // then
         assertNotNull(queue);
