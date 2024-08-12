@@ -101,7 +101,7 @@ class QueueServiceTest {
     @Test
     void createNewQueue_ShouldReturnActiveQueue_WhenQueueIsAccessible() {
         // given
-        given(queueReader.isAccessible()).willReturn(true);
+        given(queueReader.isAccessible(queueMonitor)).willReturn(true);
 
         // when
         Queue queue = queueService.createNewQueue(UUID.randomUUID().toString(), System.currentTimeMillis());
@@ -109,7 +109,7 @@ class QueueServiceTest {
         // then
         assertNotNull(queue);
         assertEquals(Key.ACTIVE, queue.getKey());
-        then(queueReader).should().isAccessible();
+        then(queueReader).should().isAccessible(queueMonitor);
         then(queueWriter).should().addActiveToken(queue);
         then(queueWriter).should().createActiveKey(queue, queueMonitor);
     }
@@ -118,7 +118,7 @@ class QueueServiceTest {
     @Test
     void createNewQueue_ShouldReturnWaitingQueue_WhenQueueIsNotAccessible() {
         // given
-        given(queueReader.isAccessible()).willReturn(false);
+        given(queueReader.isAccessible(queueMonitor)).willReturn(false);
         doNothing().when(queueWriter).addWaitingToken(any(Queue.class));
 
         ArgumentCaptor<Queue> captor = ArgumentCaptor.forClass(Queue.class);
@@ -131,7 +131,7 @@ class QueueServiceTest {
         assertNotNull(queue);
         assertEquals(Key.WAITING, queue.getKey());
         assertEquals(1L, queue.getWaitingNumber());
-        then(queueReader).should().isAccessible();
+        then(queueReader).should().isAccessible(queueMonitor);
         then(queueWriter).should().addWaitingToken(captor.capture());
         then(queueReader).should().getWaitingNumber(captor.getValue().getToken());
     }

@@ -29,7 +29,7 @@ public class QueueService {
     }
 
     public Queue createNewQueue(String token, long score) {
-        return queueReader.isAccessible() ? createActiveQueue(token) : createWaitingQueue(token, score);
+        return queueReader.isAccessible(queueMonitor) ? createActiveQueue(token) : createWaitingQueue(token, score);
     }
 
     private Queue createActiveQueue(String token) {

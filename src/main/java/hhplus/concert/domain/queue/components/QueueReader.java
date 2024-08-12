@@ -1,6 +1,7 @@
 package hhplus.concert.domain.queue.components;
 
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,7 +9,6 @@ import java.util.Set;
 
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static hhplus.concert.domain.queue.model.Key.WAITING;
-import static hhplus.concert.domain.queue.model.QueuePolicy.MAX_CONCURRENT_USERS;
 
 @Component
 @RequiredArgsConstructor
@@ -16,9 +16,9 @@ public class QueueReader {
 
     private final QueueReaderRepository queueReaderRepository;
 
-    public Boolean isAccessible() {
+    public Boolean isAccessible(QueueMonitor queueMonitor) {
         Long concurrentSize = queueReaderRepository.getActiveUserCount(ACTIVE.getKeyName());
-        return concurrentSize == null || concurrentSize < MAX_CONCURRENT_USERS.getValue();
+        return concurrentSize == null || concurrentSize < queueMonitor.getMaxActiveUserCount();
     }
 
     public Boolean isActiveToken(String token) {
