@@ -145,7 +145,7 @@ class ConcertControllerTest {
     @Test
     public void bookConcert() throws Exception {
         // given
-        User user = User.builder().id(10L).name("홍길동").build();
+        User user = User.builder().name("홍길동").build();
         Concert concert = Concert.builder()
                 .id(1L)
                 .build();

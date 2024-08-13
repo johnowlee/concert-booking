@@ -39,7 +39,6 @@ class BalanceReaderTest extends IntegrationTestSupport {
     void getAmountBySearchParam() {
         // given
         User user = User.builder()
-                .id(1L)
                 .name("jon")
                 .version(1L)
                 .build();

@@ -33,7 +33,6 @@ class BalanceCoreWriterRepositoryTest extends IntegrationTestSupport {
     void save() {
         // given
         User user = User.builder()
-                .id(1L)
                 .name("jon")
                 .version(1L)
                 .build();

@@ -39,11 +39,10 @@ public class User {
     private List<Payment> payments = new ArrayList<>();
 
     @Builder
-    private User(Long id, String name, long balance,
+    private User(String name, long balance,
                  List<Booking> bookings,
                  List<Payment> payments,
                  Long version) {
-        this.id = id;
         this.name = name;
         this.balance = balance;
         this.bookings = bookings;

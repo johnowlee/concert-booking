@@ -80,7 +80,7 @@ class BookingControllerTest {
     @Test
     public void getBookingsByBookingId() throws Exception {
         // given
-        User user = User.builder().id(10L).name("홍길동").build();
+        User user = User.builder().name("홍길동").build();
         Seat seat = Seat.builder()
                 .concertOption(ConcertOption.builder().build())
                 .build();
