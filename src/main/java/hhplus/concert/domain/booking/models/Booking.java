@@ -12,7 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -65,7 +64,7 @@ public class Booking {
 
     public void addBookingSeat(BookingSeat bookingSeat) {
         boolean hasNotDuplicated = bookingSeats.stream()
-                    .noneMatch(seat -> seat.equals(bookingSeat));
+                    .noneMatch(thisBookingSeat -> thisBookingSeat.equals(bookingSeat));
 
         if (hasNotDuplicated) {
             this.bookingSeats.add(bookingSeat);
