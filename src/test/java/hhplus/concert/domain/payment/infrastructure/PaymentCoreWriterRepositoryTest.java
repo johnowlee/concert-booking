@@ -1,4 +1,4 @@
-package hhplus.concert.domain.history.payment.infrastructure;
+package hhplus.concert.domain.payment.infrastructure;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
@@ -12,6 +12,8 @@ import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
+import hhplus.concert.domain.history.payment.infrastructure.PaymentCoreWriterRepository;
+import hhplus.concert.domain.history.payment.infrastructure.PaymentJpaRepository;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;

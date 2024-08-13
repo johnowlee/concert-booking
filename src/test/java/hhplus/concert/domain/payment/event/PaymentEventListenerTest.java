@@ -1,7 +1,9 @@
-package hhplus.concert.domain.history.payment.event;
+package hhplus.concert.domain.payment.event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.event.PaymentEventListener;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
