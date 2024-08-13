@@ -72,7 +72,6 @@ class PaymentCoreWriterRepositoryTest extends IntegrationTestSupport {
                 .bookingDateTime(bookingDateTime)
                 .user(savedUser)
                 .bookingStatus(BookingStatus.COMPLETE)
-                .bookingSeats(new ArrayList<>())
                 .build();
         Booking savedBooking = bookingJpaRepository.save(booking);
 

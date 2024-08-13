@@ -14,12 +14,89 @@ import java.util.stream.Collectors;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
-import static hhplus.concert.domain.booking.models.BookingStatus.*;
+import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
+import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
 import static org.assertj.core.api.Assertions.*;
 
 class BookingTest {
+
+    @DisplayName("Booking의 BookingSeat 리스트에 BookingSeat 를 하나 추가 한다")
+    @Test
+    void addBookingSeat() {
+        // given
+        Booking booking = Booking.builder().build();
+        BookingSeat bookingSeat = BookingSeat.builder()
+                .id(1L)
+                .build();
+
+        // when
+        booking.addBookingSeat(bookingSeat);
+
+        // then
+        assertThat(booking.getBookingSeats()).hasSize(1)
+                .contains(bookingSeat);
+    }
+
+    @DisplayName("Booking의 BookingSeat 리스트에 같은 BookingSeat를 중복 추가해도 하나만 추가 된다.")
+    @Test
+    void addBookingSeatWithDuplicatedBookingSeat() {
+        // given
+        Booking booking = Booking.builder().build();
+        BookingSeat bookingSeat = BookingSeat.builder()
+                .id(1L)
+                .build();
+
+        // when
+        booking.addBookingSeat(bookingSeat);
+        booking.addBookingSeat(bookingSeat);
+
+        // then
+        assertThat(booking.getBookingSeats()).hasSize(1)
+                .contains(bookingSeat);
+    }
+
+    @DisplayName("Booking의 bookingSeat 리스트에 BookingSeat 리스트를 추가 한다.")
+    @Test
+    void addAllBookingSeats() {
+        // given
+        Booking booking = Booking.builder().build();
+        BookingSeat bookingSeat1 = BookingSeat.builder()
+                .id(1L)
+                .build();
+        BookingSeat bookingSeat2 = BookingSeat.builder()
+                .id(2L)
+                .build();
+
+        // when
+        booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
+
+        // then
+        assertThat(booking.getBookingSeats()).hasSize(2)
+                .containsExactlyInAnyOrder(bookingSeat1, bookingSeat2);
+    }
+
+    @DisplayName("Booking의 bookingSeat 리스트에 BookingSeat 리스트를 추가할 때, 중복 요소가 있으면 추가되지 않는다.")
+    @Test
+    void addAllBookingSeatsWithDuplicatedBookingSeat() {
+        // given
+        Booking booking = Booking.builder().build();
+        BookingSeat bookingSeat1 = BookingSeat.builder()
+                .id(1L)
+                .build();
+        BookingSeat bookingSeat2 = BookingSeat.builder()
+                .id(2L)
+                .build();
+
+        // when
+        booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
+        booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
+
+        // then
+        assertThat(booking.getBookingSeats()).hasSize(2)
+                .containsExactlyInAnyOrder(bookingSeat1, bookingSeat2);
+    }
 
     @DisplayName("예약 상태를 COMPLETE 상태로 변경한다.")
     @Test
@@ -101,9 +178,8 @@ class BookingTest {
         BookingSeat bookingSeat2 = BookingSeat.builder()
                 .seat(seat2)
                 .build();
-        Booking booking = Booking.builder()
-                .bookingSeats(List.of(bookingSeat1, bookingSeat2))
-                .build();
+        Booking booking = Booking.builder().build();
+        booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
 
         // when
         int result = booking.getTotalPrice();
@@ -156,9 +232,8 @@ class BookingTest {
         BookingSeat bookingSeat2 = BookingSeat.builder()
                 .seat(seat2)
                 .build();
-        Booking booking = Booking.builder()
-                .bookingSeats(List.of(bookingSeat1, bookingSeat2))
-                .build();
+        Booking booking = Booking.builder().build();
+        booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
 
         // when
         booking.reserveAllSeats();

@@ -23,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
@@ -72,7 +71,6 @@ class PaymentWriterTest extends IntegrationTestSupport {
                 .bookingDateTime(bookingDateTime)
                 .user(savedUser)
                 .bookingStatus(BookingStatus.COMPLETE)
-                .bookingSeats(new ArrayList<>())
                 .build();
         Booking savedBooking = bookingJpaRepository.save(booking);
 

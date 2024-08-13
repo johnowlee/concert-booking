@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,13 +46,12 @@ public class Booking {
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeats) {
+    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
         this.id = id;
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
         this.user = user;
-        this.bookingSeats = bookingSeats;
     }
 
     public static Booking createBooking(String concertTitle, LocalDateTime bookingDateTime, User user) {
@@ -61,6 +61,21 @@ public class Booking {
                 .concertTitle(concertTitle)
                 .user(user)
                 .build();
+    }
+
+    public void addBookingSeat(BookingSeat bookingSeat) {
+        boolean hasNotDuplicated = bookingSeats.stream()
+                    .noneMatch(seat -> seat.equals(bookingSeat));
+
+        if (hasNotDuplicated) {
+            this.bookingSeats.add(bookingSeat);
+        }
+    }
+
+    public void addAllBookingSeats(List<BookingSeat> bookingSeats) {
+        for (BookingSeat bookingSeat : bookingSeats) {
+            addBookingSeat(bookingSeat);
+        }
     }
 
     public void markAsComplete() {

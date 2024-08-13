@@ -168,8 +168,8 @@ class ConcertControllerTest {
                 .id(1L)
                 .user(user)
                 .concertTitle("아이유콘서트")
-                .bookingSeats(new ArrayList<>(List.of(bookingSeat)))
                 .build();
+        booking.addBookingSeat(bookingSeat);
 
         BookingResultResponse bookingResultResponse = BookingResultResponse.succeed(user, booking, seats);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "A1");

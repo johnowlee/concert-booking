@@ -90,8 +90,8 @@ class BookingControllerTest {
         Booking booking = Booking.builder()
                 .id(1L)
                 .user(user)
-                .bookingSeats(new ArrayList<>(List.of(bookingSeat)))
                 .build();
+        booking.addBookingSeat(bookingSeat);
 
         BookingResponse bookingResponse = BookingResponse.from(booking);
         given(getBookingByIdUseCase.execute(anyLong())).willReturn(bookingResponse);
