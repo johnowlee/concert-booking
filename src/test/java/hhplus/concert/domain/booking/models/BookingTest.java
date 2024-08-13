@@ -4,7 +4,6 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
-import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -188,30 +187,6 @@ class BookingTest {
 
         // then
         assertThat(result).isEqualTo(seat1.getPrice() + seat2.getPrice());
-    }
-
-    @DisplayName("예약자의 userId와 같지 않다면, 예외를 터트린다.")
-    @Test
-    void validatePayer() {
-        // given
-        User user = User.builder().id(1L).build();
-        Booking booking = Booking.builder().user(user).build();
-
-        // when & then
-        assertThatThrownBy(() -> booking.validatePayer(2L))
-                .isInstanceOf(RestApiException.class)
-                .hasMessage(INVALID_PAYER.getMessage());
-    }
-
-    @DisplayName("예약자의 userId와 같다면, 아무일도 일어나지 않는다.")
-    @Test
-    void validatePayeWithSameUser() {
-        // given
-        User user = User.builder().id(1L).build();
-        Booking booking = Booking.builder().user(user).build();
-
-        // when & then
-        booking.validatePayer(1L);
     }
 
     @DisplayName("좌석의 예약 상태를 모두 좌석된 상태로 변경한다.")

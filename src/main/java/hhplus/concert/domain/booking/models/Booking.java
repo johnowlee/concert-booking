@@ -107,12 +107,6 @@ public class Booking {
                 .sum();
     }
 
-    public void validatePayer(Long userId) {
-        if (user.isNotSameUserId(userId)) {
-            throw new RestApiException(INVALID_PAYER);
-        }
-    }
-
     public void reserveAllSeats() {
         bookingSeats.stream()
                 .map(BookingSeat::getSeat)

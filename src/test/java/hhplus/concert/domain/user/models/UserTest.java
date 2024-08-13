@@ -1,7 +1,6 @@
 package hhplus.concert.domain.user.models;
 
 import hhplus.concert.api.exception.RestApiException;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -78,25 +77,5 @@ class UserTest {
         assertThatThrownBy(() -> user.useBalance(useAmount))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NEGATIVE_NUMBER_AMOUNT.getMessage());
-    }
-
-    @DisplayName("userId가 다르면 true를 반환한다.")
-    @Test
-    void isNotSameUserId() {
-        // given
-        User user = User.builder().id(1L).build();
-
-        // when & then
-        Assertions.assertTrue(user.isNotSameUserId(2L));
-    }
-
-    @DisplayName("userId가 같으면 false를 반환한다.")
-    @Test
-    void isNotSameUserIdWithSameId() {
-        // given
-        User user = User.builder().id(1L).build();
-
-        // when & then
-        Assertions.assertFalse(user.isNotSameUserId(1L));
     }
 }

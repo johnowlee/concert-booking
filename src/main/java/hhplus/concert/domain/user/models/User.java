@@ -68,10 +68,6 @@ public class User {
         this.balance -= amount;
     }
 
-    public boolean isNotSameUserId(Long userId) {
-        return this.id != userId;
-    }
-
     @Override
     public boolean equals(Object object) {
         if (this == object) return true;
