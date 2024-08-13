@@ -29,7 +29,7 @@ public class BookingSeatManager {
 
     public List<BookingSeat> createBookingSeats(List<Seat> seats, Booking booking) {
         return seats.stream()
-                .map(s -> BookingSeat.buildBookingSeat(booking, s))
+                .map(s -> BookingSeat.createBookingSeat(booking, s))
                 .collect(Collectors.toList());
     }
 

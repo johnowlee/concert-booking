@@ -30,7 +30,7 @@ public class BookingSeat {
     private BookingSeat(Long id, Booking booking, Seat seat) {
         this.id = id;
         this.seat = seat;
-        setBooking(booking);
+        this.booking = booking;
     }
 
     private void setBooking(Booking booking) {
@@ -38,7 +38,7 @@ public class BookingSeat {
         booking.getBookingSeats().add(this);
     }
 
-    public static BookingSeat buildBookingSeat(Booking booking, Seat seat) {
+    public static BookingSeat createBookingSeat(Booking booking, Seat seat) {
         return builder()
                 .booking(booking)
                 .seat(seat)
