@@ -173,9 +173,11 @@ class BookingTest {
                 .grade(SeatGrade.B)
                 .build();
         BookingSeat bookingSeat1 = BookingSeat.builder()
+                .id(1L)
                 .seat(seat1)
                 .build();
         BookingSeat bookingSeat2 = BookingSeat.builder()
+                .id(2L)
                 .seat(seat2)
                 .build();
         Booking booking = Booking.builder().build();
@@ -227,9 +229,11 @@ class BookingTest {
                 .seatBookingStatus(PROCESSING)
                 .build();
         BookingSeat bookingSeat1 = BookingSeat.builder()
+                .id(1L)
                 .seat(seat1)
                 .build();
         BookingSeat bookingSeat2 = BookingSeat.builder()
+                .id(2L)
                 .seat(seat2)
                 .build();
         Booking booking = Booking.builder().build();
