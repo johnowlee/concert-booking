@@ -1,4 +1,4 @@
-package hhplus.concert.api.concert.dto.response.concerts;
+package hhplus.concert.api.concert.usecase.response.concerts;
 
 import hhplus.concert.domain.concert.models.Concert;
 

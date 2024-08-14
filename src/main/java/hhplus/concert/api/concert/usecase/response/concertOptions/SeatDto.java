@@ -1,4 +1,4 @@
-package hhplus.concert.api.concert.dto.response.concertOptions;
+package hhplus.concert.api.concert.usecase.response.concertOptions;
 
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;

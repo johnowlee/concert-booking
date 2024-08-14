@@ -25,5 +25,4 @@ public class QueueController {
     public RestApiResponse<QueueResponse> createToken() {
         return RestApiResponse.ok(createQueueToken.execute());
     }
-
 }

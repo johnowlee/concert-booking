@@ -1,4 +1,4 @@
-package hhplus.concert.api.concert.dto.request;
+package hhplus.concert.api.concert.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
