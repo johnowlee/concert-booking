@@ -1,10 +1,9 @@
 package hhplus.concert.api.balance.controller;
 
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
-import hhplus.concert.api.balance.usecase.response.BalanceChargeResponse;
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.common.RestApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -24,8 +23,8 @@ public class BalanceController {
     }
 
     @PatchMapping("{userId}")
-    public RestApiResponse<BalanceChargeResponse> charge(@PathVariable Long userId,
-                                                        @Valid @RequestBody BalanceChargeRequest request) {
+    public RestApiResponse<BalanceResponse> charge(@PathVariable Long userId,
+                                                   @Valid @RequestBody BalanceChargeRequest request) {
         return RestApiResponse.ok(chargeBalanceUseCase.execute(userId, request));
     }
 }
