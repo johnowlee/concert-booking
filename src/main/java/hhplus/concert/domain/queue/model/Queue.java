@@ -3,54 +3,50 @@ package hhplus.concert.domain.queue.model;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.util.UUID;
+import static hhplus.concert.domain.queue.model.Key.ACTIVE;
+import static hhplus.concert.domain.queue.model.Key.WAITING;
 
 @Getter
 public class Queue {
-    Key key;
-    String token;
-    Long waitingNumber;
-    double score;
+    private Key key;
+    private String token;
+    private int waitingNumber;
+    private double score;
 
     public String getKeyName() {
         return key.toString();
     }
 
     @Builder
-    private Queue(Key key, String token, Long waitingNumber, double score) {
+    private Queue(Key key, String token, int waitingNumber, double score) {
         this.key = key;
         this.token = token;
         this.waitingNumber = waitingNumber;
         this.score = score;
     }
 
-    public static Queue createNewActiveQueue() {
-        return Queue.builder()
-                .key(Key.ACTIVE)
-                .token(UUID.randomUUID().toString())
-                .build();
-    }
-
-    public static Queue createNewWaitingQueue() {
-        return Queue.builder()
-                .key(Key.WAITING)
-                .token(UUID.randomUUID().toString())
+    private static Queue of(Key key, String token, int waitingNumber, long score) {
+        return builder()
+                .key(key)
+                .token(token)
+                .waitingNumber(waitingNumber)
+                .score((double) score)
                 .build();
     }
 
     public static Queue createActiveQueue(String token) {
-        return Queue.builder()
-                .key(Key.ACTIVE)
-                .token(token)
-                .build();
+        return of(ACTIVE, token, 0, 0);
     }
 
-    public static Queue createWaitingQueue(String token, Long waitingNumber) {
-        return Queue.builder()
-                .key(Key.WAITING)
-                .token(token)
-                .waitingNumber(waitingNumber)
-                .score(System.currentTimeMillis())
-                .build();
+    public static Queue createWaitingQueue(String token) {
+        return of(WAITING, token, 0, 0);
+    }
+
+    public static Queue createWaitingQueue(String token, int waitingNumber) {
+        return of(WAITING, token, waitingNumber, 0);
+    }
+
+    public static Queue createWaitingQueue(String token, long score) {
+        return of(WAITING, token, 0, score);
     }
 }

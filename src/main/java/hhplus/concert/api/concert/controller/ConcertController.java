@@ -1,15 +1,15 @@
 package hhplus.concert.api.concert.controller;
 
-import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionResponse;
-import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.dto.response.concerts.ConcertsResponse;
+import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
+import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
 import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
-import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
+import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

@@ -1,84 +1,118 @@
 package hhplus.concert.domain.booking.components;
 
+import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.booking.models.BookingStatus;
-import hhplus.concert.domain.booking.repositories.BookingReaderRepository;
+import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static hhplus.concert.api.exception.code.BookingErrorCode.NOT_FOUND_BOOKING;
+import static org.assertj.core.api.Assertions.*;
 
-class BookingReaderTest {
+@Transactional
+class BookingReaderTest extends IntegrationTestSupport {
 
+    @Autowired
     BookingReader bookingReader;
 
-    BookingReaderRepository bookingReaderRepository;
+    @Autowired
+    BookingJpaRepository bookingJpaRepository;
 
-    @BeforeEach
-    void setUp() {
-        bookingReaderRepository = Mockito.mock(BookingReaderRepository.class);
-        bookingReader = new BookingReader(bookingReaderRepository);
-    }
+    @Autowired
+    UserJpaRepository userJpaRepository;
 
-
-    @DisplayName("인자값이 유효하면, Booking 리스트 조회에 성공한다.")
+    @DisplayName("예약한 유저 ID로 예약 목록을 조회한다.")
     @Test
-    void getBookingsByUserId_Success_ifWithValidArguments() {
+    void getBookingsByUserId() {
         // given
+        User user = User.builder()
+                .name("jon")
+                .build();
+        User savedUser = userJpaRepository.save(user);
+
+        LocalDateTime bookingDateTime1 = LocalDateTime.of(2024, 8, 10, 11, 30, 30);
         Booking booking1 = Booking.builder()
-                .user(User.builder().id(1L).build())
+                .bookingDateTime(bookingDateTime1)
+                .concertTitle("IU 콘서트")
+                .user(savedUser)
                 .build();
+
+        LocalDateTime bookingDateTime2 = LocalDateTime.of(2024, 8, 13, 21, 30, 30);
         Booking booking2 = Booking.builder()
-                .user(User.builder().id(1L).build())
+                .bookingDateTime(bookingDateTime2)
+                .concertTitle("NewJeans 콘서트")
+                .user(savedUser)
                 .build();
-        Booking booking3 = Booking.builder()
-                .user(User.builder().id(2L).build())
-                .build();
-        List<Booking> expectedBookings = List.of(booking1, booking2);
-
-        given(bookingReaderRepository.getBookingsByUserId(1L)).willReturn(expectedBookings);
+        bookingJpaRepository.saveAll(List.of(booking1, booking2));
 
         // when
-        List<Booking> result = bookingReader.getBookingsByUserId(1L);
+        List<Booking> result = bookingReader.getBookingsByUserId(savedUser.getId());
 
         // then
-        assertThat(result).isEqualTo(expectedBookings);
-        assertThat(result.size()).isEqualTo(2);
-        verify(bookingReaderRepository, times(1)).getBookingsByUserId(1L);
+        assertThat(result).hasSize(2)
+                .extracting("user", "bookingDateTime", "concertTitle")
+                .containsExactlyInAnyOrder(
+                        tuple(savedUser, bookingDateTime1, "IU 콘서트"),
+                        tuple(savedUser, bookingDateTime2, "NewJeans 콘서트")
+                );
     }
 
-    @DisplayName("인자값이 유효하면, Booking 조회에 성공한다.")
+    @DisplayName("예약 ID로 예약을 단건 조회한다.")
     @Test
-    void getBookingById_Success_ifWithValidArguments() {
+    void getBookingById() {
         // given
-        Booking expectedBooking = Booking.builder()
-                .id(1L)
-                .concertTitle("콘서트A")
-                .bookingStatus(BookingStatus.COMPLETE)
-                .user(User.builder().id(2L).build())
+        User user = User.builder()
+                .name("jon")
                 .build();
+        User savedUser = userJpaRepository.save(user);
 
-        given(bookingReaderRepository.getBookingById(1L)).willReturn(Optional.ofNullable(expectedBooking));
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 10, 11, 30, 30);
+        Booking booking = Booking.builder()
+                .bookingDateTime(bookingDateTime)
+                .concertTitle("IU 콘서트")
+                .user(savedUser)
+                .build();
+        Booking savedBooking = bookingJpaRepository.save(booking);
 
         // when
-        Booking result = bookingReader.getBookingById(1L);
+        Booking result = bookingReader.getBookingById(savedBooking.getId());
 
         // then
-        assertThat(result).isEqualTo(expectedBooking);
-        assertThat(result.getId()).isEqualTo(1L);
-        assertThat(result.getConcertTitle()).isEqualTo("콘서트A");
-        assertThat(result.getUser().getId()).isEqualTo(2L);
-        verify(bookingReaderRepository, times(1)).getBookingById(1L);
+        assertThat(result).isNotNull();
+        assertThat(result.getUser()).isEqualTo(savedUser);
+        assertThat(result.getBookingDateTime()).isEqualTo(bookingDateTime);
+        assertThat(result.getConcertTitle()).isEqualTo("IU 콘서트");
     }
 
-    //TODO: 실패케이스 작성
+    @DisplayName("존재하지 않는 예약 ID로 조회 시 예외가 발생한다.")
+    @Test
+    void getBookingByIdWithNotExistedBookingId() {
+        // given
+        User user = User.builder()
+                .name("jon")
+                .build();
+        User savedUser = userJpaRepository.save(user);
+
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 10, 11, 30, 30);
+        Booking booking = Booking.builder()
+                .bookingDateTime(bookingDateTime)
+                .concertTitle("IU 콘서트")
+                .user(savedUser)
+                .build();
+        Booking savedBooking = bookingJpaRepository.save(booking);
+
+        // when & then
+        assertThatThrownBy(() -> bookingReader.getBookingById(2L))
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(NOT_FOUND_BOOKING.getMessage());
+    }
+
 }

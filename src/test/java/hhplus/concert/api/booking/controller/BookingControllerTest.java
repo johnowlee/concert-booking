@@ -13,7 +13,7 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -80,7 +80,7 @@ class BookingControllerTest {
     @Test
     public void getBookingsByBookingId() throws Exception {
         // given
-        User user = User.builder().id(10L).name("홍길동").build();
+        User user = User.builder().name("홍길동").build();
         Seat seat = Seat.builder()
                 .concertOption(ConcertOption.builder().build())
                 .build();
@@ -90,8 +90,8 @@ class BookingControllerTest {
         Booking booking = Booking.builder()
                 .id(1L)
                 .user(user)
-                .bookingSeats(new ArrayList<>(List.of(bookingSeat)))
                 .build();
+        booking.addBookingSeat(bookingSeat);
 
         BookingResponse bookingResponse = BookingResponse.from(booking);
         given(getBookingByIdUseCase.execute(anyLong())).willReturn(bookingResponse);

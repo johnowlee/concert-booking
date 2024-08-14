@@ -1,6 +1,6 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.api.balance.dto.response.BalanceResponse;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.domain.user.components.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +12,6 @@ public class GetBalanceUseCase {
     private final UserReader userReader;
 
     public BalanceResponse execute(Long userId) {
-        return BalanceResponse.from(userReader.getUserById(userId).getBalance());
+        return BalanceResponse.from(userReader.getUserById(userId));
     }
 }

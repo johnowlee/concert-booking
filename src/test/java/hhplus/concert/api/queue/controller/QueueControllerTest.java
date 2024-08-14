@@ -1,29 +1,27 @@
 package hhplus.concert.api.queue.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hhplus.concert.api.queue.dto.response.QueueResponse;
+import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
-import hhplus.concert.domain.queue.model.Key;
+import hhplus.concert.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@ExtendWith(SpringExtension.class)
 @WebMvcTest(QueueController.class)
 class QueueControllerTest {
 
@@ -42,75 +40,91 @@ class QueueControllerTest {
     @MockBean
     private TokenValidator tokenValidator;
 
-    @DisplayName("토큰 조회 - ACTIVE")
+    @DisplayName("ACTIVE 토큰을 조회한다.")
     @Test
-    public void findToken_active() throws Exception {
+    public void findTokenWithActiveToken() throws Exception {
         // given
-        String token = "token";
+        String token = "abc123";
         QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createActiveQueue(token));
-        given(findTokenUseCase.execute(token)).willReturn(queueResponse);
+        given(findTokenUseCase.execute(new QueueTokenRequest(token))).willReturn(queueResponse);
 
-        // expected
+        // when & then
         mockMvc.perform(get("/queue")
                         .contentType(APPLICATION_JSON)
                         .header("Queue-Token", token)
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.key").value(Key.ACTIVE.toString()));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.token").value("abc123"))
+                .andExpect(jsonPath("$.data.key").value("ACTIVE"));
     }
 
-    @DisplayName("토큰 조회 - WAITING")
+    @DisplayName("WAITING 토큰을 조회한다.")
     @Test
-    public void findToken_waiting() throws Exception {
+    public void findTokenWithWaitingToken() throws Exception {
         // given
-        String token = "token";
-        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
-        given(findTokenUseCase.execute(token)).willReturn(queueResponse);
+        String token = "abc123";
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5));
+        given(findTokenUseCase.execute(new QueueTokenRequest(token))).willReturn(queueResponse);
 
-        // expected
+        // when & then
         mockMvc.perform(get("/queue")
                         .contentType(APPLICATION_JSON)
                         .header("Queue-Token", token)
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.key").value(Key.WAITING.toString()))
-                .andExpect(jsonPath("$.waitingNumber").value(5L));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.token").value("abc123"))
+                .andExpect(jsonPath("$.data.key").value("WAITING"))
+                .andExpect(jsonPath("$.data.waitingNumber").value(5));
     }
 
-    @DisplayName("토큰 생성 - ACTIVE")
+    @DisplayName("ACTIVE 토큰을 생성한다.")
     @Test
-    public void createToken_active() throws Exception {
+    public void createTokenWhenActive() throws Exception {
         // given
-        String token = "token";
+        String token = "abc123";
         QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createActiveQueue(token));
         given(createQueueToken.execute()).willReturn(queueResponse);
 
-        // expected
+        // when & then
         mockMvc.perform(post("/queue")
                         .contentType(APPLICATION_JSON)
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.key").value(Key.ACTIVE.toString()));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.token").value("abc123"))
+                .andExpect(jsonPath("$.data.key").value("ACTIVE"));
     }
 
-    @DisplayName("토큰 생성 - WAITING")
+    @DisplayName("WAITING 토큰을 생성한다.")
     @Test
-    public void createToken_waiting() throws Exception {
+    public void createTokenWhenWaiting() throws Exception {
         // given
-        String token = "token";
-        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5L));
+        String token = "abc123";
+        QueueResponse queueResponse = QueueResponse.createQueueResponse(Queue.createWaitingQueue(token, 5));
         given(createQueueToken.execute()).willReturn(queueResponse);
 
-        // expected
+        // when & then
         mockMvc.perform(post("/queue")
                         .contentType(APPLICATION_JSON)
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.token").value(token))
-                .andExpect(jsonPath("$.key").value(Key.WAITING.toString()))
-                .andExpect(jsonPath("$.waitingNumber").value(5L));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.token").value("abc123"))
+                .andExpect(jsonPath("$.data.key").value("WAITING"))
+                .andExpect(jsonPath("$.data.waitingNumber").value(5));
     }
 }

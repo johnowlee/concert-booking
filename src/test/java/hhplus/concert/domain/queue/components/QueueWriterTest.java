@@ -1,8 +1,9 @@
 package hhplus.concert.domain.queue.components;
 
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.model.QueuePolicy;
 import hhplus.concert.domain.queue.repositories.QueueWriterRepository;
+import hhplus.concert.domain.queue.support.monitor.Ttl;
+import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,8 +13,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.concurrent.TimeUnit;
 
-import static org.mockito.ArgumentMatchers.any;
+import static java.util.concurrent.TimeUnit.*;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -26,9 +28,12 @@ class QueueWriterTest {
     @Mock
     QueueWriterRepository queueWriterRepository;
 
-    @DisplayName("Set에 Active 대기열 토큰을 추가한다.")
+    @Mock
+    QueueMonitor queueMonitor;
+
+    @DisplayName("활성 유저를 활성 Key Set에 추가한다.")
     @Test
-    void addActiveToken_Success() {
+    void addActiveToken() {
         // given
         String token = "ABC123";
         Queue queue = Queue.createActiveQueue(token);
@@ -37,12 +42,12 @@ class QueueWriterTest {
         queueWriter.addActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addTokenToSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).addUserToActiveSet(eq(queue));
     }
 
-    @DisplayName("Set에 Active 대기열 토큰을 제거 한다.")
+    @DisplayName("활성 유저를 활성 Key Set에서 삭제한다.")
     @Test
-    void removeActiveToken_Success() {
+    void removeActiveToken() {
         // given
         String token = "ABC123";
         Queue queue = Queue.createActiveQueue(token);
@@ -51,49 +56,54 @@ class QueueWriterTest {
         queueWriter.removeActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeTokenFromSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).removeUserFromActiveSet(eq(queue));
     }
 
-    @DisplayName("Sorted Set에 Waiting 대기열 토큰을 추가 한다.")
+    @DisplayName("대기 유저를 대기 Key SortedSet에 추가한다.")
     @Test
-    void addWaitingToken_Success() {
+    void addWaitingToken() {
         // given
         String token = "ABC123";
-        Queue queue = Queue.createActiveQueue(token);
+        Queue queue = Queue.createWaitingQueue(token);
 
         // when
         queueWriter.addWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addTokenToSortedSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).addUserToWaitingSortedSet(eq(queue));
     }
 
-    @DisplayName("Sorted Set에 Waiting 대기열 토큰을 제거 한다.")
+    @DisplayName("대기 유저를 대기 Key SortedSet에서 삭제한다.")
     @Test
-    void removeWaitingToken_Success() {
+    void removeWaitingToken() {
         // given
         String token = "ABC123";
-        Queue queue = Queue.createActiveQueue(token);
+        Queue queue = Queue.createWaitingQueue(token);
 
         // when
         queueWriter.removeWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeTokenFromSortedSet(any(Queue.class));
+        verify(queueWriterRepository, times(1)).removeUserFromWaitingSortedSet(eq(queue));
     }
 
-    @DisplayName("Active Key 토큰을 생성 한다.")
+    @DisplayName("유저의 토큰값으로 유효기간이 있는 key를 등록한다.")
     @Test
-    void createActiveKey_Success() {
+    void createActiveKey() {
         // given
         String token = "ABC123";
         Queue queue = Queue.createActiveQueue(token);
 
+        long timeout = 300L;
+        TimeUnit timeUnit = SECONDS;
+        Ttl ttl = new Ttl(timeout, timeUnit);
+        given(queueMonitor.getTtl()).willReturn(ttl);
+
         // when
-        queueWriter.createActiveKey(queue);
+        queueWriter.createActiveKey(queue, queueMonitor);
 
         // then
         verify(queueWriterRepository, times(1))
-                .createTimeoutKey(any(Queue.class), eq(QueuePolicy.MAX_WORKING_SEC.getValue()), eq(TimeUnit.SECONDS));
+                .createUserTimeout(eq(queue), eq(300L), eq(SECONDS));
     }
 }

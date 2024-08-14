@@ -1,9 +1,11 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
+import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.EntityManager;
@@ -13,8 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.api.common.ResponseResult.SUCCESS;
-
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,18 +22,27 @@ import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 public class ChargeBalanceUseCase {
 
     private final UserReader userReader;
-    private final BalanceHistoryWriter balanceHistoryWriter;
+    private final BalanceWriter balanceWriter;
     private final EntityManager em;
+    private final ClockManager clockManager;
 
-    public BalanceChargeResponse execute(Long userId, long amount) {
+    public BalanceResponse execute(Long userId, BalanceChargeRequest request) {
         try {
+            long amount = request.balance();
             User user = userReader.getUserById(userId);
-            user.chargeBalance(amount);
-            em.flush();
-            balanceHistoryWriter.saveBalanceChargeHistory(user, amount);
-            return BalanceChargeResponse.from(SUCCESS, user.getBalance());
+
+            chargeBalance(user, amount);
+
+            balanceWriter.saveChargeBalance(user, amount, clockManager);
+
+            return BalanceResponse.from(user);
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }
+    }
+
+    private void chargeBalance(User user, long amount) {
+        user.chargeBalance(amount);
+        em.flush();
     }
 }

@@ -6,9 +6,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,14 +20,10 @@ public class Concert {
     private String title;
     private String organizer;
 
-    @OneToMany(mappedBy = "concert")
-    private List<ConcertOption> concertOptions = new ArrayList<>();
-
     @Builder
-    private Concert(Long id, String title, String organizer, List<ConcertOption> concertOptions) {
+    private Concert(Long id, String title, String organizer) {
         this.id = id;
         this.title = title;
         this.organizer = organizer;
-        this.concertOptions = concertOptions;
     }
 }

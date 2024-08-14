@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Objects;
+
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,14 +31,32 @@ public class BookingSeat {
     @Builder
     private BookingSeat(Long id, Booking booking, Seat seat) {
         this.id = id;
-        this.booking = booking;
         this.seat = seat;
+        this.booking = booking;
     }
 
-    public static BookingSeat buildBookingSeat(Booking booking, Seat seat) {
+    private void setBooking(Booking booking) {
+        this.booking = booking;
+        booking.getBookingSeats().add(this);
+    }
+
+    public static BookingSeat createBookingSeat(Booking booking, Seat seat) {
         return builder()
                 .booking(booking)
                 .seat(seat)
                 .build();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        BookingSeat that = (BookingSeat) object;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -2,11 +2,11 @@ package hhplus.concert.api.concert.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hhplus.concert.api.common.ResponseResult;
-import hhplus.concert.api.concert.dto.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.dto.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionResponse;
-import hhplus.concert.api.concert.dto.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.dto.response.concerts.ConcertsResponse;
+import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
+import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
 import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
@@ -17,7 +17,7 @@ import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
-import hhplus.concert.domain.queue.service.TokenValidator;
+import hhplus.concert.domain.queue.support.TokenValidator;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -145,7 +145,7 @@ class ConcertControllerTest {
     @Test
     public void bookConcert() throws Exception {
         // given
-        User user = User.builder().id(10L).name("홍길동").build();
+        User user = User.builder().name("홍길동").build();
         Concert concert = Concert.builder()
                 .id(1L)
                 .build();
@@ -168,10 +168,10 @@ class ConcertControllerTest {
                 .id(1L)
                 .user(user)
                 .concertTitle("아이유콘서트")
-                .bookingSeats(new ArrayList<>(List.of(bookingSeat)))
                 .build();
+        booking.addBookingSeat(bookingSeat);
 
-        BookingResultResponse bookingResultResponse = BookingResultResponse.succeed(user, booking, concertOption, seats);
+        BookingResultResponse bookingResultResponse = BookingResultResponse.succeed(user, booking, seats);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "A1");
         given(bookConcertUseCase.execute(1L, concertBookingRequest)).willReturn(bookingResultResponse);
 

@@ -11,6 +11,4 @@ public interface BookingReaderRepository {
     List<Booking> getBookingsByUserId(Long userId);
 
     Optional<Booking> getBookingById(Long id);
-
-    List<Booking> getBookingsBySeatIds(List<Long> ids);
 }

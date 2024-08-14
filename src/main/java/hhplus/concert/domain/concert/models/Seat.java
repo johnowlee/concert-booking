@@ -1,14 +1,12 @@
 package hhplus.concert.domain.concert.models;
 
-import hhplus.concert.domain.booking.models.BookingSeat;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -27,20 +25,21 @@ public class Seat {
     @Column(name = "booking_status")
     private SeatBookingStatus seatBookingStatus;
 
-    @OneToMany(mappedBy = "seat")
-    private List<BookingSeat> bookingSeats = new ArrayList<>();
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "concert_option_id")
     private ConcertOption concertOption;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "grade")
+    private SeatGrade grade;
+
     @Builder
-    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, List<BookingSeat> bookingSeats, ConcertOption concertOption) {
+    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, ConcertOption concertOption, SeatGrade grade) {
         this.id = id;
         this.seatNo = seatNo;
         this.seatBookingStatus = seatBookingStatus;
-        this.bookingSeats = bookingSeats;
         this.concertOption = concertOption;
+        this.grade = grade;
     }
 
     public void markAsProcessing() {
@@ -53,5 +52,22 @@ public class Seat {
 
     public boolean isBooked() {
         return this.seatBookingStatus == SeatBookingStatus.BOOKED;
+    }
+
+    public int getPrice() {
+        return this.grade.price;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Seat seat = (Seat) object;
+        return Objects.equals(id, seat.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

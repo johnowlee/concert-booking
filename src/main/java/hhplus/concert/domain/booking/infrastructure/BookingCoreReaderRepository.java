@@ -24,9 +24,4 @@ public class BookingCoreReaderRepository implements BookingReaderRepository {
     public Optional<Booking> getBookingById(Long id) {
         return bookingJpaRepository.findById(id);
     }
-
-    @Override
-    public List<Booking> getBookingsBySeatIds(List<Long> ids) {
-        return bookingJpaRepository.findBookingsBySeatIds(ids);
-    }
 }

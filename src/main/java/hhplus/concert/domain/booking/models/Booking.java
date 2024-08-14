@@ -1,10 +1,6 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
-import hhplus.concert.domain.concert.models.ConcertOption;
-import hhplus.concert.domain.concert.models.SeatPriceByGrade;
-import hhplus.concert.domain.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -17,8 +13,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import static hhplus.concert.api.exception.code.BookingErrorCode.*;
 import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
+import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 
 @Entity
 @Getter
@@ -44,62 +44,97 @@ public class Booking {
     @OneToMany(mappedBy = "booking")
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
-    @OneToOne(mappedBy = "booking")
-    private Payment payment;
-
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user, List<BookingSeat> bookingSeats, Payment payment) {
+    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
         this.id = id;
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
         this.user = user;
-        this.bookingSeats = bookingSeats;
-        this.payment = payment;
     }
 
-    // 예약만료시간 체크
-    public void validateBookingDateTime() {
-        if (isBookingDateTimeExpired()) {
-            log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
-            throw new RestApiException(BookingErrorCode.EXPIRED_BOOKING_TIME);
+    public static Booking createBooking(String concertTitle, LocalDateTime bookingDateTime, User user) {
+        return Booking.builder()
+                .bookingStatus(INCOMPLETE)
+                .bookingDateTime(bookingDateTime)
+                .concertTitle(concertTitle)
+                .user(user)
+                .build();
+    }
+
+    public void addBookingSeat(BookingSeat bookingSeat) {
+        boolean hasNotDuplicated = bookingSeats.stream()
+                    .noneMatch(thisBookingSeat -> thisBookingSeat.equals(bookingSeat));
+
+        if (hasNotDuplicated) {
+            this.bookingSeats.add(bookingSeat);
         }
     }
 
-    private boolean isBookingDateTimeExpired() {
-        return getMinutesSinceBooking() > BOOKING_EXPIRY_MINUTES.toLong();
-    }
-
-    public void validatePending() {
-        if (isBookingDateTimeValid()) {
-            log.info("BookingErrorCode.PENDING_BOOKING 발생");
-            throw new RestApiException(BookingErrorCode.PENDING_BOOKING);
+    public void addAllBookingSeats(List<BookingSeat> bookingSeats) {
+        for (BookingSeat bookingSeat : bookingSeats) {
+            addBookingSeat(bookingSeat);
         }
-    }
-
-    private boolean isBookingDateTimeValid() {
-        return getMinutesSinceBooking() <= BOOKING_EXPIRY_MINUTES.toLong();
-    }
-
-    private long getMinutesSinceBooking() {
-        return Duration.between(this.getBookingDateTime(), LocalDateTime.now()).toMinutes();
     }
 
     public void markAsComplete() {
-        this.bookingStatus = BookingStatus.COMPLETE;
+        this.bookingStatus = COMPLETE;
     }
 
-    public static Booking buildBooking(ConcertOption concertOption, User user) {
-        Booking booking = Booking.builder()
-                .bookingStatus(BookingStatus.INCOMPLETE)
-                .bookingDateTime(LocalDateTime.now())
-                .concertTitle(concertOption.getConcert().getTitle())
-                .user(user)
-                .build();
-        return booking;
+    public void validateAlreadyBooked() {
+        if (bookingStatus == COMPLETE) {
+            throw new RestApiException(ALREADY_BOOKED);
+        }
+    }
+
+    public void validateBookingDateTime(LocalDateTime dateTime) {
+        if (isBookingDateTimeExpired(dateTime)) {
+            log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
+            throw new RestApiException(EXPIRED_BOOKING_TIME);
+        }
+    }
+
+    public void validatePendingBooking(LocalDateTime dateTime) {
+        if (isBookingDateTimeValid(dateTime)) {
+            log.info("BookingErrorCode.PENDING_BOOKING 발생");
+            throw new RestApiException(PENDING_BOOKING);
+        }
     }
 
     public int getTotalPrice() {
-        return this.getBookingSeats().size() * SeatPriceByGrade.A.getValue();
+        return this.bookingSeats.stream()
+                .mapToInt(bs -> bs.getSeat().getPrice())
+                .sum();
+    }
+
+    public void reserveAllSeats() {
+        bookingSeats.stream()
+                .map(BookingSeat::getSeat)
+                .forEach(seat -> seat.markAsBooked());
+    }
+
+    private boolean isBookingDateTimeExpired(LocalDateTime dateTime) {
+        return getPassedMinutesSinceBookingFrom(dateTime) >= BOOKING_EXPIRY_MINUTES.toLong();
+    }
+
+    private boolean isBookingDateTimeValid(LocalDateTime dateTime) {
+        return getPassedMinutesSinceBookingFrom(dateTime) < BOOKING_EXPIRY_MINUTES.toLong();
+    }
+
+    private long getPassedMinutesSinceBookingFrom(LocalDateTime dateTime) {
+        return Duration.between(this.getBookingDateTime(), dateTime).toMinutes();
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+        Booking booking = (Booking) object;
+        return Objects.equals(id, booking.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }
