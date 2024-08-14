@@ -1,9 +1,9 @@
 package hhplus.concert.api.balance.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hhplus.concert.api.balance.dto.request.BalanceChargeRequest;
-import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
-import hhplus.concert.api.balance.dto.response.BalanceResponse;
+import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
+import hhplus.concert.api.balance.usecase.response.BalanceChargeResponse;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
 import hhplus.concert.api.common.ResponseResult;

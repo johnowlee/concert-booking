@@ -1,6 +1,6 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.api.balance.dto.response.BalanceResponse;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.domain.user.components.UserReader;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

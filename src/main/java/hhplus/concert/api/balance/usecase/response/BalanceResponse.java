@@ -1,4 +1,4 @@
-package hhplus.concert.api.balance.dto.response;
+package hhplus.concert.api.balance.usecase.response;
 
 import hhplus.concert.domain.user.models.User;
 

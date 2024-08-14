@@ -1,6 +1,6 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.api.balance.dto.response.BalanceChargeResponse;
+import hhplus.concert.api.balance.usecase.response.BalanceChargeResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
