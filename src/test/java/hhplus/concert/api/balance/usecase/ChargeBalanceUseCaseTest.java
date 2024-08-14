@@ -1,8 +1,8 @@
 package hhplus.concert.api.balance.usecase;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.balance.usecase.response.BalanceChargeResponse;
-import hhplus.concert.api.common.ResponseResult;
+import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.user.components.UserReader;
@@ -61,11 +61,12 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
         long version = user.getVersion();
 
         // when
-        BalanceChargeResponse result = chargeBalanceUseCase.execute(user.getId(), 30000L);
+        BalanceResponse result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeRequest(30000L));
 
         // then
         assertThat(user.getVersion()).isEqualTo(version + 1);
-        assertThat(result.chargeResult()).isEqualTo(ResponseResult.SUCCESS);
+        assertThat(result.id()).isEqualTo(user.getId());
+        assertThat(result.name()).isEqualTo("jon");
         assertThat(result.balance()).isEqualTo(balance + 30000L);
     }
 
@@ -85,7 +86,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
 
         // when & then
         assertThat(userId).isNotEqualTo(notFoundUserId);
-        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, 30000L))
+        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, new BalanceChargeRequest(30000L)))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_USER.getMessage());
     }
@@ -102,7 +103,6 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
 
         User user = userReader.getUserById(savedUser.getId());
         Long userId = user.getId();
-        long chargeAmount = 30000L;
 
         int threadCount = 5;
         CountDownLatch latch = new CountDownLatch(threadCount);
@@ -112,7 +112,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    chargeBalanceUseCase.execute(userId, chargeAmount);
+                    chargeBalanceUseCase.execute(userId, new BalanceChargeRequest(30000L));
                 } catch (RestApiException e) {
                 } finally {
                     latch.countDown();
