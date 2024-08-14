@@ -9,7 +9,7 @@ import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
-import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
+import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

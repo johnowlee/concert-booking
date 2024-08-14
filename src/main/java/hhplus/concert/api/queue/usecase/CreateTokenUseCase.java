@@ -1,6 +1,6 @@
 package hhplus.concert.api.queue.usecase;
 
-import hhplus.concert.api.queue.dto.response.QueueResponse;
+import hhplus.concert.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.support.QueueService;
 import hhplus.concert.domain.queue.support.factory.score.ScoreFactory;
@@ -8,7 +8,7 @@ import hhplus.concert.domain.queue.support.factory.token.TokenFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import static hhplus.concert.api.queue.dto.response.QueueResponse.createQueueResponse;
+import static hhplus.concert.api.queue.usecase.response.QueueResponse.createQueueResponse;
 
 @Service
 @RequiredArgsConstructor

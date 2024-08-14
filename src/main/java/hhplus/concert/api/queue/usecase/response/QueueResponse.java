@@ -1,4 +1,4 @@
-package hhplus.concert.api.queue.dto.response;
+package hhplus.concert.api.queue.usecase.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.queue.model.Queue;

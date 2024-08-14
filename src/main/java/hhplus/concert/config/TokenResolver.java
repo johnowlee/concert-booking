@@ -1,6 +1,6 @@
 package hhplus.concert.config;
 
-import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
+import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.domain.queue.support.TokenValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

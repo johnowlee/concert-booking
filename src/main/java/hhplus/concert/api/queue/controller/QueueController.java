@@ -1,9 +1,9 @@
 package hhplus.concert.api.queue.controller;
 
-import hhplus.concert.api.queue.dto.request.QueueTokenRequest;
+import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
-import hhplus.concert.api.queue.dto.response.QueueResponse;
+import hhplus.concert.api.queue.usecase.response.QueueResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
