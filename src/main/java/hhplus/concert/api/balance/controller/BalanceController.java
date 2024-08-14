@@ -25,7 +25,7 @@ public class BalanceController {
 
     @PatchMapping("{userId}")
     public RestApiResponse<BalanceChargeResponse> charge(@PathVariable Long userId,
-                                                        @Valid @RequestBody BalanceChargeRequest balanceChargeRequest) {
-        return RestApiResponse.ok(chargeBalanceUseCase.execute(userId, balanceChargeRequest.balance()));
+                                                        @Valid @RequestBody BalanceChargeRequest request) {
+        return RestApiResponse.ok(chargeBalanceUseCase.execute(userId, request));
     }
 }
