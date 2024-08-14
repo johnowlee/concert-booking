@@ -1,7 +1,9 @@
 package hhplus.concert.api.balance.dto.response;
 
-public record BalanceResponse(long balance) {
-    public static BalanceResponse from(long balance) {
-        return new BalanceResponse(balance);
+import hhplus.concert.domain.user.models.User;
+
+public record BalanceResponse(Long id, String name, long balance) {
+    public static BalanceResponse from(User user) {
+        return new BalanceResponse(user.getId(), user.getName(), user.getBalance());
     }
 }
