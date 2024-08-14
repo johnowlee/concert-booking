@@ -17,8 +17,8 @@ public class QueueController {
     private final CreateTokenUseCase createQueueToken;
 
     @GetMapping
-    public ResponseEntity<QueueResponse> findToken(QueueTokenRequest tokenRequest) {
-        return ResponseEntity.ok().body(findTokenUseCase.execute(tokenRequest.token()));
+    public ResponseEntity<QueueResponse> findToken(@RequestHeader("Queue-Token") QueueTokenRequest request) {
+        return ResponseEntity.ok().body(findTokenUseCase.execute(request));
     }
 
     @PostMapping
