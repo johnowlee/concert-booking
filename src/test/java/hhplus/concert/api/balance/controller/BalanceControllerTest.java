@@ -2,11 +2,9 @@ package hhplus.concert.api.balance.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
-import hhplus.concert.api.balance.usecase.response.BalanceChargeResponse;
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
-import hhplus.concert.api.common.ResponseResult;
+import hhplus.concert.api.balance.usecase.response.BalanceResponse;
 import hhplus.concert.domain.queue.support.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -45,36 +43,51 @@ class BalanceControllerTest {
     @MockBean
     private TokenValidator tokenValidator;
 
-    @DisplayName("포인트 조회")
+    @DisplayName("잔액을 조회한다.")
     @Test
     public void getBalance() throws Exception {
         // given
-        BalanceResponse balanceResponse = BalanceResponse.from(10000);
+        Long userId = 1L;
+        String name = "jon";
+        long balance = 10000L;
+        BalanceResponse balanceResponse = new BalanceResponse(userId, name, balance);
         given(getBalanceUseCase.execute(anyLong())).willReturn(balanceResponse);
 
-        // expected
+        // when & then
         mockMvc.perform(get("/balance/{userId}", 1)
                         .contentType(APPLICATION_JSON)
                 )
+                .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.balance").value(10000));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.id").value(1L))
+                .andExpect(jsonPath("$.data.name").value("jon"))
+                .andExpect(jsonPath("$.data.balance").value(10000));
     }
 
-    @DisplayName("포인트 충전")
+    @DisplayName("잔액을 충전한다.")
     @Test
-    public void chargeBalance() throws Exception {
+    void chargeBalance() throws Exception {
         // given
-        BalanceChargeResponse balanceChargeResponse = BalanceChargeResponse.success(10000);
-        given(chargeBalanceUseCase.execute(anyLong(), anyLong())).willReturn(balanceChargeResponse);
+        Long userId = 1L;
+        String name = "jon";
+        long balance = 10000L;
+        BalanceChargeRequest chargeRequest = new BalanceChargeRequest(30000L);
+        BalanceResponse balanceResponse = new BalanceResponse(userId, name, balance + chargeRequest.balance());
+        given(chargeBalanceUseCase.execute(userId, chargeRequest)).willReturn(balanceResponse);
 
-        // expected
-        mockMvc.perform(patch("/balance/{userId}", 1)
+        // when & then
+        mockMvc.perform(patch("/balance/{userId}", userId)
                         .contentType(APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(new BalanceChargeRequest(10000)))
-                )
+                        .content(objectMapper.writeValueAsString(chargeRequest)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.balance").value(10000))
-                .andExpect(jsonPath("$.chargeResult").value(ResponseResult.SUCCESS.name()));
+                .andExpect(jsonPath("$.code").value("200"))
+                .andExpect(jsonPath("$.status").value("OK"))
+                .andExpect(jsonPath("$.message").value("OK"))
+                .andExpect(jsonPath("$.data.name").value("jon"))
+                .andExpect(jsonPath("$.data.balance").value(10000L + 30000L));
     }
 
     @DisplayName("포인트를 충전할 떄 충전 금액은 양수이다.")
