@@ -9,12 +9,12 @@ import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Repository
+@Service
 @RequiredArgsConstructor
 public class BookConcertUseCase {
 
