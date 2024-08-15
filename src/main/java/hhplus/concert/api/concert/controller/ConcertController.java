@@ -11,7 +11,7 @@ import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import hhplus.concert.api.common.RestApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,25 +25,25 @@ public class ConcertController {
     private final BookConcertUseCase bookConcertUseCase;
 
     @GetMapping
-    public ResponseEntity<ConcertsResponse> concerts() {
-        return ResponseEntity.ok().body(getConcertsUseCase.execute());
+    public RestApiResponse<ConcertsResponse> concerts() {
+        return RestApiResponse.ok(getConcertsUseCase.execute());
     }
 
     @GetMapping("{id}/options")
-    public ResponseEntity<ConcertOptionsResponse> concertOptions(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getConcertOptionsUseCase.execute(id));
+    public RestApiResponse<ConcertOptionsResponse> concertOptions(@PathVariable Long id) {
+        return RestApiResponse.ok(getConcertOptionsUseCase.execute(id));
     }
 
     @GetMapping("/options/{id}")
-    public ResponseEntity<ConcertOptionResponse> concertOption(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getConcertOptionUseCase.execute(id));
+    public RestApiResponse<ConcertOptionResponse> concertOption(@PathVariable Long id) {
+        return RestApiResponse.ok(getConcertOptionUseCase.execute(id));
     }
 
 
     @PostMapping("/options/{optionId}/booking")
-    public ResponseEntity<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
+    public RestApiResponse<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
                                                              @PathVariable Long optionId,
                                                              @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return ResponseEntity.ok().body(bookConcertUseCase.execute(optionId, concertBookingRequest));
+        return RestApiResponse.ok(bookConcertUseCase.execute(optionId, concertBookingRequest));
     }
 }
