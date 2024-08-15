@@ -1,0 +1,18 @@
+### 콘서트 목록 조회
+GET localhost:8080/concerts
+
+### 특정 콘서트 옵션 목록 조회
+GET localhost:8080/concerts/1/options
+
+### 특정 콘서트 옵션 단건 조회
+GET localhost:8080/concerts/options/1
+
+### 콘서트 예약
+POST localhost:8080/concerts/options/booking
+Queue-Token: 1c4f3884-815b-4c17-abab-b08a61a3a52a
+Content-Type: application/json
+
+{
+  "user_id": 1,
+  "seat_id": "1,  2"
+}
