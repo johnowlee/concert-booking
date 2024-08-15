@@ -40,10 +40,9 @@ public class ConcertController {
     }
 
 
-    @PostMapping("/options/{optionId}/booking")
+    @PostMapping("/options/booking")
     public RestApiResponse<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
-                                                             @PathVariable Long optionId,
-                                                             @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return RestApiResponse.ok(bookConcertUseCase.execute(optionId, concertBookingRequest));
+                                                             @RequestBody ConcertBookingRequest request) {
+        return RestApiResponse.ok(bookConcertUseCase.execute(request));
     }
 }
