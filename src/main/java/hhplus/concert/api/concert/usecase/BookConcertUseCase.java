@@ -26,13 +26,13 @@ public class BookConcertUseCase {
     public BookingResultResponse execute(ConcertBookingRequest request) {
 
         // 1. 예약상태, 좌석상태 검증
-        bookingService.validateBookability(request.parsedSeatIds());
+        bookingService.validateBookability(request.seatIds());
 
         // 2. 유저 조회
         User user = userReader.getUserById(request.userId());
 
         // 3. 좌석정보 조회
-        List<Seat> seats = seatReader.getSeatsByIds(request.parsedSeatIds());
+        List<Seat> seats = seatReader.getSeatsByIds(request.seatIds());
 
         // 4. 콘서트 예약
         Booking booking = bookingService.book(user, seats);

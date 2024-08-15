@@ -1,17 +1,18 @@
 package hhplus.concert.api.concert.controller;
 
+import hhplus.concert.api.common.RestApiResponse;
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
 import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
+import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import hhplus.concert.api.common.RestApiResponse;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -42,7 +43,7 @@ public class ConcertController {
 
     @PostMapping("/options/booking")
     public RestApiResponse<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
-                                                             @RequestBody ConcertBookingRequest request) {
+                                                             @Valid @RequestBody ConcertBookingRequest request) {
         return RestApiResponse.ok(bookConcertUseCase.execute(request));
     }
 }
