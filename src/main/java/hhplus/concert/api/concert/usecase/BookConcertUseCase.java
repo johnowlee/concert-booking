@@ -37,6 +37,6 @@ public class BookConcertUseCase {
         // 4. 콘서트 예약
         Booking booking = bookingService.book(user, seats);
 
-        return BookingResultResponse.succeed(user, booking, seats);
+        return BookingResultResponse.of(user, booking, seats);
     }
 }
