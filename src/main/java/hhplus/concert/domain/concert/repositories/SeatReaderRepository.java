@@ -7,4 +7,5 @@ import java.util.List;
 public interface SeatReaderRepository {
 
     public List<Seat> getSeatsByIds(List<Long> ids);
+    public List<Seat> getSeatsByConcertOptionId(Long concertOptionId);
 }
