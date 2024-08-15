@@ -11,12 +11,12 @@ public record ConcertOptionResponse(Long concertOptionId,
                                     String place,
                                     LocalDateTime dateTime,
                                     List<SeatDto> seats) {
-    public static ConcertOptionResponse from(ConcertOption concertOption) {
+    public static ConcertOptionResponse from(ConcertOption concertOption, List<Seat> seats) {
         return new ConcertOptionResponse(
                 concertOption.getId(),
                 concertOption.getPlace(),
                 concertOption.getConcertDateTime(),
-                toSeatDtos(concertOption.getSeats())
+                toSeatDtos(seats)
         );
     }
 
