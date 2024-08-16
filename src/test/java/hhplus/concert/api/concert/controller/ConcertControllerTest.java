@@ -22,6 +22,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.ArrayList;
@@ -169,11 +170,11 @@ class ConcertControllerTest {
         booking.addBookingSeat(bookingSeat);
 
         BookingResultResponse bookingResultResponse = BookingResultResponse.of(user, booking, seats);
-        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "A1");
+        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "1");
         given(bookConcertUseCase.execute(concertBookingRequest)).willReturn(bookingResultResponse);
 
         // expected
-        mockMvc.perform(post("/concerts/options/{optionId}/booking", concertOption.getId())
+        mockMvc.perform(post("/concerts/options/booking", concertOption.getId())
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(concertBookingRequest))
                         .header("Queue-Token", "token")
@@ -183,5 +184,85 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.data.bookerName").value("홍길동"))
                 .andExpect(jsonPath("$.data.concertTitle").value("아이유콘서트"))
                 .andExpect(jsonPath("$.data.seats[0]").value("A1"));
+    }
+
+    @DisplayName("콘서트 예약시 유저 아이디가 Null이면 안된다.")
+    @Test
+    public void bookConcertWithNullUserId() throws Exception {
+        // given
+        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(null, "1");
+
+        // expected
+        mockMvc.perform(post("/concerts/options/booking", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(concertBookingRequest))
+                        .header("Queue-Token", "token")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
+                .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
+                .andExpect(jsonPath("$.message").value("유저 아이디는 필수입니다."));
+    }
+
+    @DisplayName("콘서트 예약시 유저 아이디는 양수이다.")
+    @Test
+    public void bookConcertWithNegativeUserId() throws Exception {
+        // given
+        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(-1L, "1");
+
+        // expected
+        mockMvc.perform(post("/concerts/options/booking", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(concertBookingRequest))
+                        .header("Queue-Token", "token")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
+                .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
+                .andExpect(jsonPath("$.message").value("아이디가 부적합 합니다."));
+    }
+
+    @DisplayName("콘서트 예약시 유저 아이디는 양수이다.")
+    @Test
+    public void bookConcertWithNoSeatId() throws Exception {
+        // given
+        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(1L, " ");
+
+        // expected
+        mockMvc.perform(post("/concerts/options/booking", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(concertBookingRequest))
+                        .header("Queue-Token", "token")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
+                .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
+                .andExpect(jsonPath("$.message").value("예약 좌석 아이디는 필수입니다."));
+    }
+
+    @DisplayName("콘서트 예약시 유저 아이디는 양수이다.")
+    @Test
+    public void bookConcertWithInvalidSeatId() throws Exception {
+        // given
+        ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(1L, "a,b,2");
+
+        // expected
+        mockMvc.perform(post("/concerts/options/booking", 1L)
+                        .contentType(APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(concertBookingRequest))
+                        .header("Queue-Token", "token")
+                )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
+                .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
+                .andExpect(jsonPath("$.message").value("좌석 ID가 유효하지 않습니다."));
     }
 }
