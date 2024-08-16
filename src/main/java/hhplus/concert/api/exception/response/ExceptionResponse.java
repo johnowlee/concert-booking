@@ -22,7 +22,7 @@ public record ExceptionResponse(int code, HttpStatus status, String name, String
     }
 
     public static ExceptionResponse from(BindException e) {
-        return of(BAD_REQUEST, "INVALIDATED_FIELDS", getBindingErrorMessage(e));
+        return of(BAD_REQUEST, "INVALID_FIELD_VALUE", getBindingErrorMessage(e));
     }
 
     private static ExceptionResponse from(ErrorCode errorCode) {
