@@ -8,11 +8,11 @@ import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
-import hhplus.concert.api.common.ResponseResult;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.queue.support.TokenValidator;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
@@ -110,8 +110,10 @@ class BookingControllerTest {
     @Test
     public void payment() throws Exception {
         // given
-        PaymentResponse paymentResponse = PaymentResponse.from(ResponseResult.SUCCESS);
-        given(payBookingUseCase.execute(1L, 10L)).willReturn(paymentResponse);
+        Payment payment = Payment.builder().build();
+        PaymentRequest request = new PaymentRequest(2L);
+        PaymentResponse paymentResponse = PaymentResponse.from(payment);
+        given(payBookingUseCase.execute(1L, request)).willReturn(paymentResponse);
 
         // expected
         mockMvc.perform(post("/bookings/{id}/payment", 1L)
@@ -120,6 +122,6 @@ class BookingControllerTest {
                         .header("Queue-Token", "token")
                 )
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.paymentResult").value(ResponseResult.SUCCESS.name()));
+                .andExpect(jsonPath("$.paymentResult").value(payment));
     }
 }

@@ -6,6 +6,7 @@ import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.support.BalanceService;
 import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentValidator;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
@@ -14,8 +15,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import static hhplus.concert.api.common.ResponseResult.SUCCESS;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class PayBookingUseCase {
         balanceService.use(booking);
 
         // 결제 내역 save
-        paymentWriter.save(booking, clockManager.getNowDateTime());
+        Payment payment = paymentWriter.save(booking, clockManager.getNowDateTime());
 
         // 예약 완료
         booking.markAsComplete();
@@ -53,6 +52,6 @@ public class PayBookingUseCase {
         // 좌석 예약
         booking.reserveAllSeats();
 
-        return PaymentResponse.from(SUCCESS);
+        return PaymentResponse.from(payment);
     }
 }
