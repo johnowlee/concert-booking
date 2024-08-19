@@ -34,7 +34,7 @@ public class BookingController {
     @PostMapping("{id}/payment")
     public ResponseEntity<PaymentResponse> payment(@PathVariable Long id,
                                    QueueTokenRequest queueTokenRequest,
-                                   @RequestBody PaymentRequest paymentRequest) {
-        return ResponseEntity.ok().body(payBookingUseCase.execute(id, paymentRequest.userId()));
+                                   @RequestBody PaymentRequest request) {
+        return ResponseEntity.ok().body(payBookingUseCase.execute(id, request));
     }
 }

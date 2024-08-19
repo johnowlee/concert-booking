@@ -1,5 +1,6 @@
 package hhplus.concert.api.booking.usecase;
 
+import hhplus.concert.api.booking.dto.request.PaymentRequest;
 import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
@@ -29,7 +30,7 @@ public class PayBookingUseCase {
     private final PaymentValidator paymentValidator;
 
     @Transactional
-    public PaymentResponse execute(Long id, Long userId) {
+    public PaymentResponse execute(Long id, PaymentRequest request) {
 
         Booking booking = bookingReader.getBookingById(id);
 
@@ -37,7 +38,7 @@ public class PayBookingUseCase {
         booking.validateBookingDateTime(clockManager.getNowDateTime());
 
         // 결제자 ID 검증
-        User payer = userReader.getUserById(userId);
+        User payer = userReader.getUserById(request.userId());
         paymentValidator.validatePayer(booking, payer);
 
         // 잔액 use
