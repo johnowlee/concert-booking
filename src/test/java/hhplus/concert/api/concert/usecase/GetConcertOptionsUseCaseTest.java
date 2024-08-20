@@ -1,5 +1,6 @@
 package hhplus.concert.api.concert.usecase;
 
+import hhplus.concert.api.common.response.ConcertOptionResponse;
 import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
@@ -43,7 +44,9 @@ class GetConcertOptionsUseCaseTest {
 
         // then
         assertThat(result.concertOptions()).hasSize(1)
-                .extracting("place", "dateTime")
+                .extracting(ConcertOptionResponse::place,
+                        ConcertOptionResponse::concertDateTime
+                )
                 .contains(
                         tuple("stadium", concertDateTime)
                 );

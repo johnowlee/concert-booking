@@ -2,6 +2,7 @@ package hhplus.concert.api.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.concert.models.Concert;
+import hhplus.concert.domain.concert.models.ConcertOption;
 
 import java.time.LocalDateTime;
 
@@ -13,4 +14,8 @@ public record ConcertOptionResponse(
         LocalDateTime concertDateTime,
         String place,
         Concert concert
-) {}
+) {
+    public static ConcertOptionResponse from(ConcertOption concertOption) {
+        return new ConcertOptionResponse(concertOption.getId(), concertOption.getConcertDateTime(), concertOption.getPlace(), null);
+    }
+}

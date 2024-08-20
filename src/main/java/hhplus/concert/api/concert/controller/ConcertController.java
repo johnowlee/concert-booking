@@ -6,10 +6,10 @@ import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
 import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
 import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +36,7 @@ public class ConcertController {
     }
 
     @GetMapping("/options/{id}")
-    public RestApiResponse<ConcertOptionResponse> concertOption(@PathVariable Long id) {
+    public RestApiResponse<ConcertOptionWithSeatsResponse> concertOption(@PathVariable Long id) {
         return RestApiResponse.ok(getConcertOptionUseCase.execute(id));
     }
 

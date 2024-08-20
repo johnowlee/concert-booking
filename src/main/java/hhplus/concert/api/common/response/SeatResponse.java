@@ -2,6 +2,7 @@ package hhplus.concert.api.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.concert.models.ConcertOption;
+import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
 
@@ -14,4 +15,8 @@ public record SeatResponse(
         SeatBookingStatus seatBookingStatus,
         ConcertOption concertOption,
         SeatGrade grade
-) {}
+) {
+    public static SeatResponse from(Seat seat) {
+        return new SeatResponse(seat.getId(), seat.getSeatNo(), seat.getSeatBookingStatus(), null, seat.getGrade());
+    }
+}

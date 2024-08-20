@@ -1,6 +1,6 @@
 package hhplus.concert.api.concert.usecase;
 
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
@@ -51,11 +51,11 @@ class GetConcertOptionUseCaseTest {
         given(seatReader.getSeatsByConcertOptionId(1L)).willReturn(List.of(seat));
 
         // when
-        ConcertOptionResponse result = getConcertOptionUseCase.execute(1L);
+        ConcertOptionWithSeatsResponse result = getConcertOptionUseCase.execute(1L);
 
         // then
-        assertThat(result.dateTime()).isEqualTo(concertDateTime);
-        assertThat(result.place()).isEqualTo("stadium");
+        assertThat(result.concertOption().concertDateTime()).isEqualTo(concertDateTime);
+        assertThat(result.concertOption().place()).isEqualTo("stadium");
         assertThat(result.seats()).hasSize(1)
                 .extracting("seatNo", "seatBookingStatus")
                 .contains(

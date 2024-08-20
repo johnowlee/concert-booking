@@ -6,10 +6,10 @@ import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
 import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
 import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Concert;
@@ -122,7 +122,7 @@ class ConcertControllerTest {
                 .place("월드컵경기장")
                 .build();
 
-        ConcertOptionResponse concertOptionResponse = ConcertOptionResponse.from(concertOption, List.of(seat));
+        ConcertOptionWithSeatsResponse concertOptionResponse = ConcertOptionWithSeatsResponse.of(concertOption, List.of(seat));
         given(getConcertOptionUseCase.execute(1L)).willReturn(concertOptionResponse);
 
         // expected
@@ -131,8 +131,8 @@ class ConcertControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.place").value("월드컵경기장"))
-                .andExpect(jsonPath("$.data.seats[0].seatId").value(5L))
+                .andExpect(jsonPath("$.data.concertOption.place").value("월드컵경기장"))
+                .andExpect(jsonPath("$.data.seats[0].id").value(5L))
                 .andExpect(jsonPath("$.data.seats[0].seatNo").value("A1"))
                 .andExpect(jsonPath("$.data.seats[0].seatBookingStatus").value(AVAILABLE.name()));
     }
