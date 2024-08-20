@@ -1,4 +1,4 @@
-package hhplus.concert.api.concert.usecase.response.concertBooking;
+package hhplus.concert.api.concert.usecase.response;
 
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.concert.models.Seat;
@@ -8,15 +8,15 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record BookingResultResponse(
+public record BookConcertResponse(
         LocalDateTime bookingDateTime,
         String bookerName,
         String concertTitle,
         LocalDateTime concertDateTime,
         List<String> seats) {
 
-    public static BookingResultResponse of(User user, Booking booking, List<Seat> seats) {
-        return new BookingResultResponse(
+    public static BookConcertResponse of(User user, Booking booking, List<Seat> seats) {
+        return new BookConcertResponse(
                 booking.getBookingDateTime(),
                 user.getName(),
                 booking.getConcertTitle(),

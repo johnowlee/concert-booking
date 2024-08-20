@@ -1,7 +1,7 @@
 package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.support.BookingService;
 import hhplus.concert.domain.concert.components.SeatReader;
@@ -68,7 +68,7 @@ class BookConcertUseCaseTest {
         given(bookingService.book(user, List.of(seat1, seat2))).willReturn(booking);
 
         // when
-        BookingResultResponse result = bookConcertUseCase.execute(request);
+        BookConcertResponse result = bookConcertUseCase.execute(request);
 
         // then
         verify(bookingService, times(1)).validateBookability(request.seatIds());

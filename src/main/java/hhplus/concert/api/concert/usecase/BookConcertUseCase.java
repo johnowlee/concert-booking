@@ -1,7 +1,7 @@
 package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.support.BookingService;
 import hhplus.concert.domain.concert.components.SeatReader;
@@ -23,7 +23,7 @@ public class BookConcertUseCase {
     private final BookingService bookingService;
 
     @Transactional
-    public BookingResultResponse execute(ConcertBookingRequest request) {
+    public BookConcertResponse execute(ConcertBookingRequest request) {
 
         // 1. 예약상태, 좌석상태 검증
         bookingService.validateBookability(request.seatIds());
@@ -37,6 +37,6 @@ public class BookConcertUseCase {
         // 4. 콘서트 예약
         Booking booking = bookingService.book(user, seats);
 
-        return BookingResultResponse.of(user, booking, seats);
+        return BookConcertResponse.of(user, booking, seats);
     }
 }

@@ -7,7 +7,7 @@ import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
 import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
@@ -42,8 +42,8 @@ public class ConcertController {
 
 
     @PostMapping("/options/booking")
-    public RestApiResponse<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
-                                                             @Valid @RequestBody ConcertBookingRequest request) {
+    public RestApiResponse<BookConcertResponse> bookConcert(QueueTokenRequest queueTokenRequest,
+                                                            @Valid @RequestBody ConcertBookingRequest request) {
         return RestApiResponse.ok(bookConcertUseCase.execute(request));
     }
 }

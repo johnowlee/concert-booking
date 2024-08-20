@@ -7,7 +7,7 @@ import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
+import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
 import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.domain.booking.models.Booking;
@@ -169,9 +169,9 @@ class ConcertControllerTest {
                 .build();
         booking.addBookingSeat(bookingSeat);
 
-        BookingResultResponse bookingResultResponse = BookingResultResponse.of(user, booking, seats);
+        BookConcertResponse bookConcertResponse = BookConcertResponse.of(user, booking, seats);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "1");
-        given(bookConcertUseCase.execute(concertBookingRequest)).willReturn(bookingResultResponse);
+        given(bookConcertUseCase.execute(concertBookingRequest)).willReturn(bookConcertResponse);
 
         // expected
         mockMvc.perform(post("/concerts/options/booking", concertOption.getId())
