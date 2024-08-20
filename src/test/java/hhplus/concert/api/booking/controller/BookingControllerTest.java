@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hhplus.concert.api.booking.dto.request.PaymentRequest;
 import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
 import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
-import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
+import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;

@@ -1,4 +1,4 @@
-package hhplus.concert.api.booking.dto.response.payment;
+package hhplus.concert.api.common.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.booking.models.BookingSeat;
