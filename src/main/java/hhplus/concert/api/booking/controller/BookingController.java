@@ -1,12 +1,12 @@
 package hhplus.concert.api.booking.controller;
 
 import hhplus.concert.api.booking.dto.request.PaymentRequest;
-import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
 import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
-import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
+import hhplus.concert.api.common.response.BookingResponse;
+import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

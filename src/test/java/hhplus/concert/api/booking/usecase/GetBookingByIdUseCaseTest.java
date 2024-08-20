@@ -1,6 +1,6 @@
 package hhplus.concert.api.booking.usecase;
 
-import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
+import hhplus.concert.api.common.response.BookingResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
@@ -54,7 +54,7 @@ class GetBookingByIdUseCaseTest {
         BookingResponse result = getBookingByIdUseCase.execute(1L);
 
         // then
-        assertThat(result.booking().bookingId()).isEqualTo(1L);
-        assertThat(result.booking().bookingStatus()).isEqualTo(COMPLETE);
+        assertThat(result.id()).isEqualTo(1L);
+        assertThat(result.bookingStatus()).isEqualTo(COMPLETE);
     }
 }
