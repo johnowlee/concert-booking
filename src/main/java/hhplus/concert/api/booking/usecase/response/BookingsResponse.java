@@ -1,4 +1,4 @@
-package hhplus.concert.api.booking.dto.response.bookings;
+package hhplus.concert.api.booking.usecase.response;
 
 import hhplus.concert.api.common.response.BookingResponse;
 import hhplus.concert.domain.booking.models.Booking;

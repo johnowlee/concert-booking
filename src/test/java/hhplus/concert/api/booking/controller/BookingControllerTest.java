@@ -2,7 +2,7 @@ package hhplus.concert.api.booking.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import hhplus.concert.api.booking.dto.request.PaymentRequest;
-import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
+import hhplus.concert.api.booking.usecase.response.BookingsResponse;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
