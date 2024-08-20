@@ -1,6 +1,6 @@
 package hhplus.concert.api.booking.usecase;
 
-import hhplus.concert.api.booking.dto.request.PaymentRequest;
+import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
