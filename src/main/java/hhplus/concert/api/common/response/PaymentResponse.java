@@ -4,11 +4,13 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
+@Builder
 @JsonInclude(NON_NULL)
 public record PaymentResponse(
         Long id,
@@ -35,6 +37,14 @@ public record PaymentResponse(
     }
 
     private static BookingResponse createBookingResponse(Booking booking) {
-        return new BookingResponse(booking.getId(), booking.getBookingStatus(), null, booking.getConcertTitle(), null, null);
+        return new BookingResponse(
+                booking.getId(),
+                booking.getBookingStatus(),
+                null,
+                booking.getConcertTitle(),
+                null,
+                null,
+                null
+        );
     }
 }
