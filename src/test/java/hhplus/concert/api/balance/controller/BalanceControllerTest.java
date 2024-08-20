@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
+import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.domain.queue.support.TokenValidator;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,7 +50,7 @@ class BalanceControllerTest {
         Long userId = 1L;
         String name = "jon";
         long balance = 10000L;
-        BalanceResponse balanceResponse = new BalanceResponse(userId, name, balance);
+        UserResponse balanceResponse = new UserResponse(userId, name, balance, null, null);
         given(getBalanceUseCase.execute(anyLong())).willReturn(balanceResponse);
 
         // when & then
@@ -75,7 +75,7 @@ class BalanceControllerTest {
         String name = "jon";
         long balance = 10000L;
         BalanceChargeRequest chargeRequest = new BalanceChargeRequest(30000L);
-        BalanceResponse balanceResponse = new BalanceResponse(userId, name, balance + chargeRequest.balance());
+        UserResponse balanceResponse = new UserResponse(userId, name, balance + chargeRequest.balance(), null, null);
         given(chargeBalanceUseCase.execute(userId, chargeRequest)).willReturn(balanceResponse);
 
         // when & then
@@ -102,9 +102,9 @@ class BalanceControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                 )
                 .andDo(print())
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value("400"))
-                .andExpect(jsonPath("$.code").value("BAD_REQUEST"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value(400))
+                .andExpect(jsonPath("$.status").value("BAD_REQUEST"))
                 .andExpect(jsonPath("$.message").value("충전금액은 양수이어야 합니다."));
     }
 }

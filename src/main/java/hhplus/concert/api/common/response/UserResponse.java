@@ -3,6 +3,7 @@ package hhplus.concert.api.common.response;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
+import hhplus.concert.domain.user.models.User;
 
 import java.util.List;
 
@@ -15,4 +16,10 @@ public record UserResponse(
         Long balance,
         List<Booking> bookings,
         List<Payment> payments
-) {}
+) {
+
+    public static UserResponse forBalanceResponseFrom(User user) {
+        return new UserResponse(user.getId(), user.getName(), user.getBalance(), null, null);
+    }
+
+}
