@@ -80,7 +80,7 @@ class ConcertControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.concerts[0].concertId").value(1L))
+                .andExpect(jsonPath("$.data.concerts[0].id").value(1L))
                 .andExpect(jsonPath("$.data.concerts[0].title").value("아이유 콘서트"))
                 .andExpect(jsonPath("$.data.concerts[0].organizer").value("아이유"));
     }
