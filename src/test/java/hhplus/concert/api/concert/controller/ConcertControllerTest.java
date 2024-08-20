@@ -8,7 +8,7 @@ import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
 import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
 import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;

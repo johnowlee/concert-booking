@@ -1,7 +1,7 @@
 package hhplus.concert.api.concert.usecase;
 
 import hhplus.concert.api.common.response.ConcertOptionResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import org.junit.jupiter.api.DisplayName;
