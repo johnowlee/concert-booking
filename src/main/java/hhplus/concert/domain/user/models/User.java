@@ -82,4 +82,8 @@ public class User {
     public int hashCode() {
         return Objects.hash(getId());
     }
+
+    public boolean doesNotEqual(User user) {
+        return !equals(user);
+    }
 }

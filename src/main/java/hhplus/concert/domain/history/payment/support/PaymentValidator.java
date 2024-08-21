@@ -12,7 +12,7 @@ public class PaymentValidator {
 
     public void validatePayer(Booking booking, User payer) {
         User booker = booking.getUser();
-        if (!booker.equals(payer)) {
+        if (payer.doesNotEqual(booker)) {
             throw new RestApiException(INVALID_PAYER);
         }
     }
