@@ -33,18 +33,17 @@ public record PaymentResponse(
     }
 
     private static UserResponse createUserResponse(User user) {
-        return new UserResponse(user.getId(), user.getName(), null, null, null);
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .build();
     }
 
     private static BookingResponse createBookingResponse(Booking booking) {
-        return new BookingResponse(
-                booking.getId(),
-                booking.getBookingStatus(),
-                null,
-                booking.getConcertTitle(),
-                null,
-                null,
-                null
-        );
+        return BookingResponse.builder()
+                .id(booking.getId())
+                .bookingStatus(booking.getBookingStatus())
+                .concertTitle(booking.getConcertTitle())
+                .build();
     }
 }
