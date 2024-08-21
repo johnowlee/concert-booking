@@ -1,7 +1,6 @@
 package hhplus.concert.api.concert.controller.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 
@@ -15,7 +14,6 @@ public record ConcertBookingRequest(
         @Positive(message = "아이디가 부적합 합니다.")
         @JsonProperty("user_id") Long userId,
 
-        @NotBlank(message = "예약 좌석 아이디는 필수입니다.")
         @ValidSeatIds
         @JsonProperty("seat_id") String seatId
 ) {

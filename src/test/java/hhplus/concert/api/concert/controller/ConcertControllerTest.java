@@ -226,7 +226,7 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.message").value("아이디가 부적합 합니다."));
     }
 
-    @DisplayName("콘서트 예약시 유저 아이디는 양수이다.")
+    @DisplayName("콘서트 예약시 좌석 ID는 필수다.ㄱ")
     @Test
     public void bookConcertWithNoSeatId() throws Exception {
         // given
@@ -243,10 +243,10 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.code").value(400))
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
                 .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
-                .andExpect(jsonPath("$.message").value("예약 좌석 아이디는 필수입니다."));
+                .andExpect(jsonPath("$.message").value("좌석 ID가 유효하지 않습니다."));
     }
 
-    @DisplayName("콘서트 예약시 유저 아이디는 양수이다.")
+    @DisplayName("콘서트 예약시 좌석 ID는 양수이어야 한다.")
     @Test
     public void bookConcertWithInvalidSeatId() throws Exception {
         // given
