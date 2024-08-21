@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record BookConcertResponse(
+        Long bookingId,
         LocalDateTime bookingDateTime,
         String bookerName,
         String concertTitle,
@@ -17,6 +18,7 @@ public record BookConcertResponse(
 
     public static BookConcertResponse of(User user, Booking booking, List<Seat> seats) {
         return new BookConcertResponse(
+                booking.getId(),
                 booking.getBookingDateTime(),
                 user.getName(),
                 booking.getConcertTitle(),
