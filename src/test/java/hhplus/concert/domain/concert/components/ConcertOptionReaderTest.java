@@ -77,8 +77,8 @@ class ConcertOptionReaderTest extends IntegrationTestSupport {
         ConcertOption savedConcertOption = concertOptionJpaRepository.save(concertOption);
 
         // when & then
-        assertThat(savedConcertOption.getId()).isNotEqualTo(2L);
-        assertThatThrownBy(() -> concertOptionReader.getConcertOptionById(2L))
+        assertThat(savedConcertOption.getId()).isNotEqualTo(99L);
+        assertThatThrownBy(() -> concertOptionReader.getConcertOptionById(99L))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(CONCERT_OPTION_NOT_FOUND.getMessage());
     }
