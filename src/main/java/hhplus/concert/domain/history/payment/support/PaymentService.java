@@ -1,4 +1,4 @@
-package hhplus.concert.domain.history.balance.support;
+package hhplus.concert.domain.history.payment.support;
 
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.booking.models.Booking;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BalanceService {
+public class PaymentService {
 
     private final EventPublisher eventPublisher;
     private final BalanceWriter balanceWriter;
     private final ClockManager clockManager;
 
-    public void use(Booking booking) {
+    public void pay(Booking booking) {
         // 잔액검증 및 user 잔액 update
         User user = booking.getUser();
         long amount = booking.getTotalPrice();

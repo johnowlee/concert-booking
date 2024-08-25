@@ -1,4 +1,4 @@
-package hhplus.concert.domain.history.balance.support;
+package hhplus.concert.domain.payment.support;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.booking.models.Booking;
@@ -6,6 +6,7 @@ import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
@@ -26,10 +27,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
 @Transactional
-class BalanceServiceTest extends IntegrationTestSupport {
+class PaymentServiceTest extends IntegrationTestSupport {
 
     @Autowired
-    BalanceService balanceService;
+    PaymentService paymentService;
 
     @Autowired
     BalanceWriter balanceWriter;
@@ -46,9 +47,9 @@ class BalanceServiceTest extends IntegrationTestSupport {
     @MockBean
     EventPublisher eventPublisher;
 
-    @DisplayName("유저의 계좌에 잔액이 차감되고 이벤트발행 및 balance 거래 내역을 저장한다.")
+    @DisplayName("결제 시 유저의 계좌에 잔액이 차감되고 이벤트발행 및 balance 거래 내역을 저장한다.")
     @Test
-    void use() {
+    void pay() {
         // given
         User user = User.builder()
                 .name("jon")
@@ -64,7 +65,7 @@ class BalanceServiceTest extends IntegrationTestSupport {
         given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
         // when
-        balanceService.use(booking);
+        paymentService.pay(booking);
 
         // then
         assertThat(user.getBalance()).isEqualTo(20000 - 10000);

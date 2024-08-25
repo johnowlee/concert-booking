@@ -4,7 +4,7 @@ import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.balance.support.BalanceService;
+import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.history.payment.components.PaymentWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentValidator;
@@ -23,7 +23,7 @@ public class PayBookingUseCase {
 
     private final BookingReader bookingReader;
     private final PaymentWriter paymentWriter;
-    private final BalanceService balanceService;
+    private final PaymentService paymentService;
     private final ClockManager clockManager;
     private final UserReader userReader;
     private final PaymentValidator paymentValidator;
@@ -40,8 +40,8 @@ public class PayBookingUseCase {
         User payer = userReader.getUserById(request.userId());
         paymentValidator.validatePayer(booking, payer);
 
-        // 잔액 use
-        balanceService.use(booking);
+        // 결제
+        paymentService.pay(booking);
 
         // 결제 내역 save
         Payment payment = paymentWriter.save(booking, clockManager.getNowDateTime());
