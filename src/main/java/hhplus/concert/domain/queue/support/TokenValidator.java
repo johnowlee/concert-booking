@@ -16,6 +16,6 @@ public class TokenValidator {
 
     public void validateToken(String token) {
         if (queueReader.isWaitingToken(token)) throw new RestApiException(WAITING_TOKEN);
-        if (queueReader.isActiveToken(token) == null) throw new RestApiException(NOT_FOUND_TOKEN);
+        if (queueReader.isNotActiveToken(token)) throw new RestApiException(NOT_FOUND_TOKEN);
     }
 }

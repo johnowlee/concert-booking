@@ -22,8 +22,12 @@ public class QueueReader {
         return concurrentSize == null || concurrentSize < queueMonitor.getMaxActiveUserCount();
     }
 
-    public Boolean isActiveToken(String token) {
+    public boolean isActiveToken(String token) {
         return queueReaderRepository.isActiveUser(ACTIVE.getKeyName(), token);
+    }
+
+    public boolean isNotActiveToken(String token) {
+        return !isActiveToken(token);
     }
 
     public Boolean isWaitingToken(String token) {

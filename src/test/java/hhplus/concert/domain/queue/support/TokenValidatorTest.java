@@ -53,7 +53,7 @@ class TokenValidatorTest extends IntegrationTestSupport {
         // given
         String token = "abc123";
         given(queueReader.isWaitingToken(token)).willReturn(false);
-        given(queueReader.isActiveToken(token)).willReturn(null);
+        given(queueReader.isNotActiveToken(token)).willReturn(true);
 
         // when & then
         assertThatThrownBy(() -> tokenValidator.validateToken(token))
