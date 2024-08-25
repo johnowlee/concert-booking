@@ -1,6 +1,6 @@
 > # Sequence Diagram
 
-![sequence-diagram](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/sequnce-diagram.png)
+![sequence-diagram](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/docs/sequnce-diagram.png)
 ***********************************
 > # API명세
 
@@ -9,18 +9,12 @@ https://velog.io/@wonholee/%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%98%88%EC%95%BD-%EC%84
 
 > # ERD
 
-![ERD](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/ERD.png)
-***********************************
-
-> # Milestone
-
-https://github.com/WonhoLeeDev/hhplus-concert/milestones?with_issues=no
-
+![ERD](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/docs/ERD.png)
 ***********************************
 
 > # API Swagger UI
 
-![API Swagger UI](https://github.com/WonhoLeeDev/hhplus-concert/blob/main/API%20Swagger%20UI.png)
+![API Swagger UI](https://github.com/WonhoLeeDev/hhplus-concert/blob/docs/main/API%20Swagger%20UI.png)
 ***********************************
 
 ### 브랜치 전략
