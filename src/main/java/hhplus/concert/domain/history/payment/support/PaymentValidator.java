@@ -1,6 +1,7 @@
 package hhplus.concert.domain.history.payment.support;
 
 import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.user.models.User;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,14 @@ public class PaymentValidator {
         }
     }
 
+    public void validatePayability(User user, long totalPrice) {
+        if (user.isBalanceLessThan(totalPrice)) {
+            throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
+        }
+    }
+
     private boolean isPayableTimeOver(long passedMinutes) {
         return passedMinutes >= ALLOWED_MINUTES.getMinutes();
     }
+
 }

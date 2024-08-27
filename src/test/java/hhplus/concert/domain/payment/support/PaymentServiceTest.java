@@ -1,6 +1,8 @@
 package hhplus.concert.domain.payment.support;
 
 import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
@@ -11,6 +13,7 @@ import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -77,5 +80,25 @@ class PaymentServiceTest extends IntegrationTestSupport {
                 .contains(
                         tuple(savedUser, transactionDateTime, USE, 10000L)
                 );
+    }
+
+    @DisplayName("결제 시 결제자의 잔액이 결제금 보다 부족하면 예외가 발생한다.")
+    @Test
+    void payWithNotEnoughBalance() {
+        // given
+        User user = User.builder()
+                .name("jon")
+                .balance(20000)
+                .build();
+        User savedUser = userJpaRepository.save(user);
+        Booking booking = mock(Booking.class);
+
+        given(booking.getUser()).willReturn(savedUser);
+        given(booking.getTotalPrice()).willReturn(50000);
+
+        // when & then
+        Assertions.assertThatThrownBy(() -> paymentService.pay(booking))
+                        .isInstanceOf(RestApiException.class)
+                        .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
     }
 }

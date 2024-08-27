@@ -1,6 +1,7 @@
 package hhplus.concert.domain.history.payment.support;
 
 import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.user.models.User;
 import org.assertj.core.api.Assertions;
@@ -75,5 +76,23 @@ class PaymentValidatorTest {
         assertThatThrownBy(() -> paymentValidator.validatePayableTime(booking, verificationTime))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(PAYABLE_TIME_OVER.getMessage());
+    }
+
+    @DisplayName("결제자의 잔액이 결제액 보다 부족하면 예외가 발생한다.")
+    @Test
+    void validatePayability() {
+        // given
+        User user = User.builder()
+                .balance(10000L)
+                .build();
+        long paymentAmount = 30000L;
+
+        // when & then
+        PaymentValidator paymentValidator = new PaymentValidator();
+
+        Assertions.assertThat(user.isBalanceLessThan(30000L)).isTrue();
+        assertThatThrownBy(() -> paymentValidator.validatePayability(user, paymentAmount))
+                        .isInstanceOf(RestApiException.class)
+                        .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
     }
 }

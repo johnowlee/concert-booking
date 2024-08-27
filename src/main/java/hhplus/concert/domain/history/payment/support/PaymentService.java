@@ -16,17 +16,23 @@ public class PaymentService {
     private final EventPublisher eventPublisher;
     private final BalanceWriter balanceWriter;
     private final ClockManager clockManager;
+    private final PaymentValidator paymentValidator;
 
     public void pay(Booking booking) {
-        // 잔액검증 및 user 잔액 update
+
         User user = booking.getUser();
-        long amount = booking.getTotalPrice();
-        user.useBalance(amount);
+        long totalPrice = booking.getTotalPrice();
+
+        // 잔액 검증
+        paymentValidator.validatePayability(user, totalPrice);
+
+        // 잔액 사용
+        user.useBalance(totalPrice);
 
         // 결제 완료 이벤트 발행
         eventPublisher.publish(PaymentCompleteEvent.from(booking));
 
         // 잔액내역 save
-        balanceWriter.saveUseBalance(user, amount, clockManager);
+        balanceWriter.saveUseBalance(user, totalPrice, clockManager);
     }
 }
