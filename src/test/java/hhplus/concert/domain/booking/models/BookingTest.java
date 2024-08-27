@@ -4,9 +4,11 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -229,5 +231,25 @@ class BookingTest {
                         tuple("A-1", SeatGrade.A, SeatBookingStatus.BOOKED),
                         tuple("B-1", SeatGrade.B, SeatBookingStatus.BOOKED)
                 );
+    }
+
+    @DisplayName("예약 시간과 현재 시간의 분차를 조회한다.")
+    @Test
+    void getPassedMinutesSinceBooking() {
+        // given
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 27, 12, 1);
+        Booking booking = Booking.builder()
+                .bookingDateTime(bookingDateTime)
+                .build();
+
+        // when
+        LocalDateTime verificationTime = LocalDateTime.of(2024, 8, 27, 12, 3);
+        long result = booking.getPassedMinutesSinceBookingFrom(verificationTime);
+
+        // then
+        Assertions.assertThat(result).isEqualTo(3 - 1);
+
+        long passedMinutes = Duration.between(bookingDateTime, verificationTime).toMinutes();
+        Assertions.assertThat(passedMinutes).isEqualTo(3 - 1);
     }
 }
