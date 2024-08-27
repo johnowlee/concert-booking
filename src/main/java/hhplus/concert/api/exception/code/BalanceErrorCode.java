@@ -8,7 +8,6 @@ public enum BalanceErrorCode implements ErrorCode {
     FAILED_CHARGE(HttpStatus.INTERNAL_SERVER_ERROR, "point charge error"),
     FAILED_USE(HttpStatus.INTERNAL_SERVER_ERROR, "point use error"),
 
-    NEGATIVE_NUMBER_AMOUNT(HttpStatus.INTERNAL_SERVER_ERROR, "amount must be positive"),
     NOT_ENOUGH_BALANCE(HttpStatus.INTERNAL_SERVER_ERROR, "balance is not enough")
     ;
 

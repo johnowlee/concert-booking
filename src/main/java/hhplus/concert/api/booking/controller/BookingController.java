@@ -9,6 +9,7 @@ import hhplus.concert.api.common.RestApiResponse;
 import hhplus.concert.api.common.response.BookingResponse;
 import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
