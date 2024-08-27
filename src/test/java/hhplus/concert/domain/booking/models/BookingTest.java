@@ -126,24 +126,6 @@ class BookingTest {
                 .hasMessage(ALREADY_BOOKED.getMessage());
     }
 
-    @DisplayName("예약의 예약시간이 만료되어 유효하지 않은 상태이면 예외가 발생한다.")
-    @Test
-    void validateBookingDateTime() {
-        // given
-        long expiryMinutes = ALLOWED_MINUTES.getMinutes();
-        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
-        Booking booking = Booking.builder()
-                .bookingDateTime(bookingDateTime)
-                .build();
-
-        // when & then
-        LocalDateTime validateTime = bookingDateTime.plusMinutes(expiryMinutes);
-        assertThatThrownBy(() -> booking.validateBookingDateTime(validateTime))
-                .isInstanceOf(RestApiException.class)
-                .hasMessage(EXPIRED_BOOKING_TIME.getMessage());
-    }
-
-
     @DisplayName("예약의 예약시간이 유효한 상태이면 예외가 발생한다.")
     @Test
     void validatePendingBooking() {

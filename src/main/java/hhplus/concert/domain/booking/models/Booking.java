@@ -87,13 +87,6 @@ public class Booking {
         }
     }
 
-    public void validateBookingDateTime(LocalDateTime dateTime) {
-        if (isBookingDateTimeExpired(dateTime)) {
-            log.info("BookingErrorCode.EXPIRED_BOOKING_TIME 발생");
-            throw new RestApiException(EXPIRED_BOOKING_TIME);
-        }
-    }
-
     public void validatePendingBooking(LocalDateTime dateTime) {
         if (isBookingDateTimeValid(dateTime)) {
             log.info("BookingErrorCode.PENDING_BOOKING 발생");
@@ -115,10 +108,6 @@ public class Booking {
 
     public long getPassedMinutesSinceBookingFrom(LocalDateTime verificationTime) {
         return calculateDurationSinceBookingFrom(verificationTime).toMinutes();
-    }
-
-    private boolean isBookingDateTimeExpired(LocalDateTime dateTime) {
-        return getPassedMinutesSinceBookingFrom(dateTime) >= ALLOWED_MINUTES.getMinutes();
     }
 
     private boolean isBookingDateTimeValid(LocalDateTime dateTime) {
