@@ -128,7 +128,7 @@ class BookingTest {
     @Test
     void validateBookingDateTime() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
                 .bookingDateTime(bookingDateTime)
@@ -146,7 +146,7 @@ class BookingTest {
     @Test
     void validatePendingBooking() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
                 .bookingDateTime(bookingDateTime)

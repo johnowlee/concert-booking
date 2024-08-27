@@ -28,7 +28,7 @@ class BookingSeatManagerTest {
     @Test
     void validateBookable() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
 
         LocalDateTime bookingDateTime1 = LocalDateTime.of(2024, 8, 11, 12, 00, 30);
         Booking booking1 = createBooking(bookingDateTime1, INCOMPLETE);
@@ -53,7 +53,7 @@ class BookingSeatManagerTest {
     @Test
     void validateBookableWithAnyCompleteBooking() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
 
         LocalDateTime bookingDateTime1 = LocalDateTime.of(2024, 8, 11, 12, 00, 30);
         Booking booking1 = createBooking(bookingDateTime1, COMPLETE);
@@ -80,7 +80,7 @@ class BookingSeatManagerTest {
     @Test
     void validateBookableWithAnyNotExpiredBooking() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
 
         LocalDateTime bookingDateTime1 = LocalDateTime.of(2024, 8, 11, 12, 00, 30);
         Booking booking1 = createBooking(bookingDateTime1, INCOMPLETE);
@@ -107,7 +107,7 @@ class BookingSeatManagerTest {
     @Test
     void validateBookableWithAnyBookedSeat() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.toLong();
+        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
 
         LocalDateTime bookingDateTime1 = LocalDateTime.of(2024, 8, 11, 12, 00, 30);
         Booking booking1 = createBooking(bookingDateTime1, INCOMPLETE);

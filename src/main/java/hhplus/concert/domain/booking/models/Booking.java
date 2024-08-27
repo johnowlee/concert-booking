@@ -114,11 +114,11 @@ public class Booking {
     }
 
     private boolean isBookingDateTimeExpired(LocalDateTime dateTime) {
-        return getPassedMinutesSinceBookingFrom(dateTime) >= BOOKING_EXPIRY_MINUTES.toLong();
+        return getPassedMinutesSinceBookingFrom(dateTime) >= BOOKING_EXPIRY_MINUTES.getMinutes();
     }
 
     private boolean isBookingDateTimeValid(LocalDateTime dateTime) {
-        return getPassedMinutesSinceBookingFrom(dateTime) < BOOKING_EXPIRY_MINUTES.toLong();
+        return getPassedMinutesSinceBookingFrom(dateTime) < BOOKING_EXPIRY_MINUTES.getMinutes();
     }
 
     private long getPassedMinutesSinceBookingFrom(LocalDateTime dateTime) {
