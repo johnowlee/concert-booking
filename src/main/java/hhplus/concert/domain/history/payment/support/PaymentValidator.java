@@ -23,12 +23,12 @@ public class PaymentValidator {
 
     public void validatePayableTime(Booking booking, LocalDateTime verificationTime) {
         long passedMinutes = booking.getPassedMinutesSinceBookingFrom(verificationTime);
-        if (isOverPayableTime(passedMinutes)) {
+        if (isPayableTimeOver(passedMinutes)) {
             throw new RestApiException(PAYABLE_TIME_OVER);
         }
     }
 
-    private static boolean isOverPayableTime(long passedMinutes) {
+    private static boolean isPayableTimeOver(long passedMinutes) {
         return passedMinutes >= ALLOWED_MINUTES.getMinutes();
     }
 }
