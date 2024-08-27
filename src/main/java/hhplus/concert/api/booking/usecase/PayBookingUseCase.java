@@ -33,8 +33,8 @@ public class PayBookingUseCase {
 
         Booking booking = bookingReader.getBookingById(id);
 
-        // 예약시간초과 검증
-        booking.validateBookingDateTime(clockManager.getNowDateTime());
+        // 결제 가능 시간 초과 검증
+        paymentValidator.validatePayableTime(booking, clockManager.getNowDateTime());
 
         // 결제자 ID 검증
         User payer = userReader.getUserById(request.userId());

@@ -113,8 +113,8 @@ public class Booking {
                 .forEach(seat -> seat.markAsBooked());
     }
 
-    public long getPassedMinutesSinceBookingFrom(LocalDateTime dateTime) {
-        return calculateDurationSinceBookingFrom(dateTime).toMinutes();
+    public long getPassedMinutesSinceBookingFrom(LocalDateTime verificationTime) {
+        return calculateDurationSinceBookingFrom(verificationTime).toMinutes();
     }
 
     private boolean isBookingDateTimeExpired(LocalDateTime dateTime) {

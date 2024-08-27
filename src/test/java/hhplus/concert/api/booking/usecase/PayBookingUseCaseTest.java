@@ -77,7 +77,7 @@ class PayBookingUseCaseTest {
         PaymentResponse response = payBookingUseCase.execute(bookingId, request);
 
         // then
-        verify(booking).validateBookingDateTime(now);
+        verify(paymentValidator).validatePayableTime(booking, now);
         verify(paymentValidator).validatePayer(booking, user);
         verify(paymentService).pay(booking);
         verify(paymentWriter).save(booking, now);
