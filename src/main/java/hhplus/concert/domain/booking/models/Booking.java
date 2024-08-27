@@ -1,6 +1,6 @@
 package hhplus.concert.domain.booking.models;
 
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -15,8 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import static hhplus.concert.api.exception.code.BookingErrorCode.*;
-import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 
@@ -81,19 +79,6 @@ public class Booking {
         this.bookingStatus = COMPLETE;
     }
 
-    public void validateAlreadyBooked() {
-        if (bookingStatus == COMPLETE) {
-            throw new RestApiException(ALREADY_BOOKED);
-        }
-    }
-
-    public void validatePendingBooking(LocalDateTime dateTime) {
-        if (isBookingDateTimeValid(dateTime)) {
-            log.info("BookingErrorCode.PENDING_BOOKING 발생");
-            throw new RestApiException(PENDING_BOOKING);
-        }
-    }
-
     public int getTotalPrice() {
         return this.bookingSeats.stream()
                 .mapToInt(bs -> bs.getSeat().getPrice())
@@ -103,15 +88,11 @@ public class Booking {
     public void reserveAllSeats() {
         bookingSeats.stream()
                 .map(BookingSeat::getSeat)
-                .forEach(seat -> seat.markAsBooked());
+                .forEach(Seat::markAsBooked);
     }
 
     public long getPassedMinutesSinceBookingFrom(LocalDateTime verificationTime) {
         return calculateDurationSinceBookingFrom(verificationTime).toMinutes();
-    }
-
-    private boolean isBookingDateTimeValid(LocalDateTime dateTime) {
-        return getPassedMinutesSinceBookingFrom(dateTime) < ALLOWED_MINUTES.getMinutes();
     }
 
     private Duration calculateDurationSinceBookingFrom(LocalDateTime dateTime) {

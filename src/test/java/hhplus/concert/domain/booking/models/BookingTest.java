@@ -1,6 +1,5 @@
 package hhplus.concert.domain.booking.models;
 
-import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
@@ -13,13 +12,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static hhplus.concert.api.exception.code.BookingErrorCode.*;
-import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
 
 class BookingTest {
 
@@ -110,37 +108,6 @@ class BookingTest {
 
         // then
         assertThat(booking.getBookingStatus()).isEqualTo(COMPLETE);
-    }
-
-    @DisplayName("booking 상태가 COMPLETE이면 예외가 발생한다.")
-    @Test
-    void validateAlreadyBooked() {
-        // given
-        Booking booking = Booking.builder()
-                .bookingStatus(COMPLETE)
-                .build();
-
-        // when & then
-        assertThatThrownBy(() -> booking.validateAlreadyBooked())
-                .isInstanceOf(RestApiException.class)
-                .hasMessage(ALREADY_BOOKED.getMessage());
-    }
-
-    @DisplayName("예약의 예약시간이 유효한 상태이면 예외가 발생한다.")
-    @Test
-    void validatePendingBooking() {
-        // given
-        long expiryMinutes = ALLOWED_MINUTES.getMinutes();
-        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
-        Booking booking = Booking.builder()
-                .bookingDateTime(bookingDateTime)
-                .build();
-
-        // when & then
-        LocalDateTime validateTime = bookingDateTime.plusMinutes(expiryMinutes - 1);
-        assertThatThrownBy(() -> booking.validatePendingBooking(validateTime))
-                .isInstanceOf(RestApiException.class)
-                .hasMessage(PENDING_BOOKING.getMessage());
     }
 
     @DisplayName("예약된 좌석들의 가격을 모두 더해 총 예약 금액을 가져온다.")
