@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
-import static hhplus.concert.domain.booking.models.BookingRule.BOOKING_EXPIRY_MINUTES;
+import static hhplus.concert.domain.booking.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
@@ -130,7 +130,7 @@ class BookingTest {
     @Test
     void validateBookingDateTime() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
+        long expiryMinutes = ALLOWED_MINUTES.getMinutes();
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
                 .bookingDateTime(bookingDateTime)
@@ -148,7 +148,7 @@ class BookingTest {
     @Test
     void validatePendingBooking() {
         // given
-        long expiryMinutes = BOOKING_EXPIRY_MINUTES.getMinutes();
+        long expiryMinutes = ALLOWED_MINUTES.getMinutes();
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
         Booking booking = Booking.builder()
                 .bookingDateTime(bookingDateTime)
