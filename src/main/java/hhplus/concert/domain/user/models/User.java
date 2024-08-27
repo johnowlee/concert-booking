@@ -55,9 +55,6 @@ public class User {
     }
 
     public void useBalance(long amount) {
-        if (this.balance < amount) {
-            throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
-        }
         this.balance -= amount;
     }
 

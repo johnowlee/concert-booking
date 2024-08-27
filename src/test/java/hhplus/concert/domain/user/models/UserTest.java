@@ -1,13 +1,10 @@
 package hhplus.concert.domain.user.models;
 
-import hhplus.concert.api.exception.RestApiException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static hhplus.concert.api.exception.code.BalanceErrorCode.NOT_ENOUGH_BALANCE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class UserTest {
 
@@ -37,20 +34,6 @@ class UserTest {
 
         //then
         assertThat(user.getBalance()).isEqualTo(10000L - 5000L);
-    }
-
-    @DisplayName("잔액이 불충분하면, 포인트 사용에 실패한다.")
-    @Test
-    void useBalanceWithNotEnoughBalance() {
-        //given
-        User user = User.builder().balance(5000L).build();
-
-        //when & then
-        long useAmount = 10000L;
-
-        assertThatThrownBy(() -> user.useBalance(useAmount))
-                .isInstanceOf(RestApiException.class)
-                .hasMessage(NOT_ENOUGH_BALANCE.getMessage());
     }
 
     @DisplayName("잔액이 비교액 미만이면 true를 반환한다.")
