@@ -1,4 +1,4 @@
-package hhplus.concert.domain.booking.models;
+package hhplus.concert.domain.history.payment.models;
 
 import lombok.Getter;
 

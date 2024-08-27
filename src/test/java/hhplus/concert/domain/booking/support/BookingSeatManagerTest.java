@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.ALREADY_BOOKED;
 import static hhplus.concert.api.exception.code.BookingErrorCode.PENDING_BOOKING;
-import static hhplus.concert.domain.booking.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
+import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;

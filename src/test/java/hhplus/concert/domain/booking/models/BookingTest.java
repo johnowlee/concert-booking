@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.*;
-import static hhplus.concert.domain.booking.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
+import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
