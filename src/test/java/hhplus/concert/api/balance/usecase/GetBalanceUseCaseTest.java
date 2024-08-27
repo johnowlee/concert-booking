@@ -1,6 +1,6 @@
 package hhplus.concert.api.balance.usecase;
 
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
+import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -38,7 +38,7 @@ public class GetBalanceUseCaseTest {
         given(user.getBalance()).willReturn(expectedBalance);
 
         // when
-        BalanceResponse result = getBalanceUseCase.execute(userId);
+        UserResponse result = getBalanceUseCase.execute(userId);
 
         // then
         assertThat(result).isNotNull();

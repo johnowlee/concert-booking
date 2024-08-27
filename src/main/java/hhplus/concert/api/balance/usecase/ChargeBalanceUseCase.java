@@ -1,7 +1,7 @@
 package hhplus.concert.api.balance.usecase;
 
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
+import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
@@ -26,7 +26,7 @@ public class ChargeBalanceUseCase {
     private final EntityManager em;
     private final ClockManager clockManager;
 
-    public BalanceResponse execute(Long userId, BalanceChargeRequest request) {
+    public UserResponse execute(Long userId, BalanceChargeRequest request) {
         try {
             long amount = request.balance();
             User user = userReader.getUserById(userId);
@@ -35,7 +35,7 @@ public class ChargeBalanceUseCase {
 
             balanceWriter.saveChargeBalance(user, amount, clockManager);
 
-            return BalanceResponse.from(user);
+            return UserResponse.forBalanceResponseFrom(user);
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }

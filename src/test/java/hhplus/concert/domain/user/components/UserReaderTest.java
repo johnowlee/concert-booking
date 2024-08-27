@@ -51,7 +51,7 @@ class UserReaderTest extends IntegrationTestSupport {
         userJpaRepository.save(user);
 
         // when & then
-        assertThatThrownBy(() -> userReader.getUserById(2L))
+        assertThatThrownBy(() -> userReader.getUserById(99L))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_USER.getMessage());
     }

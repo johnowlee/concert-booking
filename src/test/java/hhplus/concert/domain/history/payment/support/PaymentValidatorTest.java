@@ -37,6 +37,10 @@ class PaymentValidatorTest {
         User booker = mock(User.class);
 
         given(booking.getUser()).willReturn(booker);
+        given(booker.getId()).willReturn(1L);
+        given(payer.getId()).willReturn(2L);
+
+        given(booker.doesNotEqual(payer)).willReturn(true);
 
         PaymentValidator paymentValidator = new PaymentValidator();
 

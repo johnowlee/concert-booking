@@ -2,7 +2,7 @@ package hhplus.concert.api.balance.usecase;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
-import hhplus.concert.api.balance.usecase.response.BalanceResponse;
+import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.user.components.UserReader;
@@ -61,7 +61,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
         long version = user.getVersion();
 
         // when
-        BalanceResponse result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeRequest(30000L));
+        UserResponse result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeRequest(30000L));
 
         // then
         assertThat(user.getVersion()).isEqualTo(version + 1);

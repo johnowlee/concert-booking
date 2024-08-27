@@ -1,15 +1,15 @@
 package hhplus.concert.api.booking.controller;
 
-import hhplus.concert.api.booking.dto.request.PaymentRequest;
-import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
-import hhplus.concert.api.booking.dto.response.bookings.BookingsResponse;
-import hhplus.concert.api.booking.dto.response.payment.PaymentResponse;
+import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.api.booking.usecase.GetBookingByIdUseCase;
 import hhplus.concert.api.booking.usecase.GetBookingsByUserIdUseCase;
 import hhplus.concert.api.booking.usecase.PayBookingUseCase;
+import hhplus.concert.api.booking.usecase.response.BookingsResponse;
+import hhplus.concert.api.common.RestApiResponse;
+import hhplus.concert.api.common.response.BookingResponse;
+import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,19 +22,19 @@ public class BookingController {
     private final PayBookingUseCase payBookingUseCase;
 
     @GetMapping("/users/{userId}")
-    public ResponseEntity<BookingsResponse> bookings(@PathVariable Long userId) {
-        return ResponseEntity.ok().body(getBookingsByUserIdUseCase.execute(userId));
+    public RestApiResponse<BookingsResponse> bookings(@PathVariable Long userId) {
+        return RestApiResponse.ok(getBookingsByUserIdUseCase.execute(userId));
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<BookingResponse> booking(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getBookingByIdUseCase.execute(id));
+    public RestApiResponse<BookingResponse> booking(@PathVariable Long id) {
+        return RestApiResponse.ok(getBookingByIdUseCase.execute(id));
     }
 
     @PostMapping("{id}/payment")
-    public ResponseEntity<PaymentResponse> payment(@PathVariable Long id,
+    public RestApiResponse<PaymentResponse> payment(@PathVariable Long id,
                                    QueueTokenRequest queueTokenRequest,
-                                   @RequestBody PaymentRequest paymentRequest) {
-        return ResponseEntity.ok().body(payBookingUseCase.execute(id, paymentRequest.userId()));
+                                   @RequestBody PaymentRequest request) {
+        return RestApiResponse.ok(payBookingUseCase.execute(id, request));
     }
 }

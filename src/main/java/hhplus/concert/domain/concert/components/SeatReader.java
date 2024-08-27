@@ -15,4 +15,8 @@ public class SeatReader {
     public List<Seat> getSeatsByIds(List<Long> ids) {
         return seatReaderRepository.getSeatsByIds(ids);
     }
+
+    public List<Seat> getSeatsByConcertOptionId(Long concertOptionId) {
+        return seatReaderRepository.getSeatsByConcertOptionId(concertOptionId);
+    }
 }

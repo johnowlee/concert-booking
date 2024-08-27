@@ -1,17 +1,18 @@
 package hhplus.concert.api.concert.controller;
 
+import hhplus.concert.api.common.RestApiResponse;
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.response.concertBooking.BookingResultResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionResponse;
-import hhplus.concert.api.concert.usecase.response.concertOptions.ConcertOptionsResponse;
-import hhplus.concert.api.concert.usecase.response.concerts.ConcertsResponse;
 import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
+import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
+import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -25,25 +26,24 @@ public class ConcertController {
     private final BookConcertUseCase bookConcertUseCase;
 
     @GetMapping
-    public ResponseEntity<ConcertsResponse> concerts() {
-        return ResponseEntity.ok().body(getConcertsUseCase.execute());
+    public RestApiResponse<ConcertsResponse> concerts() {
+        return RestApiResponse.ok(getConcertsUseCase.execute());
     }
 
     @GetMapping("{id}/options")
-    public ResponseEntity<ConcertOptionsResponse> concertOptions(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getConcertOptionsUseCase.execute(id));
+    public RestApiResponse<ConcertOptionsResponse> concertOptions(@PathVariable Long id) {
+        return RestApiResponse.ok(getConcertOptionsUseCase.execute(id));
     }
 
     @GetMapping("/options/{id}")
-    public ResponseEntity<ConcertOptionResponse> concertOption(@PathVariable Long id) {
-        return ResponseEntity.ok().body(getConcertOptionUseCase.execute(id));
+    public RestApiResponse<ConcertOptionWithSeatsResponse> concertOption(@PathVariable Long id) {
+        return RestApiResponse.ok(getConcertOptionUseCase.execute(id));
     }
 
 
-    @PostMapping("/options/{optionId}/booking")
-    public ResponseEntity<BookingResultResponse> bookConcert(QueueTokenRequest queueTokenRequest,
-                                                             @PathVariable Long optionId,
-                                                             @RequestBody ConcertBookingRequest concertBookingRequest) {
-        return ResponseEntity.ok().body(bookConcertUseCase.execute(optionId, concertBookingRequest));
+    @PostMapping("/options/booking")
+    public RestApiResponse<BookConcertResponse> bookConcert(QueueTokenRequest queueTokenRequest,
+                                                            @Valid @RequestBody ConcertBookingRequest request) {
+        return RestApiResponse.ok(bookConcertUseCase.execute(request));
     }
 }

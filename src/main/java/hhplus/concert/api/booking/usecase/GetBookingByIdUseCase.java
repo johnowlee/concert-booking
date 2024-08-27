@@ -1,6 +1,6 @@
 package hhplus.concert.api.booking.usecase;
 
-import hhplus.concert.api.booking.dto.response.booking.BookingResponse;
+import hhplus.concert.api.common.response.BookingResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

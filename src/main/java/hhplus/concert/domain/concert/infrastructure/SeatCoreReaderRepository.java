@@ -17,4 +17,9 @@ public class SeatCoreReaderRepository implements SeatReaderRepository {
     public List<Seat> getSeatsByIds(List<Long> ids) {
         return seatJpaRepository.findAllByIds(ids);
     }
+
+    @Override
+    public List<Seat> getSeatsByConcertOptionId(Long concertOptionId) {
+        return seatJpaRepository.findAllByConcertOptionId(concertOptionId);
+    }
 }
