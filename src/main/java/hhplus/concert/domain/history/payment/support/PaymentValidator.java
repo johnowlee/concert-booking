@@ -28,7 +28,7 @@ public class PaymentValidator {
         }
     }
 
-    private static boolean isPayableTimeOver(long passedMinutes) {
+    private boolean isPayableTimeOver(long passedMinutes) {
         return passedMinutes >= ALLOWED_MINUTES.getMinutes();
     }
 }
