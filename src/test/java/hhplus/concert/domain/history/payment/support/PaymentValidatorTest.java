@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static hhplus.concert.api.exception.code.BookingErrorCode.EXPIRED_BOOKING_TIME;
-import static hhplus.concert.api.exception.code.BookingErrorCode.INVALID_PAYER;
+import static hhplus.concert.api.exception.code.PaymentErrorCode.INVALID_PAYER;
+import static hhplus.concert.api.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
@@ -74,6 +74,6 @@ class PaymentValidatorTest {
         PaymentValidator paymentValidator = new PaymentValidator();
         assertThatThrownBy(() -> paymentValidator.validatePayableTime(booking, verificationTime))
                 .isInstanceOf(RestApiException.class)
-                .hasMessage(EXPIRED_BOOKING_TIME.getMessage());
+                .hasMessage(PAYABLE_TIME_OVER.getMessage());
     }
 }

@@ -9,10 +9,6 @@ public enum BookingErrorCode implements ErrorCode {
 
     PENDING_BOOKING(HttpStatus.INTERNAL_SERVER_ERROR, "booking is pending in some other place"),
     ALREADY_BOOKED(HttpStatus.INTERNAL_SERVER_ERROR, "the seat is already booked"),
-
-    EXPIRED_BOOKING_TIME(HttpStatus.INTERNAL_SERVER_ERROR, "booking time is expired"),
-
-    INVALID_PAYER(HttpStatus.INTERNAL_SERVER_ERROR, "payer's ID and booker's ID is different")
     ;
 
     private final HttpStatus httpStatus;

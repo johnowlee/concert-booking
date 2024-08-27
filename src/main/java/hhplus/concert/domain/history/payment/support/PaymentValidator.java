@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-import static hhplus.concert.api.exception.code.BookingErrorCode.EXPIRED_BOOKING_TIME;
-import static hhplus.concert.api.exception.code.BookingErrorCode.INVALID_PAYER;
+import static hhplus.concert.api.exception.code.PaymentErrorCode.INVALID_PAYER;
+import static hhplus.concert.api.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 
 @Component
@@ -24,7 +24,7 @@ public class PaymentValidator {
     public void validatePayableTime(Booking booking, LocalDateTime verificationTime) {
         long passedMinutes = booking.getPassedMinutesSinceBookingFrom(verificationTime);
         if (isOverPayableTime(passedMinutes)) {
-            throw new RestApiException(EXPIRED_BOOKING_TIME);
+            throw new RestApiException(PAYABLE_TIME_OVER);
         }
     }
 
