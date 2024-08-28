@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static hhplus.concert.domain.history.balance.models.Balance.createChargeBalance;
-import static hhplus.concert.domain.history.balance.models.Balance.createUseBalance;
 
 @Component
 @RequiredArgsConstructor
@@ -20,8 +19,8 @@ public class BalanceWriter {
         return balanceWriterRepository.save(createChargeBalance(user, amount, clockManager));
     }
 
-    public Balance saveUseBalance(User user, long amount, ClockManager clockManager) {
-        return balanceWriterRepository.save(createUseBalance(user, amount, clockManager));
+    public Balance saveUseBalance(Balance balance) {
+        return balanceWriterRepository.save(balance);
     }
 
 }
