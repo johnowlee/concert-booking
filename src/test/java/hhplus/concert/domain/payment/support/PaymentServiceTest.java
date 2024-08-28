@@ -8,6 +8,7 @@ import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.support.event.EventPublisher;
@@ -67,8 +68,10 @@ class PaymentServiceTest extends IntegrationTestSupport {
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
         given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
+        Payment payment = Payment.of(booking, user);
+
         // when
-        paymentService.pay(booking);
+        paymentService.pay(payment);
 
         // then
         assertThat(user.getBalance()).isEqualTo(20000 - 10000);
@@ -96,8 +99,10 @@ class PaymentServiceTest extends IntegrationTestSupport {
         given(booking.getUser()).willReturn(savedUser);
         given(booking.getTotalPrice()).willReturn(50000);
 
+        Payment payment = Payment.of(booking, user);
+
         // when & then
-        Assertions.assertThatThrownBy(() -> paymentService.pay(booking))
+        Assertions.assertThatThrownBy(() -> paymentService.pay(payment))
                         .isInstanceOf(RestApiException.class)
                         .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
     }

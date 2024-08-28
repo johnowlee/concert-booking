@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
@@ -87,9 +88,12 @@ class PaymentWriterTest extends IntegrationTestSupport {
         BookingSeat bookingSeat2 = createBookingSeat(savedBooking, seat2);
         bookingSeatJpaRepository.saveAll(List.of(bookingSeat1, bookingSeat2));
 
-        // when
+        User payer = userJpaRepository.findById(savedUser.getId()).get();
         LocalDateTime paymentDateTime = LocalDateTime.of(2024, 8, 11, 17, 34);
-        paymentWriter.save(savedBooking, paymentDateTime);
+        Payment payment = Payment.of(booking, payer, paymentDateTime);
+
+        // when
+        paymentWriter.save(payment);
 
         // then
         List<Payment> payments = paymentJpaRepository.findAll();
