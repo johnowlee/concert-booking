@@ -1,109 +1,57 @@
 package hhplus.concert.domain.payment.support;
 
-import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
-import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
-import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentService;
-import hhplus.concert.domain.support.ClockManager;
+import hhplus.concert.domain.history.payment.support.PaymentValidator;
 import hhplus.concert.domain.support.event.EventPublisher;
-import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.transaction.annotation.Transactional;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
-import static hhplus.concert.domain.history.balance.models.TransactionType.USE;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.*;
 
-@Transactional
-class PaymentServiceTest extends IntegrationTestSupport {
+@ExtendWith(MockitoExtension.class)
+class PaymentServiceTest {
 
-    @Autowired
+    @InjectMocks
     PaymentService paymentService;
 
-    @Autowired
-    BalanceWriter balanceWriter;
+    @Mock
+    PaymentValidator paymentValidator;
 
-    @Autowired
-    BalanceJpaRepository balanceJpaRepository;
-
-    @Autowired
-    UserJpaRepository userJpaRepository;
-
-    @MockBean
-    ClockManager clockManager;
-
-    @MockBean
+    @Mock
     EventPublisher eventPublisher;
 
-    @DisplayName("결제 시 유저의 계좌에 잔액이 차감되고 이벤트발행 및 balance 거래 내역을 저장한다.")
+    @DisplayName("결제 시 결제 가능 여부를 검증하고 잔액 차감 후 결제완료 이벤트를 발행한다.")
     @Test
     void pay() {
         // given
-        User user = User.builder()
-                .name("jon")
-                .balance(20000)
-                .build();
-        User savedUser = userJpaRepository.save(user);
+        User payer = mock(User.class);
         Booking booking = mock(Booking.class);
 
-        given(booking.getUser()).willReturn(savedUser);
+        given(payer.getId()).willReturn(1L);
+        given(booking.getUser()).willReturn(payer);
         given(booking.getTotalPrice()).willReturn(10000);
 
-        LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
-
-        Payment payment = Payment.of(booking, user);
+        LocalDateTime paymentDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
+        Payment payment = Payment.of(booking, payer, paymentDateTime);
 
         // when
         paymentService.pay(payment);
 
         // then
-        assertThat(user.getBalance()).isEqualTo(20000 - 10000);
-        then(eventPublisher).should(times(1)).publish(any(PaymentCompletionEvent.class));
-
-        List<Balance> balances = balanceJpaRepository.findAll();
-        assertThat(balances).hasSize(1)
-                .extracting("user", "transactionDateTime", "TransactionType", "amount")
-                .contains(
-                        tuple(savedUser, transactionDateTime, USE, 10000L)
-                );
-    }
-
-    @DisplayName("결제 시 결제자의 잔액이 결제금 보다 부족하면 예외가 발생한다.")
-    @Test
-    void payWithNotEnoughBalance() {
-        // given
-        User user = User.builder()
-                .name("jon")
-                .balance(20000)
-                .build();
-        User savedUser = userJpaRepository.save(user);
-        Booking booking = mock(Booking.class);
-
-        given(booking.getUser()).willReturn(savedUser);
-        given(booking.getTotalPrice()).willReturn(50000);
-
-        Payment payment = Payment.of(booking, user);
-
-        // when & then
-        Assertions.assertThatThrownBy(() -> paymentService.pay(payment))
-                        .isInstanceOf(RestApiException.class)
-                        .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
+        then(payer).should(times(1)).useBalance(10000L);
+        then(eventPublisher).should(times(1)).publish(PaymentCompletionEvent.from(payment));
+        then(paymentValidator).should(times(1)).validatePayableTime(payment);
+        then(paymentValidator).should(times(1)).validatePayerEquality(payment);
+        then(paymentValidator).should(times(1)).checkPayerBalance(payment);
     }
 }
