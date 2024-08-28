@@ -33,7 +33,7 @@ public class PaymentService {
 
     private static void useBalance(Payment payment) {
         User payer = payment.getUser();
-        long totalPrice = payment.getBooking().getTotalPrice();
+        long totalPrice = payment.getPaymentAmount();
         payer.useBalance(totalPrice);
     }
 

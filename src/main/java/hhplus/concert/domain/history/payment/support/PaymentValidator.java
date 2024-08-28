@@ -35,7 +35,7 @@ public class PaymentValidator {
 
     public void checkPayerBalance(Payment payment) {
         User payer = payment.getUser();
-        int totalPrice = payment.getBooking().getTotalPrice();
+        int totalPrice = payment.getPaymentAmount();
         if (payer.isBalanceLessThan(totalPrice)) {
             throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
         }
