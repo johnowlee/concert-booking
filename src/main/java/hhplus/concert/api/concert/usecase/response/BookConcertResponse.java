@@ -1,8 +1,8 @@
 package hhplus.concert.api.concert.usecase.response;
 
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.user.models.User;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -16,16 +16,28 @@ public record BookConcertResponse(
         LocalDateTime concertDateTime,
         List<String> seats) {
 
-    public static BookConcertResponse of(User user, Booking booking, List<Seat> seats) {
+    public static BookConcertResponse from(Booking booking) {
         return new BookConcertResponse(
                 booking.getId(),
                 booking.getBookingDateTime(),
-                user.getName(),
+                booking.getUser().getName(),
                 booking.getConcertTitle(),
-                seats.get(0).getConcertOption().getConcertDateTime(),
-                getSeatNos(seats)
+                getConcertDateTime(booking),
+                getBookingSeatNumbers(booking)
         );
     }
+
+    private static List<String> getBookingSeatNumbers(Booking booking) {
+        List<BookingSeat> bookingSeats = booking.getBookingSeats();
+        return bookingSeats.stream()
+                .map(bs -> bs.getSeat().getSeatNo())
+                .toList();
+    }
+
+    private static LocalDateTime getConcertDateTime(Booking booking) {
+        return booking.getBookingSeats().get(0).getSeat().getConcertOption().getConcertDateTime();
+    }
+
 
     private static List<String> getSeatNos(List<Seat> seats) {
         return seats.stream()

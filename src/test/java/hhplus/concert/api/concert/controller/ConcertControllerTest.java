@@ -167,9 +167,9 @@ class ConcertControllerTest {
                 .user(user)
                 .concertTitle("아이유콘서트")
                 .build();
-        booking.addBookingSeat(bookingSeat);
+        bookingSeat.setBooking(booking);
 
-        BookConcertResponse bookConcertResponse = BookConcertResponse.of(user, booking, seats);
+        BookConcertResponse bookConcertResponse = BookConcertResponse.from(booking);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "1");
         given(bookConcertUseCase.execute(concertBookingRequest)).willReturn(bookConcertResponse);
 

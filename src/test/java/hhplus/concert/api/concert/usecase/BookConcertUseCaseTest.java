@@ -3,6 +3,7 @@ package hhplus.concert.api.concert.usecase;
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.booking.support.BookingService;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
@@ -56,12 +57,25 @@ class BookConcertUseCaseTest {
         Seat seat1 = createSeat("A-1", concertOption);
         Seat seat2 = createSeat("A-2", concertOption);
 
+
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 15, 16, 30, 30);
         Booking booking = Booking.builder()
                 .concertTitle("concert")
                 .bookingDateTime(bookingDateTime)
                 .user(user)
                 .build();
+
+        BookingSeat bookingSeat1 = BookingSeat.builder()
+                .id(1L)
+                .seat(seat1)
+                .build();
+        bookingSeat1.setBooking(booking);
+
+        BookingSeat bookingSeat2 = BookingSeat.builder()
+                .id(2L)
+                .seat(seat2)
+                .build();
+        bookingSeat2.setBooking(booking);
 
         given(userReader.getUserById(request.userId())).willReturn(user);
         given(seatReader.getSeatsByIds(request.seatIds())).willReturn(List.of(seat1, seat2));
