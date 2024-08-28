@@ -3,6 +3,7 @@ package hhplus.concert.domain.history.payment.support;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -27,12 +28,16 @@ class PaymentValidatorTest {
         Booking booking = mock(Booking.class);
         User booker = mock(User.class);
 
+        given(booker.getId()).willReturn(1L);
         given(booking.getUser()).willReturn(booker);
 
-        PaymentValidator paymentValidator = new PaymentValidator();
+        User payer = mock(User.class);
+        given(payer.getId()).willReturn(1L);
+        Payment payment = Payment.of(booking, payer);
 
         // when & then
-        paymentValidator.validatePayer(booking, booker);
+        PaymentValidator paymentValidator = new PaymentValidator();
+        paymentValidator.validatePayer(payment);
     }
 
     @DisplayName("예약자와 결제자가 다르면 예외가 발생한다.")
@@ -40,19 +45,19 @@ class PaymentValidatorTest {
     void validatePayerWhenPayerNotEqualsBooker() {
         // given
         Booking booking = mock(Booking.class);
-        User payer = mock(User.class);
         User booker = mock(User.class);
-
         given(booking.getUser()).willReturn(booker);
         given(booker.getId()).willReturn(1L);
-        given(payer.getId()).willReturn(2L);
 
+        User payer = mock(User.class);
+        given(payer.getId()).willReturn(2L);
         given(booker.doesNotEqual(payer)).willReturn(true);
 
-        PaymentValidator paymentValidator = new PaymentValidator();
+        Payment payment = Payment.of(booking, payer);
 
         // when & then
-        assertThatThrownBy(() -> paymentValidator.validatePayer(booking, payer))
+        PaymentValidator paymentValidator = new PaymentValidator();
+        assertThatThrownBy(() -> paymentValidator.validatePayer(payment))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(INVALID_PAYER.getMessage());
     }
@@ -66,14 +71,15 @@ class PaymentValidatorTest {
         Booking booking = Booking.builder()
                 .bookingDateTime(bookingDateTime)
                 .build();
+        LocalDateTime paymentDateTime = LocalDateTime.of(2024, 8, 11, 11, 10);
+        Payment payment = Payment.of(booking, null, paymentDateTime);
 
         // when & then
-        LocalDateTime verificationTime = LocalDateTime.of(2024, 8, 11, 11, 10);
-        long passedMinutes = Duration.between(booking.getBookingDateTime(), verificationTime).toMinutes();
+        long passedMinutes = Duration.between(booking.getBookingDateTime(), paymentDateTime).toMinutes();
         Assertions.assertThat(passedMinutes).isGreaterThanOrEqualTo(allowedMinutes);
 
         PaymentValidator paymentValidator = new PaymentValidator();
-        assertThatThrownBy(() -> paymentValidator.validatePayableTime(booking, verificationTime))
+        assertThatThrownBy(() -> paymentValidator.validatePayableTime(payment))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(PAYABLE_TIME_OVER.getMessage());
     }
@@ -82,16 +88,21 @@ class PaymentValidatorTest {
     @Test
     void validatePayability() {
         // given
-        User user = User.builder()
-                .balance(10000L)
+        User payer = User.builder()
+                .balance(10000)
                 .build();
-        long paymentAmount = 30000L;
+
+        int totalAmount = 30000;
+        Booking booking = mock(Booking.class);
+        given(booking.getTotalPrice()).willReturn(totalAmount);
+
+        Payment payment = Payment.of(booking, payer);
 
         // when & then
         PaymentValidator paymentValidator = new PaymentValidator();
 
-        Assertions.assertThat(user.isBalanceLessThan(30000L)).isTrue();
-        assertThatThrownBy(() -> paymentValidator.validatePayability(user, paymentAmount))
+        Assertions.assertThat(payer.isBalanceLessThan(30000L)).isTrue();
+        assertThatThrownBy(() -> paymentValidator.validatePayability(payment))
                         .isInstanceOf(RestApiException.class)
                         .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
     }
