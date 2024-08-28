@@ -23,7 +23,7 @@ class PaymentValidatorTest {
 
     @DisplayName("예약자와 결제자가 동일하면 검증에 통과한다.")
     @Test
-    void validatePayer() {
+    void validatePayerEquality() {
         // given
         Booking booking = mock(Booking.class);
         User booker = mock(User.class);
@@ -37,7 +37,7 @@ class PaymentValidatorTest {
 
         // when & then
         PaymentValidator paymentValidator = new PaymentValidator();
-        paymentValidator.validatePayer(payment);
+        paymentValidator.validatePayerEquality(payment);
     }
 
     @DisplayName("예약자와 결제자가 다르면 예외가 발생한다.")
@@ -57,7 +57,7 @@ class PaymentValidatorTest {
 
         // when & then
         PaymentValidator paymentValidator = new PaymentValidator();
-        assertThatThrownBy(() -> paymentValidator.validatePayer(payment))
+        assertThatThrownBy(() -> paymentValidator.validatePayerEquality(payment))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(INVALID_PAYER.getMessage());
     }
@@ -86,7 +86,7 @@ class PaymentValidatorTest {
 
     @DisplayName("결제자의 잔액이 결제액 보다 부족하면 예외가 발생한다.")
     @Test
-    void validatePayability() {
+    void checkPayerBalance() {
         // given
         User payer = User.builder()
                 .balance(10000)
@@ -102,7 +102,7 @@ class PaymentValidatorTest {
         PaymentValidator paymentValidator = new PaymentValidator();
 
         Assertions.assertThat(payer.isBalanceLessThan(30000L)).isTrue();
-        assertThatThrownBy(() -> paymentValidator.validatePayability(payment))
+        assertThatThrownBy(() -> paymentValidator.checkPayerBalance(payment))
                         .isInstanceOf(RestApiException.class)
                         .hasMessage(BalanceErrorCode.NOT_ENOUGH_BALANCE.getMessage());
     }

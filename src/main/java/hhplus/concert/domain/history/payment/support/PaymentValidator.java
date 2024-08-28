@@ -16,7 +16,7 @@ import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolic
 @Component
 public class PaymentValidator {
 
-    public void validatePayer(Payment payment) {
+    public void validatePayerEquality(Payment payment) {
         User booker = payment.getBooking().getUser();
         User payer = payment.getUser();
         if (booker.doesNotEqual(payer)) {
@@ -33,7 +33,7 @@ public class PaymentValidator {
         }
     }
 
-    public void validatePayability(Payment payment) {
+    public void checkPayerBalance(Payment payment) {
         User payer = payment.getUser();
         int totalPrice = payment.getBooking().getTotalPrice();
         if (payer.isBalanceLessThan(totalPrice)) {
