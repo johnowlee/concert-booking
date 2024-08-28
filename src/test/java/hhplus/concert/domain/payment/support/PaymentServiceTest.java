@@ -7,7 +7,7 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
 import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
@@ -75,7 +75,7 @@ class PaymentServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(user.getBalance()).isEqualTo(20000 - 10000);
-        then(eventPublisher).should(times(1)).publish(any(PaymentCompleteEvent.class));
+        then(eventPublisher).should(times(1)).publish(any(PaymentCompletionEvent.class));
 
         List<Balance> balances = balanceJpaRepository.findAll();
         assertThat(balances).hasSize(1)
