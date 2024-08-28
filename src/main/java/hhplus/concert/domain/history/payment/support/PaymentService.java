@@ -30,15 +30,14 @@ public class PaymentService {
         // 잔액 검증
         paymentValidator.validatePayability(payment);
 
-        Booking booking = payment.getBooking();
         User payer = payment.getUser();
-        long totalPrice = booking.getTotalPrice();
+        long totalPrice = payment.getBooking().getTotalPrice();
 
         // 잔액 사용
         payer.useBalance(totalPrice);
 
         // 결제 완료 이벤트 발행
-        eventPublisher.publish(PaymentCompleteEvent.from(booking));
+        eventPublisher.publish(PaymentCompleteEvent.from(payment));
 
         // 잔액내역 save
         balanceWriter.saveUseBalance(payer, totalPrice, clockManager);
