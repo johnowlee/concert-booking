@@ -102,14 +102,17 @@ public class Booking {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Booking booking = (Booking) object;
-        return Objects.equals(id, booking.id);
+        if (this == object){
+            return true;
+        }
+        if (!(object instanceof Booking booking)) {
+            return false;
+        }
+        return this.getId() != null && Objects.equals(getId(), booking.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 }
