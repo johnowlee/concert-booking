@@ -5,6 +5,7 @@ import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -28,21 +29,26 @@ public class ChargeBalanceUseCase {
 
     public UserResponse execute(Long userId, BalanceChargeRequest request) {
         try {
-            long amount = request.balance();
-            User user = userReader.getUserById(userId);
+            Balance balance = createChargeBalance(userId, request);
 
-            chargeBalance(user, amount);
+            chargeBalance(balance);
 
-            balanceWriter.saveChargeBalance(user, amount, clockManager);
-
-            return UserResponse.from(user);
+            balanceWriter.saveBalance(balance);
+            return UserResponse.from(balance.getUser());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }
     }
 
-    private void chargeBalance(User user, long amount) {
-        user.chargeBalance(amount);
+    private Balance createChargeBalance(Long userId, BalanceChargeRequest request) {
+        User user = userReader.getUserById(userId);
+        long amount = request.balance();
+        return Balance.createChargeBalance(user, amount, clockManager);
+    }
+
+    private void chargeBalance(Balance balance) {
+        long chargeAmount = balance.getAmount();
+        balance.getUser().chargeBalance(chargeAmount);
         em.flush();
     }
 }

@@ -15,8 +15,8 @@ public class BalanceWriter {
 
     private final BalanceWriterRepository balanceWriterRepository;
 
-    public Balance saveChargeBalance(User user, long amount, ClockManager clockManager) {
-        return balanceWriterRepository.save(createChargeBalance(user, amount, clockManager));
+    public Balance saveBalance(Balance balance) {
+        return balanceWriterRepository.save(balance);
     }
 
     public Balance saveUseBalance(Balance balance) {

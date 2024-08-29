@@ -52,8 +52,10 @@ class BalanceWriterTest extends IntegrationTestSupport {
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
         given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
+        Balance chargeBalance = Balance.createChargeBalance(savedUser, amount, clockManager);
+
         // when
-        balanceWriter.saveChargeBalance(savedUser, amount, clockManager);
+        balanceWriter.saveBalance(chargeBalance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
