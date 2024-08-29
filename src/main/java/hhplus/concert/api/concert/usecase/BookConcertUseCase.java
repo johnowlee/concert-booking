@@ -27,18 +27,22 @@ public class BookConcertUseCase {
     @Transactional
     public BookConcertResponse execute(ConcertBookingRequest request) {
 
-        // 1. 예약상태, 좌석상태 검증
-        bookingService.validateBookability(request.seatIds());
+        validateBookability(request);
 
-        // 2. 유저 조회
-        User user = userReader.getUserById(request.userId());
-
-        // 3. 좌석정보 조회
-        List<Seat> seats = seatReader.getSeatsByIds(request.seatIds());
-
-        // 4. 콘서트 예약
-        Booking booking = bookingService.book(user, seats);
+        Booking booking = bookConcert(request);
 
         return BookConcertResponse.from(booking);
+    }
+
+    private void validateBookability(ConcertBookingRequest request) {
+        bookingService.validateBookability(request.seatIds());
+    }
+
+    private Booking bookConcert(ConcertBookingRequest request) {
+        User user = userReader.getUserById(request.userId());
+
+        List<Seat> seats = seatReader.getSeatsByIds(request.seatIds());
+
+        return bookingService.book(user, seats);
     }
 }
