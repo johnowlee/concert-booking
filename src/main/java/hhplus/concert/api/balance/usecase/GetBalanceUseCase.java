@@ -12,6 +12,6 @@ public class GetBalanceUseCase {
     private final UserReader userReader;
 
     public UserResponse execute(Long userId) {
-        return UserResponse.forBalanceResponseFrom(userReader.getUserById(userId));
+        return UserResponse.from(userReader.getUserById(userId));
     }
 }

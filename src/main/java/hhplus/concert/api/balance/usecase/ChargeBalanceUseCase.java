@@ -35,7 +35,7 @@ public class ChargeBalanceUseCase {
 
             balanceWriter.saveChargeBalance(user, amount, clockManager);
 
-            return UserResponse.forBalanceResponseFrom(user);
+            return UserResponse.from(user);
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
         }

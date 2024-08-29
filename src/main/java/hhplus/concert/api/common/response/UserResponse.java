@@ -18,7 +18,7 @@ public record UserResponse(
         List<PaymentResponse> payments
 ) {
 
-    public static UserResponse forBalanceResponseFrom(User user) {
+    public static UserResponse from(User user) {
         return new UserResponse(user.getId(), user.getName(), user.getBalance(), null, null);
     }
 }
