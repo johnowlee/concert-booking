@@ -29,8 +29,7 @@ public class BookingSeat {
     private Seat seat;
 
     @Builder
-    private BookingSeat(Long id, Booking booking, Seat seat) {
-        this.id = id;
+    private BookingSeat(Booking booking, Seat seat) {
         this.seat = seat;
         this.booking = booking;
     }
