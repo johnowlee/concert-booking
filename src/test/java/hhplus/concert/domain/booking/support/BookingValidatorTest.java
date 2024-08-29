@@ -6,14 +6,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.ALREADY_BOOKED;
 import static hhplus.concert.api.exception.code.BookingErrorCode.PENDING_BOOKING;
-import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
+import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class BookingValidatorTest {
@@ -35,7 +34,8 @@ class BookingValidatorTest {
                 .concertTitle("NewJeans 콘서트")
                 .bookingStatus(COMPLETE)
                 .build();
-        List<Booking> bookings = new ArrayList<>(List.of(booking1, booking2));
+
+        Set<Booking> bookings = Set.of(booking1, booking2);
 
 
         // when & then
@@ -62,7 +62,7 @@ class BookingValidatorTest {
                 .concertTitle("NewJeans 콘서트")
                 .bookingStatus(INCOMPLETE)
                 .build();
-        List<Booking> bookings = new ArrayList<>(List.of(booking1, booking2));
+        Set<Booking> bookings = Set.of(booking1, booking2);
 
 
         // when & then
@@ -83,7 +83,7 @@ class BookingValidatorTest {
         Booking booking2 = Booking.builder()
                 .bookingDateTime(bookingDateTime2)
                 .build();
-        List<Booking> bookings = List.of(booking1, booking2);
+        Set<Booking> bookings = Set.of(booking1, booking2);
 
         // when & then
         BookingValidator bookingValidator = new BookingValidator();
@@ -106,7 +106,7 @@ class BookingValidatorTest {
         Booking booking2 = Booking.builder()
                 .bookingDateTime(bookingDateTime2)
                 .build();
-        List<Booking> bookings = List.of(booking1, booking2);
+        Set<Booking> bookings = Set.of(booking1, booking2);
 
         // when & then
         BookingValidator bookingValidator = new BookingValidator();

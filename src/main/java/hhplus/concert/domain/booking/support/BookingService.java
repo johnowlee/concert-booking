@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -45,16 +46,16 @@ public class BookingService {
 
     public void validateBookability(List<Long> seatIds) {
         List<BookingSeat> bookingSeats = bookingSeatReader.getBookingSeatsBySeatIds(seatIds);
-        List<Booking> bookings = extractBookings(bookingSeats);
+        Set<Booking> bookings = extractBookings(bookingSeats);
         bookingValidator.checkAnyAlreadyCompleteBooking(bookings);
         bookingValidator.checkAnyPendingBooking(bookings, clockManager.getNowDateTime());
         seatValidator.checkAnyBookedSeat(extractSeats(bookingSeats));
     }
 
-    private List<Booking> extractBookings(List<BookingSeat> bookingSeats) {
+    private Set<Booking> extractBookings(List<BookingSeat> bookingSeats) {
         return bookingSeats.stream()
                 .map(BookingSeat::getBooking)
-                .collect(Collectors.toList());
+                .collect(Collectors.toUnmodifiableSet());
     }
 
     private List<Seat> extractSeats(List<BookingSeat> bookingSeats) {

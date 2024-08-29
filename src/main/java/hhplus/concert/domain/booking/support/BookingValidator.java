@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static hhplus.concert.api.exception.code.BookingErrorCode.ALREADY_BOOKED;
 import static hhplus.concert.api.exception.code.BookingErrorCode.PENDING_BOOKING;
@@ -17,11 +18,11 @@ import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolic
 @Component
 public class BookingValidator {
 
-    public void checkAnyAlreadyCompleteBooking(List<Booking> bookings) {
+    public void checkAnyAlreadyCompleteBooking(Set<Booking> bookings) {
         bookings.forEach(BookingValidator::validateAlreadyBooked);
     }
 
-    public void checkAnyPendingBooking(List<Booking> bookings, LocalDateTime localDateTime) {
+    public void checkAnyPendingBooking(Set<Booking> bookings, LocalDateTime localDateTime) {
         bookings.forEach(booking -> validatePendingBooking(booking, localDateTime));
     }
 
