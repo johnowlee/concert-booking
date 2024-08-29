@@ -10,6 +10,7 @@ import hhplus.concert.domain.concert.infrastructure.ConcertJpaRepository;
 import hhplus.concert.domain.concert.infrastructure.ConcertOptionJpaRepository;
 import hhplus.concert.domain.concert.infrastructure.SeatJpaRepository;
 import hhplus.concert.domain.concert.models.*;
+import hhplus.concert.domain.concert.support.SeatValidator;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
@@ -22,16 +23,15 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.*;
 import static hhplus.concert.domain.concert.models.SeatGrade.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.ArgumentMatchers.anyList;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
 @Transactional
 class BookingServiceTest extends IntegrationTestSupport {
@@ -44,6 +44,12 @@ class BookingServiceTest extends IntegrationTestSupport {
 
     @MockBean
     BookingSeatReader bookingSeatReader;
+
+    @MockBean
+    BookingValidator bookingValidator;
+
+    @MockBean
+    SeatValidator seatValidator;
 
     @SpyBean
     BookingSeatManager bookingSeatManager;
@@ -137,21 +143,32 @@ class BookingServiceTest extends IntegrationTestSupport {
 
     @DisplayName("예약 가능 여부를 검증한다.")
     @Test
-    void validateBookability() {
+    void validateBookability3() {
         // given
-        List<BookingSeat> bookingSeats = List.of(mock(BookingSeat.class));
-        LocalDateTime dateTime = mock(LocalDateTime.class);
-        ClockManager clockManager = mock(ClockManager.class);
+        List<Long> seatIds = List.of(1L, 2L);
+        BookingSeat bookingSeat1 = mock(BookingSeat.class);
+        BookingSeat bookingSeat2 = mock(BookingSeat.class);
+        List<BookingSeat> bookingSeats = List.of(bookingSeat1, bookingSeat2);
 
-        given(bookingSeatReader.getBookingSeatsBySeatIds(anyList())).willReturn(bookingSeats);
-        given(this.clockManager.getNowDateTime()).willReturn(dateTime);
+        Booking booking1 = mock(Booking.class);
+        Booking booking2 = mock(Booking.class);
+        Set<Booking> bookings = Set.of(booking1, booking2);
+
+        given(bookingSeat1.getBooking()).willReturn(booking1);
+        given(bookingSeat2.getBooking()).willReturn(booking2);
+
+        given(bookingSeatReader.getBookingSeatsBySeatIds(seatIds)).willReturn(bookingSeats);
+
+        LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 11, 11, 00);
+        given(clockManager.getNowDateTime()).willReturn(bookingDateTime);
 
         // when
-        bookingService.validateBookability(anyList());
+        bookingService.validateBookability(seatIds);
 
         // then
-        verify(bookingSeatReader).getBookingSeatsBySeatIds(anyList());
-        verify(this.clockManager).getNowDateTime();
+        then(bookingValidator).should(times(1)).checkAnyAlreadyCompleteBooking(bookings);
+        then(bookingValidator).should(times(1)).checkAnyPendingBooking(bookings, bookingDateTime);
+        then(seatValidator).should(times(1)).checkAnyBookedSeat(anyList());
     }
 
     private static Seat createSeat(String seatNo, SeatBookingStatus booked, ConcertOption savedConcertOption, SeatGrade a) {
