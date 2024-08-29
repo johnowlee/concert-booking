@@ -145,7 +145,6 @@ class BookingServiceTest extends IntegrationTestSupport {
 
         given(bookingSeatReader.getBookingSeatsBySeatIds(anyList())).willReturn(bookingSeats);
         given(this.clockManager.getNowDateTime()).willReturn(dateTime);
-        willDoNothing().given(bookingSeatManager).validateBookable(bookingSeats, clockManager);
 
         // when
         bookingService.validateBookability(anyList());
@@ -153,7 +152,6 @@ class BookingServiceTest extends IntegrationTestSupport {
         // then
         verify(bookingSeatReader).getBookingSeatsBySeatIds(anyList());
         verify(this.clockManager).getNowDateTime();
-        verify(bookingSeatManager).validateBookable(bookingSeats, clockManager);
     }
 
     private static Seat createSeat(String seatNo, SeatBookingStatus booked, ConcertOption savedConcertOption, SeatGrade a) {

@@ -7,6 +7,7 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.support.SeatManager;
+import hhplus.concert.domain.concert.support.SeatValidator;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Component
@@ -26,6 +28,9 @@ public class BookingService {
     private final BookingSeatManager bookingSeatManager;
     private final BookingSeatReader bookingSeatReader;
     private final ClockManager clockManager;
+
+    private final BookingValidator bookingValidator;
+    private final SeatValidator seatValidator;
 
     public Booking book(User user, List<Seat> seats) {
         Booking booking = initializeBooking(user, seats);
@@ -40,7 +45,22 @@ public class BookingService {
 
     public void validateBookability(List<Long> seatIds) {
         List<BookingSeat> bookingSeats = bookingSeatReader.getBookingSeatsBySeatIds(seatIds);
-        bookingSeatManager.validateBookable(bookingSeats, clockManager);
+        List<Booking> bookings = extractBookings(bookingSeats);
+        bookingValidator.checkAnyAlreadyCompleteBooking(bookings);
+        bookingValidator.checkAnyPendingBooking(bookings, clockManager.getNowDateTime());
+        seatValidator.checkAnyBookedSeat(extractSeats(bookingSeats));
+    }
+
+    private List<Booking> extractBookings(List<BookingSeat> bookingSeats) {
+        return bookingSeats.stream()
+                .map(BookingSeat::getBooking)
+                .collect(Collectors.toList());
+    }
+
+    private List<Seat> extractSeats(List<BookingSeat> bookingSeats) {
+        return bookingSeats.stream()
+                .map(BookingSeat::getSeat)
+                .collect(Collectors.toList());
     }
 
     private Booking initializeBooking(User user, List<Seat> seats) {
