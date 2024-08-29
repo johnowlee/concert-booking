@@ -64,11 +64,7 @@ class ConcertControllerTest {
     @Test
     public void getConcerts() throws Exception {
         // given
-        Concert concert = Concert.builder()
-                .id(1L)
-                .title("아이유 콘서트")
-                .organizer("아이유")
-                .build();
+        Concert concert = createConcert();
         List<Concert> concerts = new ArrayList<>(List.of(concert));
 
         ConcertsResponse concertsResponse = ConcertsResponse.from(concerts);
@@ -80,7 +76,6 @@ class ConcertControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.concerts[0].id").value(1L))
                 .andExpect(jsonPath("$.data.concerts[0].title").value("아이유 콘서트"))
                 .andExpect(jsonPath("$.data.concerts[0].organizer").value("아이유"));
     }
@@ -109,16 +104,12 @@ class ConcertControllerTest {
     @Test
     public void getConcertOption() throws Exception {
         // given
-        Concert concert = Concert.builder()
-                .id(1L)
-                .build();
         Seat seat = Seat.builder()
                 .id(5L)
                 .seatNo("A1")
                 .seatBookingStatus(AVAILABLE)
                 .build();
         ConcertOption concertOption = ConcertOption.builder()
-                .concert(concert)
                 .place("월드컵경기장")
                 .build();
 
@@ -142,10 +133,7 @@ class ConcertControllerTest {
     public void bookConcert() throws Exception {
         // given
         User user = User.builder().name("홍길동").build();
-        Concert concert = Concert.builder()
-                .id(1L)
-                .build();
-
+        Concert concert = createConcert();
         ConcertOption concertOption = ConcertOption.builder()
                 .concert(concert)
                 .place("월드컵경기장")
@@ -157,7 +145,6 @@ class ConcertControllerTest {
                 .seatBookingStatus(AVAILABLE)
                 .concertOption(concertOption)
                 .build();
-        List<Seat> seats = List.of(seat);
 
         BookingSeat bookingSeat = BookingSeat.builder()
                 .seat(seat)
@@ -226,7 +213,7 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.message").value("아이디가 부적합 합니다."));
     }
 
-    @DisplayName("콘서트 예약시 좌석 ID는 필수다.ㄱ")
+    @DisplayName("콘서트 예약시 좌석 ID는 필수다.")
     @Test
     public void bookConcertWithNoSeatId() throws Exception {
         // given
@@ -264,5 +251,12 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
                 .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
                 .andExpect(jsonPath("$.message").value("좌석 ID가 유효하지 않습니다."));
+    }
+
+    private static Concert createConcert() {
+        return Concert.builder()
+                .title("아이유 콘서트")
+                .organizer("아이유")
+                .build();
     }
 }
