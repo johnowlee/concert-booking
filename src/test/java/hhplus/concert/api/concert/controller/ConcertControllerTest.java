@@ -141,7 +141,6 @@ class ConcertControllerTest {
                 .seat(seat)
                 .build();
         Booking booking = Booking.builder()
-                .id(1L)
                 .user(user)
                 .concertTitle("아이유콘서트")
                 .build();

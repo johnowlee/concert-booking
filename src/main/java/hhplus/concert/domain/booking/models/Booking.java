@@ -44,8 +44,7 @@ public class Booking {
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
-        this.id = id;
+    private Booking(BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
