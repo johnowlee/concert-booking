@@ -36,20 +36,13 @@ public class PayBookingUseCase {
 
         Payment payment = createPayment(id, request);
 
-        // 결제
         paymentService.pay(payment);
 
-        // 잔액 내역 저장
         balanceWriter.saveUseBalance(Balance.createUseBalanceFrom(payment));
 
-        // 결제 내역 저장
         paymentWriter.save(payment);
 
-        // 예약 완료
-        payment.getBooking().markAsComplete();
-
-        // 좌석 예약 완료
-        payment.getBooking().reserveAllSeats();
+        completeBooking(payment);
 
         return PaymentResponse.from(payment);
     }
@@ -59,5 +52,10 @@ public class PayBookingUseCase {
         User payer = userReader.getUserById(request.userId());
         LocalDateTime paymentDateTime = clockManager.getNowDateTime();
         return Payment.of(booking, payer, paymentDateTime);
+    }
+
+    private void completeBooking(Payment payment) {
+        payment.getBooking().markAsComplete();
+        payment.getBooking().reserveAllSeats();
     }
 }
