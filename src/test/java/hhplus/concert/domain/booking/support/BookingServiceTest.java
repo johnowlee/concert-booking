@@ -141,18 +141,19 @@ class BookingServiceTest extends IntegrationTestSupport {
         // given
         List<BookingSeat> bookingSeats = List.of(mock(BookingSeat.class));
         LocalDateTime dateTime = mock(LocalDateTime.class);
+        ClockManager clockManager = mock(ClockManager.class);
 
         given(bookingSeatReader.getBookingSeatsBySeatIds(anyList())).willReturn(bookingSeats);
-        given(clockManager.getNowDateTime()).willReturn(dateTime);
-        willDoNothing().given(bookingSeatManager).validateBookable(bookingSeats, dateTime);
+        given(this.clockManager.getNowDateTime()).willReturn(dateTime);
+        willDoNothing().given(bookingSeatManager).validateBookable(bookingSeats, clockManager);
 
         // when
         bookingService.validateBookability(anyList());
 
         // then
         verify(bookingSeatReader).getBookingSeatsBySeatIds(anyList());
-        verify(clockManager).getNowDateTime();
-        verify(bookingSeatManager).validateBookable(bookingSeats, dateTime);
+        verify(this.clockManager).getNowDateTime();
+        verify(bookingSeatManager).validateBookable(bookingSeats, clockManager);
     }
 
     private static Seat createSeat(String seatNo, SeatBookingStatus booked, ConcertOption savedConcertOption, SeatGrade a) {

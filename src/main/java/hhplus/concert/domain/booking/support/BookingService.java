@@ -40,7 +40,7 @@ public class BookingService {
 
     public void validateBookability(List<Long> seatIds) {
         List<BookingSeat> bookingSeats = bookingSeatReader.getBookingSeatsBySeatIds(seatIds);
-        bookingSeatManager.validateBookable(bookingSeats, clockManager.getNowDateTime());
+        bookingSeatManager.validateBookable(bookingSeats, clockManager);
     }
 
     private Booking initializeBooking(User user, List<Seat> seats) {

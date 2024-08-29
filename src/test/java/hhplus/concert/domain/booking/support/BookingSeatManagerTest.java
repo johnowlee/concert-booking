@@ -7,9 +7,12 @@ import hhplus.concert.domain.booking.models.BookingStatus;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.support.SeatValidator;
+import hhplus.concert.domain.support.ClockManager;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,6 +24,8 @@ import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolic
 import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
 import static hhplus.concert.domain.booking.models.BookingStatus.INCOMPLETE;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 class BookingSeatManagerTest {
 
@@ -44,9 +49,12 @@ class BookingSeatManagerTest {
         List<BookingSeat> bookingSeats2 = bookingSeatManager.createBookingSeats(List.of(seat2, seat3), booking2);
         List<BookingSeat> bookingSeats = mergeBookingSeats(bookingSeats1, bookingSeats2);
 
+        LocalDateTime verificationTime = bookingDateTime2.plusMinutes(expiryMinutes);
+        ClockManager clockManager = mock(ClockManager.class);
+        given(clockManager.getNowDateTime()).willReturn(verificationTime);
+
         // when &then
-        LocalDateTime validateTime = bookingDateTime2.plusMinutes(expiryMinutes);
-        bookingSeatManager.validateBookable(bookingSeats, validateTime);
+        bookingSeatManager.validateBookable(bookingSeats, clockManager);
     }
 
     @DisplayName("예약들의 예약 시간이 모두 만료가 되었고 좌석의 예약상태가 유효 하더라도, 예약의 예약상태가 한 건이라도 완료상태이면 예외가 발생한다.")
@@ -69,9 +77,12 @@ class BookingSeatManagerTest {
         List<BookingSeat> bookingSeats2 = bookingSeatManager.createBookingSeats(List.of(seat2, seat3), booking2);
         List<BookingSeat> bookingSeats = mergeBookingSeats(bookingSeats1, bookingSeats2);
 
+        LocalDateTime verificationTime = bookingDateTime2.plusMinutes(expiryMinutes);
+        ClockManager clockManager = mock(ClockManager.class);
+        given(clockManager.getNowDateTime()).willReturn(verificationTime);
+
         // when &then
-        LocalDateTime validateTime = bookingDateTime2.plusMinutes(expiryMinutes);
-        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, validateTime))
+        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, clockManager))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(ALREADY_BOOKED.getMessage());
     }
@@ -96,9 +107,14 @@ class BookingSeatManagerTest {
         List<BookingSeat> bookingSeats2 = bookingSeatManager.createBookingSeats(List.of(seat2, seat3), booking2);
         List<BookingSeat> bookingSeats = mergeBookingSeats(bookingSeats1, bookingSeats2);
 
+        LocalDateTime verificationTime = bookingDateTime2.plusMinutes(expiryMinutes - 1);
+        ClockManager clockManager = mock(ClockManager.class);
+        given(clockManager.getNowDateTime()).willReturn(verificationTime);
+
         // when &then
-        LocalDateTime validateTime = bookingDateTime2.plusMinutes(expiryMinutes - 1);
-        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, validateTime))
+        long bookingDateTime2MinutesDuration = Duration.between(bookingDateTime2, verificationTime).toMinutes();
+        Assertions.assertThat(bookingDateTime2MinutesDuration).isLessThan(expiryMinutes);
+        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, clockManager))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(PENDING_BOOKING.getMessage());
     }
@@ -123,9 +139,12 @@ class BookingSeatManagerTest {
         List<BookingSeat> bookingSeats2 = bookingSeatManager.createBookingSeats(List.of(seat2, seat3), booking2);
         List<BookingSeat> bookingSeats = mergeBookingSeats(bookingSeats1, bookingSeats2);
 
+        LocalDateTime verificationTime = bookingDateTime2.plusMinutes(expiryMinutes);
+        ClockManager clockManager = mock(ClockManager.class);
+        given(clockManager.getNowDateTime()).willReturn(verificationTime);
+
         // when &then
-        LocalDateTime validateTime = bookingDateTime2.plusMinutes(expiryMinutes);
-        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, validateTime))
+        assertThatThrownBy(() -> bookingSeatManager.validateBookable(bookingSeats, clockManager))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(ALREADY_BOOKED.getMessage());
     }

@@ -4,11 +4,11 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.support.SeatValidator;
+import hhplus.concert.domain.support.ClockManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,10 +20,10 @@ public class BookingSeatManager {
     private final BookingValidator bookingValidator;
     private final SeatValidator seatValidator;
 
-    public void validateBookable(List<BookingSeat> bookingSeats, LocalDateTime localDateTime) {
+    public void validateBookable(List<BookingSeat> bookingSeats, ClockManager clockManager) {
         List<Booking> bookings = extractBookings(bookingSeats);
         bookingValidator.checkAnyAlreadyCompleteBooking(bookings);
-        bookingValidator.checkAnyPendingBooking(bookings, localDateTime);
+        bookingValidator.checkAnyPendingBooking(bookings, clockManager.getNowDateTime());
         seatValidator.checkAnyBookedSeat(extractSeats(bookingSeats));
     }
 
