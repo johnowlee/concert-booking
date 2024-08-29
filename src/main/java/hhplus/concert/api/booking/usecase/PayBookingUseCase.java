@@ -56,6 +56,6 @@ public class PayBookingUseCase {
 
     private void completeBooking(Payment payment) {
         payment.getBooking().markAsComplete();
-        payment.getBooking().reserveAllSeats();
+        payment.getBooking().markSeatsAsBooked();
     }
 }

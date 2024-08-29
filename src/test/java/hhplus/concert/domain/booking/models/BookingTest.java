@@ -125,7 +125,7 @@ class BookingTest {
 
     @DisplayName("좌석의 예약 상태를 모두 좌석된 상태로 변경한다.")
     @Test
-    void reserveAllSeats() {
+    void markSeatsAsBooked() {
         // given
         Seat seat1 = Seat.builder()
                 .seatNo("A-1")
@@ -143,7 +143,7 @@ class BookingTest {
         booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
 
         // when
-        booking.reserveAllSeats();
+        booking.markSeatsAsBooked();
 
         // then
         List<BookingSeat> bookingSeats = booking.getBookingSeats();

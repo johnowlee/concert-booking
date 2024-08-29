@@ -85,7 +85,7 @@ public class Booking {
                 .sum();
     }
 
-    public void reserveAllSeats() {
+    public void markSeatsAsBooked() {
         bookingSeats.stream()
                 .map(BookingSeat::getSeat)
                 .forEach(Seat::markAsBooked);

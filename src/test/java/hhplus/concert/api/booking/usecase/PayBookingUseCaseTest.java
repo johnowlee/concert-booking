@@ -78,6 +78,6 @@ class PayBookingUseCaseTest {
         then(balanceWriter).should(times(1)).saveBalance(any(Balance.class));
         then(paymentWriter).should(times(1)).save(any(Payment.class));
         then(booking).should(times(1)).markAsComplete();
-        then(booking).should(times(1)).reserveAllSeats();
+        then(booking).should(times(1)).markSeatsAsBooked();
     }
 }
