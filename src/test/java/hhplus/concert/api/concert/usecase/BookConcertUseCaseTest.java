@@ -16,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -65,16 +66,10 @@ class BookConcertUseCaseTest {
                 .user(user)
                 .build();
 
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .seat(seat1)
-                .build();
+        BookingSeat bookingSeat1 = createBookingSeat(1L, seat1);
         bookingSeat1.setBooking(booking);
 
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .seat(seat2)
-                .build();
+        BookingSeat bookingSeat2 = createBookingSeat(2L, seat2);
         bookingSeat2.setBooking(booking);
 
         given(userReader.getUserById(request.userId())).willReturn(user);
@@ -101,5 +96,11 @@ class BookConcertUseCaseTest {
                 .seatNo(seatNo)
                 .concertOption(concertOption)
                 .build();
+    }
+
+    private BookingSeat createBookingSeat(Long id, Seat seat) {
+        BookingSeat bookingSeat = BookingSeat.builder().seat(seat).build();
+        ReflectionTestUtils.setField(bookingSeat, "id", id);
+        return bookingSeat;
     }
 }
