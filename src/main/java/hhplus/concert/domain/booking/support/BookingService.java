@@ -28,22 +28,28 @@ public class BookingService {
     private final ClockManager clockManager;
 
     public Booking book(User user, List<Seat> seats) {
-        String concertTitle = seatManager.getConcertTitleFrom(seats);
-        Booking booking = Booking.initializeBooking(concertTitle, clockManager, user);
+        Booking booking = initializeBooking(user, seats);
 
-        // 예약테이블 저장
-        Booking savedBooking = bookingWriter.bookConcert(booking);
+        bookingWriter.bookConcert(booking);
 
-        // 예약좌석매핑 테이블 저장
-        bookingSeatWriter.saveBookingSeats(bookingSeatManager.createBookingSeats(seats, savedBooking));
+        saveBookingSeats(seats, booking);
 
-        // 좌석들 예약 진행 중으로 상태 변경
         seatManager.markAllSeatsAsProcessing(seats);
-        return savedBooking;
+        return booking;
     }
 
     public void validateBookability(List<Long> seatIds) {
         List<BookingSeat> bookingSeats = bookingSeatReader.getBookingSeatsBySeatIds(seatIds);
         bookingSeatManager.validateBookable(bookingSeats, clockManager.getNowDateTime());
+    }
+
+    private Booking initializeBooking(User user, List<Seat> seats) {
+        String concertTitle = seatManager.getConcertTitleFrom(seats);
+        return Booking.initializeBooking(concertTitle, clockManager, user);
+    }
+
+    private void saveBookingSeats(List<Seat> seats, Booking booking) {
+        List<BookingSeat> bookingSeats = bookingSeatManager.createBookingSeats(seats, booking);
+        bookingSeatWriter.saveBookingSeats(bookingSeats);
     }
 }
