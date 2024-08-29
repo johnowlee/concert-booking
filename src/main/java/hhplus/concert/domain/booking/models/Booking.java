@@ -1,6 +1,7 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,12 +52,12 @@ public class Booking {
         this.user = user;
     }
 
-    public static Booking createBooking(String concertTitle, LocalDateTime bookingDateTime, User user) {
+    public static Booking initializeBooking(String concertTitle, ClockManager clockManager, User booker) {
         return Booking.builder()
                 .bookingStatus(INCOMPLETE)
-                .bookingDateTime(bookingDateTime)
+                .bookingDateTime(clockManager.getNowDateTime())
                 .concertTitle(concertTitle)
-                .user(user)
+                .user(booker)
                 .build();
     }
 

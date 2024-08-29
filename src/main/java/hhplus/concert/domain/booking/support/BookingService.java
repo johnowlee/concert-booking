@@ -29,7 +29,7 @@ public class BookingService {
 
     public Booking book(User user, List<Seat> seats) {
         String concertTitle = seatManager.getConcertTitleFrom(seats);
-        Booking booking = Booking.createBooking(concertTitle, clockManager.getNowDateTime(), user);
+        Booking booking = Booking.initializeBooking(concertTitle, clockManager, user);
 
         // 예약테이블 저장
         Booking savedBooking = bookingWriter.bookConcert(booking);
