@@ -88,7 +88,7 @@ class BalanceWriterTest extends IntegrationTestSupport {
         Balance balance = Balance.createUseBalanceFrom(payment);
 
         // when
-        balanceWriter.saveUseBalance(balance);
+        balanceWriter.saveBalance(balance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
