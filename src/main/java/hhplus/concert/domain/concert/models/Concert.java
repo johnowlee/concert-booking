@@ -21,8 +21,7 @@ public class Concert {
     private String organizer;
 
     @Builder
-    private Concert(Long id, String title, String organizer) {
-        this.id = id;
+    private Concert(String title, String organizer) {
         this.title = title;
         this.organizer = organizer;
     }
