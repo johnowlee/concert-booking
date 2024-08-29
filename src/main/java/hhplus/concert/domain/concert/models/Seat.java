@@ -34,8 +34,7 @@ public class Seat {
     private SeatGrade grade;
 
     @Builder
-    private Seat(Long id, String seatNo, SeatBookingStatus seatBookingStatus, ConcertOption concertOption, SeatGrade grade) {
-        this.id = id;
+    private Seat(String seatNo, SeatBookingStatus seatBookingStatus, ConcertOption concertOption, SeatGrade grade) {
         this.seatNo = seatNo;
         this.seatBookingStatus = seatBookingStatus;
         this.concertOption = concertOption;

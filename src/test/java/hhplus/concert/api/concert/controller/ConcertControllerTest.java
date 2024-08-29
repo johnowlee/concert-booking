@@ -15,6 +15,7 @@ import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.queue.support.TokenValidator;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
@@ -104,11 +105,7 @@ class ConcertControllerTest {
     @Test
     public void getConcertOption() throws Exception {
         // given
-        Seat seat = Seat.builder()
-                .id(5L)
-                .seatNo("A1")
-                .seatBookingStatus(AVAILABLE)
-                .build();
+        Seat seat = createSeat("A1", AVAILABLE, null);
         ConcertOption concertOption = ConcertOption.builder()
                 .place("월드컵경기장")
                 .build();
@@ -123,7 +120,6 @@ class ConcertControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.concertOption.place").value("월드컵경기장"))
-                .andExpect(jsonPath("$.data.seats[0].id").value(5L))
                 .andExpect(jsonPath("$.data.seats[0].seatNo").value("A1"))
                 .andExpect(jsonPath("$.data.seats[0].seatBookingStatus").value(AVAILABLE.name()));
     }
@@ -139,12 +135,7 @@ class ConcertControllerTest {
                 .place("월드컵경기장")
                 .build();
 
-        Seat seat = Seat.builder()
-                .id(5L)
-                .seatNo("A1")
-                .seatBookingStatus(AVAILABLE)
-                .concertOption(concertOption)
-                .build();
+        Seat seat = createSeat("A1", AVAILABLE, concertOption);
 
         BookingSeat bookingSeat = BookingSeat.builder()
                 .seat(seat)
@@ -257,6 +248,14 @@ class ConcertControllerTest {
         return Concert.builder()
                 .title("아이유 콘서트")
                 .organizer("아이유")
+                .build();
+    }
+
+    private static Seat createSeat(String seatNo, SeatBookingStatus seatBookingStatus, ConcertOption concertOption) {
+        return Seat.builder()
+                .seatNo(seatNo)
+                .seatBookingStatus(seatBookingStatus)
+                .concertOption(concertOption)
                 .build();
     }
 }
