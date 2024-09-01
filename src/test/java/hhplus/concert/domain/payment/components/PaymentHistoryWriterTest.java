@@ -12,7 +12,7 @@ import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.models.SeatBookingStatus;
 import hhplus.concert.domain.concert.models.SeatGrade;
-import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.infrastructure.PaymentJpaRepository;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.BOOKED;
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.PROCESSING;
@@ -34,10 +33,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
 @Transactional
-class PaymentWriterTest extends IntegrationTestSupport {
+class PaymentHistoryWriterTest extends IntegrationTestSupport {
 
     @Autowired
-    PaymentWriter paymentWriter;
+    PaymentHistoryWriter paymentHistoryWriter;
 
     @Autowired
     PaymentJpaRepository paymentJpaRepository;
@@ -93,7 +92,7 @@ class PaymentWriterTest extends IntegrationTestSupport {
         Payment payment = Payment.of(booking, payer, paymentDateTime);
 
         // when
-        paymentWriter.save(payment);
+        paymentHistoryWriter.save(payment);
 
         // then
         List<Payment> payments = paymentJpaRepository.findAll();

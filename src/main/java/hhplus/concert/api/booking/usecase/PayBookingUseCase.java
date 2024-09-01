@@ -6,7 +6,7 @@ import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
@@ -25,7 +25,7 @@ import java.time.LocalDateTime;
 public class PayBookingUseCase {
 
     private final BookingReader bookingReader;
-    private final PaymentWriter paymentWriter;
+    private final PaymentHistoryWriter paymentHistoryWriter;
     private final BalanceWriter balanceWriter;
     private final PaymentService paymentService;
     private final ClockManager clockManager;
@@ -40,7 +40,7 @@ public class PayBookingUseCase {
 
         balanceWriter.saveBalance(Balance.createUseBalanceFrom(payment));
 
-        paymentWriter.save(payment);
+        paymentHistoryWriter.save(payment);
 
         completeBooking(payment);
 

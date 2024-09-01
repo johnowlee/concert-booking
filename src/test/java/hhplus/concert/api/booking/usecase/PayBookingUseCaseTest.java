@@ -5,7 +5,7 @@ import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.components.BalanceWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
@@ -34,7 +34,7 @@ class PayBookingUseCaseTest {
     BookingReader bookingReader;
 
     @Mock
-    PaymentWriter paymentWriter;
+    PaymentHistoryWriter paymentHistoryWriter;
 
     @Mock
     PaymentService paymentService;
@@ -76,7 +76,7 @@ class PayBookingUseCaseTest {
         then(clockManager).should(times(1)).getNowDateTime();
         then(paymentService).should(times(1)).pay(any(Payment.class));
         then(balanceWriter).should(times(1)).saveBalance(any(Balance.class));
-        then(paymentWriter).should(times(1)).save(any(Payment.class));
+        then(paymentHistoryWriter).should(times(1)).save(any(Payment.class));
         then(booking).should(times(1)).markAsComplete();
         then(booking).should(times(1)).markSeatsAsBooked();
     }

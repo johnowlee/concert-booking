@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class PaymentWriter {
+public class PaymentHistoryWriter {
 
     private final PaymentWriterRepository paymentWriterRepository;
 
