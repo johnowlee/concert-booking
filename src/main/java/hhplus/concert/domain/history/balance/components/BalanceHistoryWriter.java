@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class BalanceWriter {
+public class BalanceHistoryWriter {
 
     private final BalanceWriterRepository balanceWriterRepository;
 

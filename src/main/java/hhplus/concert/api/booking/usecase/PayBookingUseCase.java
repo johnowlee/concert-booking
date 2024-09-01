@@ -4,7 +4,7 @@ import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
@@ -26,7 +26,7 @@ public class PayBookingUseCase {
 
     private final BookingReader bookingReader;
     private final PaymentHistoryWriter paymentHistoryWriter;
-    private final BalanceWriter balanceWriter;
+    private final BalanceHistoryWriter balanceHistoryWriter;
     private final PaymentService paymentService;
     private final ClockManager clockManager;
     private final UserReader userReader;
@@ -38,7 +38,7 @@ public class PayBookingUseCase {
 
         paymentService.pay(payment);
 
-        balanceWriter.saveBalance(Balance.createUseBalanceFrom(payment));
+        balanceHistoryWriter.saveBalance(Balance.createUseBalanceFrom(payment));
 
         paymentHistoryWriter.save(payment);
 

@@ -4,7 +4,7 @@ import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
@@ -23,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChargeBalanceUseCase {
 
     private final UserReader userReader;
-    private final BalanceWriter balanceWriter;
+    private final BalanceHistoryWriter balanceHistoryWriter;
     private final EntityManager em;
     private final ClockManager clockManager;
 
@@ -33,7 +33,7 @@ public class ChargeBalanceUseCase {
 
             chargeBalance(balance);
 
-            balanceWriter.saveBalance(balance);
+            balanceHistoryWriter.saveBalance(balance);
             return UserResponse.from(balance.getUser());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);

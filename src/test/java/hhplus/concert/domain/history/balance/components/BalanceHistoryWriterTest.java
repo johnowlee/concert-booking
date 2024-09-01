@@ -25,10 +25,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @Transactional
-class BalanceWriterTest extends IntegrationTestSupport {
+class BalanceHistoryWriterTest extends IntegrationTestSupport {
 
     @Autowired
-    BalanceWriter balanceWriter;
+    BalanceHistoryWriter balanceHistoryWriter;
 
     @Autowired
     BalanceJpaRepository balanceJpaRepository;
@@ -55,7 +55,7 @@ class BalanceWriterTest extends IntegrationTestSupport {
         Balance chargeBalance = Balance.createChargeBalance(savedUser, amount, clockManager);
 
         // when
-        balanceWriter.saveBalance(chargeBalance);
+        balanceHistoryWriter.saveBalance(chargeBalance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
@@ -88,7 +88,7 @@ class BalanceWriterTest extends IntegrationTestSupport {
         Balance balance = Balance.createUseBalanceFrom(payment);
 
         // when
-        balanceWriter.saveBalance(balance);
+        balanceHistoryWriter.saveBalance(balance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();

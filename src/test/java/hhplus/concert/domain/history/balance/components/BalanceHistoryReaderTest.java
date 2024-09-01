@@ -20,10 +20,10 @@ import static hhplus.concert.domain.history.balance.models.TransactionType.USE;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-class BalanceReaderTest extends IntegrationTestSupport {
+class BalanceHistoryReaderTest extends IntegrationTestSupport {
 
     @Autowired
-    BalanceReader balanceReader;
+    BalanceHistoryReader balanceHistoryReader;
 
     @Autowired
     BalanceJpaRepository balanceJpaRepository;
@@ -68,8 +68,8 @@ class BalanceReaderTest extends IntegrationTestSupport {
         balanceJpaRepository.saveAll(List.of(balance1, balance2, balance3));
 
         // when
-        long amountBySearchParamWithCharge = balanceReader.getAmountBySearchParam(savedUser.getId(), CHARGE, transactionDateTime, transactionDateTime.plusDays(1));
-        long amountBySearchParamWithUse = balanceReader.getAmountBySearchParam(savedUser.getId(), USE, transactionDateTime, transactionDateTime.plusDays(1));
+        long amountBySearchParamWithCharge = balanceHistoryReader.getAmountBySearchParam(savedUser.getId(), CHARGE, transactionDateTime, transactionDateTime.plusDays(1));
+        long amountBySearchParamWithUse = balanceHistoryReader.getAmountBySearchParam(savedUser.getId(), USE, transactionDateTime, transactionDateTime.plusDays(1));
 
         // then
         assertThat(amountBySearchParamWithCharge).isEqualTo(10000L);

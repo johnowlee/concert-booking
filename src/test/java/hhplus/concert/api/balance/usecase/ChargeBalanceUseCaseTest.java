@@ -4,7 +4,7 @@ import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.domain.history.balance.components.BalanceWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;
 import hhplus.concert.domain.user.models.User;
@@ -35,7 +35,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
     UserWriter userWriter;
 
     @Autowired
-    BalanceWriter balanceWriter;
+    BalanceHistoryWriter balanceHistoryWriter;
 
     @Autowired
     EntityManager em;
