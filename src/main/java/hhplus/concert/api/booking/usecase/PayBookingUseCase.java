@@ -9,7 +9,7 @@ import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.history.payment.support.PaymentService;
+import hhplus.concert.domain.history.payment.service.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
