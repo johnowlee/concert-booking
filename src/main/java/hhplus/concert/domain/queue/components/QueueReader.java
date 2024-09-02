@@ -27,6 +27,10 @@ public class QueueReader {
         return queueReaderRepository.getTokenScoreFromSortedSet(WAITING.getKeyName(), token) != null;
     }
 
+    public Double getTokenScoreFromSortedSet(Key key, String token) {
+        return queueReaderRepository.getTokenScoreFromSortedSet(key.getKeyName(), token);
+    }
+
     public int getWaitingNumber(String token) {
         Long rank = queueReaderRepository.getTokenRankFromSortedSet(WAITING.getKeyName(), token);
         return calculateWaitingNumberBy(rank);

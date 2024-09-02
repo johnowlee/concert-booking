@@ -3,6 +3,7 @@ package hhplus.concert.domain.queue.components;
 import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -110,6 +111,38 @@ class QueueReaderTest {
         // then
         assertThat(result).isFalse();
         verify(queueReaderRepository, times(1)).getTokenScoreFromSortedSet(eq("WAITING"), eq("abc123"));
+    }
+    
+    @DisplayName("Sorted Set 토큰의 스코어를 조회 한다.")
+    @Test
+    void getTokenScoreFromSortedSet() {
+        // given
+        Double score = 1.0;
+        String token = "abc123";
+        Key key = Key.WAITING;
+        given(queueReaderRepository.getTokenScoreFromSortedSet(key.getKeyName(), token)).willReturn(score);
+        
+        // when
+        Double result = queueReader.getTokenScoreFromSortedSet(key, token);
+
+        // then
+        Assertions.assertThat(result).isEqualTo(1.0);
+    }
+
+    @DisplayName("Sorted Set에 토큰이 없으면 스코어는 null을 반환 한다.")
+    @Test
+    void getTokenScoreFromSortedSetWithNotExistedToken() {
+        // given
+        Double score = null;
+        String token = "abc123";
+        Key key = Key.WAITING;
+        given(queueReaderRepository.getTokenScoreFromSortedSet(key.getKeyName(), token)).willReturn(score);
+
+        // when
+        Double result = queueReader.getTokenScoreFromSortedSet(key, token);
+
+        // then
+        Assertions.assertThat(result).isNull();
     }
 
     @DisplayName("대기열에서 토큰의 대기순번을 조회한다.")
