@@ -13,7 +13,7 @@ import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.queue.support.TokenValidator;
+import hhplus.concert.domain.queue.service.QueueService;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -53,7 +53,7 @@ class BookingControllerTest {
     private PayBookingUseCase payBookingUseCase;
 
     @MockBean
-    private TokenValidator tokenValidator;
+    private QueueService queueService;
 
     @DisplayName("유저 예약 목록 조회")
     @Test

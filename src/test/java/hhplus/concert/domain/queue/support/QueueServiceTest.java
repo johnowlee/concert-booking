@@ -3,6 +3,7 @@ package hhplus.concert.domain.queue.support;
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
+import hhplus.concert.domain.queue.service.QueueService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,13 @@ import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-class TokenValidatorTest extends IntegrationTestSupport {
+class QueueServiceTest extends IntegrationTestSupport {
 
     @MockBean
     QueueReader queueReader;
 
     @Autowired
-    TokenValidator tokenValidator;
+    QueueService queueService;
 
     @DisplayName("활성 유저의 토큰이면 검증에 통과한다.")
     @Test
@@ -30,7 +31,7 @@ class TokenValidatorTest extends IntegrationTestSupport {
         given(queueReader.isActiveToken(token)).willReturn(true);
 
         // when & then
-        tokenValidator.validateToken(token);
+        queueService.validateToken(token);
     }
 
     @DisplayName("대기 유저의 토큰이면 예외가 발생한다.")
@@ -42,7 +43,7 @@ class TokenValidatorTest extends IntegrationTestSupport {
         given(queueReader.isActiveToken(token)).willReturn(true);
 
         // when & then
-        assertThatThrownBy(() -> tokenValidator.validateToken(token))
+        assertThatThrownBy(() -> queueService.validateToken(token))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(WAITING_TOKEN.getMessage());
     }
@@ -56,7 +57,7 @@ class TokenValidatorTest extends IntegrationTestSupport {
         given(queueReader.isNotActiveToken(token)).willReturn(true);
 
         // when & then
-        assertThatThrownBy(() -> tokenValidator.validateToken(token))
+        assertThatThrownBy(() -> queueService.validateToken(token))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_TOKEN.getMessage());
     }

@@ -6,7 +6,7 @@ import hhplus.concert.api.queue.usecase.CreateTokenUseCase;
 import hhplus.concert.api.queue.usecase.FindTokenUseCase;
 import hhplus.concert.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.support.TokenValidator;
+import hhplus.concert.domain.queue.service.QueueService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ class QueueControllerTest {
     CreateTokenUseCase createQueueToken;
 
     @MockBean
-    private TokenValidator tokenValidator;
+    private QueueService queueService;
 
     @DisplayName("ACTIVE 토큰을 조회한다.")
     @Test
