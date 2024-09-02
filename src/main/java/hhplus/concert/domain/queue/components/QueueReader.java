@@ -34,4 +34,8 @@ public class QueueReader {
     public Set<String> getFirstWaiter() {
         return queueReaderRepository.getTokensFromSortedSetByRange(WAITING.getKeyName(), 0, 0);
     }
+
+    public Set<String> getTokensFromSortedSetByRange(Key key, long start, long end) {
+        return queueReaderRepository.getTokensFromSortedSetByRange(key.getKeyName(), start, end);
+    }
 }

@@ -156,4 +156,28 @@ class QueueReaderTest {
         assertThat(result).isEqualTo(Set.of("abc123"));
         verify(queueReaderRepository).getTokensFromSortedSetByRange("WAITING", 0, 0);
     }
+
+    @DisplayName("대기 Sorted Set의 토큰들을 범위에 따라 조회한다.")
+    @Test
+    void getTokensFromSortedSetByRange() {
+        // given
+        Key key = WAITING;
+        long start = 0;
+        long end = 1;
+
+        String token1 = "abc";
+        String token2 = "def";
+        Set<String> tokens = Set.of(token1, token2);
+
+        given(queueReaderRepository.getTokensFromSortedSetByRange(key.getKeyName(), start, end)).willReturn(tokens);
+
+        // when
+        Set<String> result = queueReader.getTokensFromSortedSetByRange(key, start, end);
+
+        // then
+        Assertions.assertThat(result).hasSize(2)
+                .contains(
+                        token1, token2
+                );
+    }
 }
