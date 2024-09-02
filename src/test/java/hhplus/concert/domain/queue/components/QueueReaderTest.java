@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
 
+import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -59,6 +60,21 @@ class QueueReaderTest {
         // then
         assertThat(result).isFalse();
         verify(queueReaderRepository, times(1)).getTokenSizeFromSet("ACTIVE");
+    }
+
+    @DisplayName("활성 유저 key에 등록된 토큰 수를 반환한다.")
+    @Test
+    void getTokenCountFromSet() {
+        // given
+        Long activeUserCount = 30L;
+        String keyName = ACTIVE.getKeyName();
+        given(queueReaderRepository.getTokenSizeFromSet(keyName)).willReturn(activeUserCount);
+
+        // when
+        Long result = queueReader.getTokenCountFromSet(keyName);
+
+        // then
+        assertThat(result).isEqualTo(30L);
     }
 
     @DisplayName("토큰이 활성 유저에 포함되어 있으면 true를 반환한다.")

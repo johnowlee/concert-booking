@@ -13,13 +13,16 @@ import static hhplus.concert.domain.queue.model.Key.WAITING;
 @Component
 @RequiredArgsConstructor
 public class QueueReader {
-    // TODO : 리팩토링 -> service or manager 객체 필요.
 
     private final QueueReaderRepository queueReaderRepository;
 
     public Boolean isAccessible(QueueMonitor queueMonitor) {
         Long concurrentSize = queueReaderRepository.getTokenSizeFromSet(ACTIVE.getKeyName());
         return concurrentSize == null || concurrentSize < queueMonitor.getMaxActiveUserCount();
+    }
+
+    public Long getTokenCountFromSet(String keyName) {
+        return queueReaderRepository.getTokenSizeFromSet(keyName);
     }
 
     public boolean isActiveToken(String token) {
