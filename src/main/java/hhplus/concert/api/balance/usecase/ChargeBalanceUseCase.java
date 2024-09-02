@@ -1,6 +1,7 @@
 package hhplus.concert.api.balance.usecase;
 
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
+import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
@@ -13,13 +14,12 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
+@Slf4j
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
+@UseCase
 public class ChargeBalanceUseCase {
 
     private final UserReader userReader;
