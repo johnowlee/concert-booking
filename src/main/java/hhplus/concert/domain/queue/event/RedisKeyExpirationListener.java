@@ -1,6 +1,6 @@
 package hhplus.concert.domain.queue.event;
 
-import hhplus.concert.domain.queue.support.RedisKeyEventService;
+import hhplus.concert.domain.queue.service.RedisKeyEventService;
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;

@@ -1,4 +1,4 @@
-package hhplus.concert.domain.queue.support;
+package hhplus.concert.domain.queue.service;
 
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;

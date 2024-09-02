@@ -1,10 +1,11 @@
-package hhplus.concert.domain.queue.support;
+package hhplus.concert.domain.queue.service;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Queue;
+import hhplus.concert.domain.queue.service.QueueService;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
