@@ -78,40 +78,6 @@ class QueueReaderTest {
         assertThat(result).isFalse();
         verify(queueReaderRepository, times(1)).doseTokenBelongToSet(eq("ACTIVE"), eq("abc123"));
     }
-
-    @DisplayName("토큰이 대기열에 포함되어 있으면 true를 반환 한다.")
-    @Test
-    void isWaitingToken() {
-        // given
-        Double score = 1.0;
-        String token = "abc123";
-        String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token)).willReturn(score);
-
-        // when
-        Boolean result = queueReader.isWaitingToken(token);
-
-        // then
-        assertThat(result).isTrue();
-        verify(queueReaderRepository, times(1)).getTokenScoreFromSortedSet(eq("WAITING"), eq("abc123"));
-    }
-
-    @DisplayName("토큰이 대기열에 포함되어 있지 않으면 false를 반환 한다.")
-    @Test
-    void isWaitingTokenIfNotExists() {
-        // given
-        Double score = null;
-        String token = "abc123";
-        String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token)).willReturn(score);
-
-        // when
-        Boolean result = queueReader.isWaitingToken(token);
-
-        // then
-        assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).getTokenScoreFromSortedSet(eq("WAITING"), eq("abc123"));
-    }
     
     @DisplayName("Sorted Set 토큰의 스코어를 조회 한다.")
     @Test

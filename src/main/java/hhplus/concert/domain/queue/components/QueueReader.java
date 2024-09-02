@@ -23,10 +23,6 @@ public class QueueReader {
         return queueReaderRepository.doseTokenBelongToSet(key.getKeyName(), token);
     }
 
-    public Boolean isWaitingToken(String token) {
-        return queueReaderRepository.getTokenScoreFromSortedSet(WAITING.getKeyName(), token) != null;
-    }
-
     public Double getTokenScoreFromSortedSet(Key key, String token) {
         return queueReaderRepository.getTokenScoreFromSortedSet(key.getKeyName(), token);
     }
