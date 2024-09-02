@@ -4,7 +4,7 @@ import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.balance.support.BalanceService;
+import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;

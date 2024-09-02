@@ -1,6 +1,5 @@
-package hhplus.concert.domain.history.balance.support;
+package hhplus.concert.domain.history.balance.service;
 
-import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
