@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
+import static hhplus.concert.domain.queue.model.Key.WAITING;
 
 @Component
 @RequiredArgsConstructor
@@ -49,7 +50,8 @@ public class QueueService {
     }
 
     private Boolean isWaitingToken(String token) {
-        return queueReader.isWaitingToken(token);
+        Double score = queueReader.getTokenScoreFromSortedSet(WAITING, token);
+        return score != null;
     }
 
     private Queue createActiveQueue(String token) {

@@ -15,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
+import static hhplus.concert.domain.queue.model.Key.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -61,7 +62,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         int waitingNumber = 10;
         given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
         given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(false);
-        given(queueReader.isWaitingToken(token)).willReturn(true);
+        given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(1.0);
 
         // when
         Queue result = queueService.getQueueByToken(token);
@@ -80,7 +81,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(false);
-        given(queueReader.isWaitingToken(token)).willReturn(false);
+        given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(null);
 
         // when & then
         assertThatThrownBy(() -> queueService.getQueueByToken("abc"))
@@ -132,15 +133,14 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         Key key = ACTIVE;
-        given(queueReader.isWaitingToken(token)).willReturn(false);
-//        given(queueReader.isNotActiveToken(token)).willReturn(false);
+        given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(null);
         given(queueReader.doseTokenBelongToSet(key, token)).willReturn(true);
 
         // when
         queueService.validateToken(token);
 
         // then
-        then(queueReader).should(times(1)).isWaitingToken(token);
+        then(queueReader).should(times(1)).getTokenScoreFromSortedSet(WAITING, token);
         then(queueReader).should(times(1)).doseTokenBelongToSet(key, token);
     }
 
@@ -149,13 +149,13 @@ class QueueServiceTest extends IntegrationTestSupport {
     void validateTokenWithWaitingToken() {
         // given
         String token = "abc";
-        given(queueReader.isWaitingToken(token)).willReturn(true);
+        given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(1.0);
 
         // when & then
         assertThatThrownBy(() -> queueService.validateToken(token))
                         .isInstanceOf(RestApiException.class)
                         .hasMessage(WAITING_TOKEN.getMessage());
-        then(queueReader).should(times(1)).isWaitingToken(token);
+        then(queueReader).should(times(1)).getTokenScoreFromSortedSet(WAITING, token);
     }
 
     @DisplayName("유효하지 않은 토큰이면 예외 발생한다.")
@@ -164,14 +164,14 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         Key key = ACTIVE;
-        given(queueReader.isWaitingToken(token)).willReturn(false);
+        given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(null);
         given(queueReader.doseTokenBelongToSet(key, token)).willReturn(false);
 
         // when & then
         assertThatThrownBy(() -> queueService.validateToken(token))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_TOKEN.getMessage());
-        then(queueReader).should(times(1)).isWaitingToken(token);
+        then(queueReader).should(times(1)).getTokenScoreFromSortedSet(WAITING, token);
         then(queueReader).should(times(1)).doseTokenBelongToSet(key, token);
     }
 }
