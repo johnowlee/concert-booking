@@ -3,15 +3,11 @@ package hhplus.concert.api.balance.usecase;
 import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.common.response.UserResponse;
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
-import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.history.balance.support.BalanceService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.OptimisticLockException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,32 +19,20 @@ import org.springframework.transaction.annotation.Transactional;
 public class ChargeBalanceUseCase {
 
     private final UserReader userReader;
-    private final BalanceHistoryWriter balanceHistoryWriter;
-    private final EntityManager em;
     private final ClockManager clockManager;
+    private final BalanceService balanceService;
 
     public UserResponse execute(Long userId, BalanceChargeRequest request) {
-        try {
-            Balance balance = createChargeBalance(userId, request);
+        Balance balance = createChargeBalance(userId, request);
 
-            chargeBalance(balance);
+        balanceService.chargeBalanceWithOptimisticLock(balance);
 
-            balanceHistoryWriter.save(balance);
-            return UserResponse.from(balance.getUser());
-        } catch (OptimisticLockException e) {
-            throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
-        }
+        return UserResponse.from(balance.getUser());
     }
 
     private Balance createChargeBalance(Long userId, BalanceChargeRequest request) {
         User user = userReader.getUserById(userId);
         long amount = request.balance();
         return Balance.createChargeBalance(user, amount, clockManager);
-    }
-
-    private void chargeBalance(Balance balance) {
-        long chargeAmount = balance.getAmount();
-        balance.getUser().chargeBalance(chargeAmount);
-        em.flush();
     }
 }
