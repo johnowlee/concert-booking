@@ -34,7 +34,7 @@ class QueueReaderTest {
     void isAccessible() {
         // given
         Long activeUserCount = 5L;
-        given(queueReaderRepository.getActiveUserCount("ACTIVE")).willReturn(activeUserCount);
+        given(queueReaderRepository.getTokenSizeFromSet("ACTIVE")).willReturn(activeUserCount);
         given(queueMonitor.getMaxActiveUserCount()).willReturn(10);
 
         // when
@@ -42,7 +42,7 @@ class QueueReaderTest {
 
         // then
         assertThat(result).isTrue();
-        verify(queueReaderRepository, times(1)).getActiveUserCount("ACTIVE");
+        verify(queueReaderRepository, times(1)).getTokenSizeFromSet("ACTIVE");
     }
 
     @DisplayName("활성 유저의 수가 최대 활성 유저 수 보다 같거나 많으면 false를 반환한다.")
@@ -50,7 +50,7 @@ class QueueReaderTest {
     void isAccessibleWhenActiveUserCountIsFull() {
         // given
         Long activeUserCount = 10L;
-        given(queueReaderRepository.getActiveUserCount("ACTIVE")).willReturn(activeUserCount);
+        given(queueReaderRepository.getTokenSizeFromSet("ACTIVE")).willReturn(activeUserCount);
         given(queueMonitor.getMaxActiveUserCount()).willReturn(10);
 
         // when
@@ -58,7 +58,7 @@ class QueueReaderTest {
 
         // then
         assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).getActiveUserCount("ACTIVE");
+        verify(queueReaderRepository, times(1)).getTokenSizeFromSet("ACTIVE");
     }
 
     @DisplayName("토큰이 활성 유저에 포함되어 있으면 true를 반환한다.")
@@ -67,14 +67,14 @@ class QueueReaderTest {
         // given
         String token = "abc123";
         String activeUserKey = "ACTIVE";
-        given(queueReaderRepository.isActiveUser(activeUserKey, token)).willReturn(true);
+        given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(true);
 
         // when
         Boolean result = queueReader.isActiveToken(token);
 
         // then
         assertThat(result).isTrue();
-        verify(queueReaderRepository).isActiveUser("ACTIVE", "abc123");
+        verify(queueReaderRepository).doseTokenBelongToSet("ACTIVE", "abc123");
     }
 
     @DisplayName("토큰이 활성 유저에 포함되어 있지 않으면 true를 반환한다.")
@@ -83,14 +83,14 @@ class QueueReaderTest {
         // given
         String token = "abc123";
         String activeUserKey = "ACTIVE";
-        given(queueReaderRepository.isActiveUser(activeUserKey, token)).willReturn(true);
+        given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(true);
 
         // when
         Boolean result = queueReader.isNotActiveToken(token);
 
         // then
         assertThat(result).isFalse();
-        verify(queueReaderRepository).isActiveUser("ACTIVE", "abc123");
+        verify(queueReaderRepository).doseTokenBelongToSet("ACTIVE", "abc123");
     }
 
     @DisplayName("토큰이 활성 유저에 포함되어 있지 않으면 false 반환한다.")
@@ -99,14 +99,14 @@ class QueueReaderTest {
         // given
         String token = "abc123";
         String activeUserKey = "ACTIVE";
-        given(queueReaderRepository.isActiveUser(activeUserKey, token)).willReturn(false);
+        given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(false);
 
         // when
         Boolean result = queueReader.isActiveToken(token);
 
         // then
         assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).isActiveUser(eq("ACTIVE"), eq("abc123"));
+        verify(queueReaderRepository, times(1)).doseTokenBelongToSet(eq("ACTIVE"), eq("abc123"));
     }
 
     @DisplayName("토큰이 대기열에 포함되어 있으면 true를 반환 한다.")
@@ -116,14 +116,14 @@ class QueueReaderTest {
         Double score = 1.0;
         String token = "abc123";
         String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getWaitingUserScore(waitingUserKey, token)).willReturn(score);
+        given(queueReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token)).willReturn(score);
 
         // when
         Boolean result = queueReader.isWaitingToken(token);
 
         // then
         assertThat(result).isTrue();
-        verify(queueReaderRepository, times(1)).getWaitingUserScore(eq("WAITING"), eq("abc123"));
+        verify(queueReaderRepository, times(1)).getTokenScoreFromSortedSet(eq("WAITING"), eq("abc123"));
     }
 
     @DisplayName("토큰이 대기열에 포함되어 있지 않으면 false를 반환 한다.")
@@ -133,14 +133,14 @@ class QueueReaderTest {
         Double score = null;
         String token = "abc123";
         String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getWaitingUserScore(waitingUserKey, token)).willReturn(score);
+        given(queueReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token)).willReturn(score);
 
         // when
         Boolean result = queueReader.isWaitingToken(token);
 
         // then
         assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).getWaitingUserScore(eq("WAITING"), eq("abc123"));
+        verify(queueReaderRepository, times(1)).getTokenScoreFromSortedSet(eq("WAITING"), eq("abc123"));
     }
 
     @DisplayName("대기열에서 토큰의 대기순번을 조회한다.")
@@ -150,14 +150,14 @@ class QueueReaderTest {
         String token = "abc123";
         Long rank = 5L;
         String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getWaitingUserRank(waitingUserKey, token)).willReturn(rank);
+        given(queueReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token)).willReturn(rank);
 
         // when
         int waitingNumber = queueReader.getWaitingNumber(token);
 
         // then
         assertThat(waitingNumber).isEqualTo(5 + 1);
-        verify(queueReaderRepository).getWaitingUserRank("WAITING", "abc123");
+        verify(queueReaderRepository).getTokenRankFromSortedSet("WAITING", "abc123");
     }
 
     @DisplayName("대기열에 토큰이 없을 경우 0을 반환한다.")
@@ -166,14 +166,14 @@ class QueueReaderTest {
         // given
         String token = "abc123";
         String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getWaitingUserRank(waitingUserKey, token)).willReturn(null);
+        given(queueReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token)).willReturn(null);
 
         // when
         int result = queueReader.getWaitingNumber(token);
 
         // then
         assertThat(result).isZero();
-        verify(queueReaderRepository, times(1)).getWaitingUserRank(eq("WAITING"), eq("abc123"));
+        verify(queueReaderRepository, times(1)).getTokenRankFromSortedSet(eq("WAITING"), eq("abc123"));
     }
 
     @DisplayName("대기열의 첫번째 대기자의 토큰을 반환한다.")
@@ -181,13 +181,13 @@ class QueueReaderTest {
     void getFirstWaiter() {
         // given
         Set<String> firstWaiter = Set.of("abc123");
-        given(queueReaderRepository.getWaitingUsersByRange("WAITING", 0, 0)).willReturn(firstWaiter);
+        given(queueReaderRepository.getTokensFromSortedSetByRange("WAITING", 0, 0)).willReturn(firstWaiter);
 
         // when
         Set<String> result = queueReader.getFirstWaiter();
 
         // then
         assertThat(result).isEqualTo(Set.of("abc123"));
-        verify(queueReaderRepository).getWaitingUsersByRange("WAITING", 0, 0);
+        verify(queueReaderRepository).getTokensFromSortedSetByRange("WAITING", 0, 0);
     }
 }

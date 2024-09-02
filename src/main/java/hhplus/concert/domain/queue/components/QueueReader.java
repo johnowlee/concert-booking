@@ -18,12 +18,12 @@ public class QueueReader {
     private final QueueReaderRepository queueReaderRepository;
 
     public Boolean isAccessible(QueueMonitor queueMonitor) {
-        Long concurrentSize = queueReaderRepository.getActiveUserCount(ACTIVE.getKeyName());
+        Long concurrentSize = queueReaderRepository.getTokenSizeFromSet(ACTIVE.getKeyName());
         return concurrentSize == null || concurrentSize < queueMonitor.getMaxActiveUserCount();
     }
 
     public boolean isActiveToken(String token) {
-        return queueReaderRepository.isActiveUser(ACTIVE.getKeyName(), token);
+        return queueReaderRepository.doseTokenBelongToSet(ACTIVE.getKeyName(), token);
     }
 
     public boolean isNotActiveToken(String token) {
@@ -31,16 +31,16 @@ public class QueueReader {
     }
 
     public Boolean isWaitingToken(String token) {
-        return queueReaderRepository.getWaitingUserScore(WAITING.getKeyName(), token) != null;
+        return queueReaderRepository.getTokenScoreFromSortedSet(WAITING.getKeyName(), token) != null;
     }
 
     public int getWaitingNumber(String token) {
-        Long rank = queueReaderRepository.getWaitingUserRank(WAITING.getKeyName(), token);
+        Long rank = queueReaderRepository.getTokenRankFromSortedSet(WAITING.getKeyName(), token);
         return calculateWaitingNumberBy(rank);
     }
 
     public Set<String> getFirstWaiter() {
-        return queueReaderRepository.getWaitingUsersByRange(WAITING.getKeyName(), 0, 0);
+        return queueReaderRepository.getTokensFromSortedSetByRange(WAITING.getKeyName(), 0, 0);
     }
 
     private static int calculateWaitingNumberBy(Long rank) {

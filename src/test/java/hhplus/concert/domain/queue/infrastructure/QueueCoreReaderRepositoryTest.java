@@ -34,7 +34,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Active Key Set의 등록된 유저 수를 반환한다.")
     @Test
-    void getActiveUserCount() {
+    void getTokenSizeFromSet() {
         // given
         String activeUserKey = "ACTIVE";
         Long userCount = 10L;
@@ -43,7 +43,7 @@ class QueueCoreReaderRepositoryTest {
         given(setOperations.size(activeUserKey)).willReturn(userCount);
 
         // when
-        Long result = queueCoreReaderRepository.getActiveUserCount(activeUserKey);
+        Long result = queueCoreReaderRepository.getTokenSizeFromSet(activeUserKey);
 
         // then
         assertThat(result).isEqualTo(10L);
@@ -52,7 +52,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Active key Set에 조회하는 토큰이 포함되어 있으면 true를 반환한다.")
     @Test
-    void isActiveUser() {
+    void doseTokenBelongToSet() {
         // given
         String activeUserKey = "ACTIVE";
         String token = "abc123";
@@ -61,7 +61,7 @@ class QueueCoreReaderRepositoryTest {
         given(setOperations.isMember(activeUserKey, token)).willReturn(true);
 
         // when
-        Boolean result = queueCoreReaderRepository.isActiveUser(activeUserKey, token);
+        Boolean result = queueCoreReaderRepository.doseTokenBelongToSet(activeUserKey, token);
 
         // then
         assertThat(result).isTrue();
@@ -70,7 +70,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Active key Set에 조회하는 토큰이 없으면 false를 반환한다.")
     @Test
-    void isActiveUserWithNotExistedToken() {
+    void doseTokenBelongToSet_withNotActiveUserToken() {
         // given
         String activeUserKey = "ACTIVE";
         String token = "abc123";
@@ -79,7 +79,7 @@ class QueueCoreReaderRepositoryTest {
         given(setOperations.isMember(activeUserKey, token)).willReturn(false);
 
         // when
-        Boolean result = queueCoreReaderRepository.isActiveUser(activeUserKey, token);
+        Boolean result = queueCoreReaderRepository.doseTokenBelongToSet(activeUserKey, token);
 
         // then
         assertThat(result).isFalse();
@@ -88,7 +88,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Waiting Key SortedSet에 지정된 범위의 대기 유저 목록을 반환한다.")
     @Test
-    void getWaitingUsersByRanges() {
+    void getTokensFromSortedSetByRange() {
         // given
         String waitingUserKey = "WAITING";
         long start = 0L;
@@ -99,7 +99,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.range(waitingUserKey, start, end)).willReturn(waitingUsers);
 
         // when
-        Set<String> result = queueCoreReaderRepository.getWaitingUsersByRange(waitingUserKey, start, end);
+        Set<String> result = queueCoreReaderRepository.getTokensFromSortedSetByRange(waitingUserKey, start, end);
 
         // then
         assertThat(result).hasSize(3);
@@ -109,7 +109,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Waiting Key SortedSet에서 대기 유저 토큰의 대기순서를 조회한다.")
     @Test
-    void getWaitingUserRank() {
+    void getTokenRankFromSortedSet() {
         // given
         String waitingUserKey = "WAITING";
         String token = "abc123";
@@ -119,7 +119,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.rank(waitingUserKey, token)).willReturn(rank);
 
         // when
-        Long result = queueCoreReaderRepository.getWaitingUserRank(waitingUserKey, token);
+        Long result = queueCoreReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -128,7 +128,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Waiting Key SortedSet에서 존재하지 않는 유저 토큰의 대기 순번은 null을 반환한다.")
     @Test
-    void getWaitingUserRankWithNotExistedToken() {
+    void getTokenRankFromSortedSet_withNotExistedToken() {
         // given
         String waitingUserKey = "WAITING";
         String token = "abc123";
@@ -138,7 +138,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.rank(waitingUserKey, token)).willReturn(rank);
 
         // when
-        Long result = queueCoreReaderRepository.getWaitingUserRank(waitingUserKey, token);
+        Long result = queueCoreReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isNull();
@@ -147,7 +147,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Waiting Key SortedSet에서 유저 토큰의 점수 반환한다.")
     @Test
-    void getWaitingUserScore() {
+    void getTokenScoreFromSortedSet() {
         // given
         String waitingUserKey = "WAITING";
         String token = "abc123";
@@ -157,7 +157,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.score(waitingUserKey, token)).willReturn(score);
 
         // when
-        Double result = queueCoreReaderRepository.getWaitingUserScore(waitingUserKey, token);
+        Double result = queueCoreReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isEqualTo(1234.56);
@@ -166,7 +166,7 @@ class QueueCoreReaderRepositoryTest {
 
     @DisplayName("Waiting Key SortedSet에서 존재하지 않는 유저 토큰의 점수는 null을 반환한다.")
     @Test
-    void getWaitingUserScoreWithNotExistedToken() {
+    void getTokenScoreFromSortedSet_withNotExistedToken() {
         // given
         String waitingUserKey = "WAITING";
         String token = "abc123";
@@ -176,7 +176,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.score(waitingUserKey, token)).willReturn(score);
 
         // when
-        Double result = queueCoreReaderRepository.getWaitingUserScore(waitingUserKey, token);
+        Double result = queueCoreReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isNull();

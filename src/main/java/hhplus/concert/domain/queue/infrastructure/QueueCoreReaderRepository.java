@@ -14,27 +14,27 @@ public class QueueCoreReaderRepository implements QueueReaderRepository {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Long getActiveUserCount(String activeUserKey) {
-        return redisTemplate.opsForSet().size(activeUserKey);
+    public Long getTokenSizeFromSet(String activeTokenKey) {
+        return redisTemplate.opsForSet().size(activeTokenKey);
     }
 
     @Override
-    public Boolean isActiveUser(String activeUserKey, String token) {
-        return redisTemplate.opsForSet().isMember(activeUserKey, token);
+    public Boolean doseTokenBelongToSet(String activeTokenKey, String token) {
+        return redisTemplate.opsForSet().isMember(activeTokenKey, token);
     }
 
     @Override
-    public Set<String> getWaitingUsersByRange(String waitingUserKey, long start, long end) {
-        return redisTemplate.opsForZSet().range(waitingUserKey, start, end);
+    public Set<String> getTokensFromSortedSetByRange(String waitingTokenKey, long start, long end) {
+        return redisTemplate.opsForZSet().range(waitingTokenKey, start, end);
     }
 
     @Override
-    public Long getWaitingUserRank(String waitingUserKey, String token) {
-        return redisTemplate.opsForZSet().rank(waitingUserKey, token);
+    public Long getTokenRankFromSortedSet(String waitingTokenKey, String token) {
+        return redisTemplate.opsForZSet().rank(waitingTokenKey, token);
     }
 
     @Override
-    public Double getWaitingUserScore(String waitingUserKey, String token) {
-        return redisTemplate.opsForZSet().score(waitingUserKey, token);
+    public Double getTokenScoreFromSortedSet(String waitingTokenKey, String token) {
+        return redisTemplate.opsForZSet().score(waitingTokenKey, token);
     }
 }
