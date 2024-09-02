@@ -13,22 +13,22 @@ public class QueueWriter {
     private final QueueWriterRepository queueWriterRepository;
 
     public void addActiveToken(Queue queue) {
-        queueWriterRepository.addUserToActiveSet(queue);
+        queueWriterRepository.addTokenToSet(queue);
     }
 
     public void removeActiveToken(Queue queue) {
-        queueWriterRepository.removeUserFromActiveSet(queue);
+        queueWriterRepository.removeTokenFromSet(queue);
     }
 
     public void addWaitingToken(Queue queue) {
-        queueWriterRepository.addUserToWaitingSortedSet(queue);
+        queueWriterRepository.addTokenToSortedSet(queue);
     }
 
     public void removeWaitingToken(Queue queue) {
-        queueWriterRepository.removeUserFromWaitingSortedSet(queue);
+        queueWriterRepository.removeTokenFromSortedSet(queue);
     }
 
     public void createActiveKey(Queue queue, QueueMonitor queueMonitor) {
-        queueWriterRepository.createUserTimeout(queue, queueMonitor.getTtl().timeout(), queueMonitor.getTtl().timeUnit());
+        queueWriterRepository.createTtlToken(queue, queueMonitor.getTtl().timeout(), queueMonitor.getTtl().timeUnit());
     }
 }

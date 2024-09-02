@@ -3,7 +3,7 @@ package hhplus.concert.api.queue.usecase;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.support.QueueService;
+import hhplus.concert.domain.queue.service.QueueService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

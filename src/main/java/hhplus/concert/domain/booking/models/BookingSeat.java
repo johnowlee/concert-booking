@@ -29,22 +29,22 @@ public class BookingSeat {
     private Seat seat;
 
     @Builder
-    private BookingSeat(Long id, Booking booking, Seat seat) {
-        this.id = id;
+    private BookingSeat(Booking booking, Seat seat) {
         this.seat = seat;
         this.booking = booking;
     }
 
-    private void setBooking(Booking booking) {
+    public void setBooking(Booking booking) {
         this.booking = booking;
-        booking.getBookingSeats().add(this);
+        booking.addBookingSeat(this);
     }
 
     public static BookingSeat createBookingSeat(Booking booking, Seat seat) {
-        return builder()
-                .booking(booking)
+        BookingSeat bookingSeat = builder()
                 .seat(seat)
                 .build();
+        bookingSeat.setBooking(booking);
+        return bookingSeat;
     }
 
     @Override

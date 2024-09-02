@@ -3,7 +3,8 @@ package hhplus.concert.api.concert.usecase;
 import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.booking.support.BookingService;
+import hhplus.concert.domain.booking.models.BookingSeat;
+import hhplus.concert.domain.booking.service.BookingService;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
@@ -15,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -56,12 +58,19 @@ class BookConcertUseCaseTest {
         Seat seat1 = createSeat("A-1", concertOption);
         Seat seat2 = createSeat("A-2", concertOption);
 
+
         LocalDateTime bookingDateTime = LocalDateTime.of(2024, 8, 15, 16, 30, 30);
         Booking booking = Booking.builder()
                 .concertTitle("concert")
                 .bookingDateTime(bookingDateTime)
                 .user(user)
                 .build();
+
+        BookingSeat bookingSeat1 = createBookingSeat(1L, seat1);
+        bookingSeat1.setBooking(booking);
+
+        BookingSeat bookingSeat2 = createBookingSeat(2L, seat2);
+        bookingSeat2.setBooking(booking);
 
         given(userReader.getUserById(request.userId())).willReturn(user);
         given(seatReader.getSeatsByIds(request.seatIds())).willReturn(List.of(seat1, seat2));
@@ -87,5 +96,11 @@ class BookConcertUseCaseTest {
                 .seatNo(seatNo)
                 .concertOption(concertOption)
                 .build();
+    }
+
+    private BookingSeat createBookingSeat(Long id, Seat seat) {
+        BookingSeat bookingSeat = BookingSeat.builder().seat(seat).build();
+        ReflectionTestUtils.setField(bookingSeat, "id", id);
+        return bookingSeat;
     }
 }

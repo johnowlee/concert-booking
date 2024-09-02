@@ -6,6 +6,7 @@ import hhplus.concert.domain.concert.models.SeatGrade;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -26,9 +27,7 @@ class BookingTest {
     void addBookingSeat() {
         // given
         Booking booking = Booking.builder().build();
-        BookingSeat bookingSeat = BookingSeat.builder()
-                .id(1L)
-                .build();
+        BookingSeat bookingSeat = createBookingSeat(1L);
 
         // when
         booking.addBookingSeat(bookingSeat);
@@ -43,9 +42,7 @@ class BookingTest {
     void addBookingSeatWithDuplicatedBookingSeat() {
         // given
         Booking booking = Booking.builder().build();
-        BookingSeat bookingSeat = BookingSeat.builder()
-                .id(1L)
-                .build();
+        BookingSeat bookingSeat = createBookingSeat(1L);
 
         // when
         booking.addBookingSeat(bookingSeat);
@@ -61,12 +58,8 @@ class BookingTest {
     void addAllBookingSeats() {
         // given
         Booking booking = Booking.builder().build();
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .build();
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .build();
+        BookingSeat bookingSeat1 = createBookingSeat(1L);
+        BookingSeat bookingSeat2 = createBookingSeat(2L);
 
         // when
         booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
@@ -81,12 +74,8 @@ class BookingTest {
     void addAllBookingSeatsWithDuplicatedBookingSeat() {
         // given
         Booking booking = Booking.builder().build();
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .build();
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .build();
+        BookingSeat bookingSeat1 = createBookingSeat(1L);
+        BookingSeat bookingSeat2 = createBookingSeat(2L);
 
         // when
         booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
@@ -122,14 +111,8 @@ class BookingTest {
                 .seatNo("B-1")
                 .grade(SeatGrade.B)
                 .build();
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .seat(seat1)
-                .build();
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .seat(seat2)
-                .build();
+        BookingSeat bookingSeat1 = createBookingSeat(1L, seat1);
+        BookingSeat bookingSeat2 = createBookingSeat(2L, seat2);
         Booking booking = Booking.builder().build();
         booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
 
@@ -142,7 +125,7 @@ class BookingTest {
 
     @DisplayName("좌석의 예약 상태를 모두 좌석된 상태로 변경한다.")
     @Test
-    void reserveAllSeats() {
+    void markSeatsAsBooked() {
         // given
         Seat seat1 = Seat.builder()
                 .seatNo("A-1")
@@ -154,19 +137,13 @@ class BookingTest {
                 .grade(SeatGrade.B)
                 .seatBookingStatus(PROCESSING)
                 .build();
-        BookingSeat bookingSeat1 = BookingSeat.builder()
-                .id(1L)
-                .seat(seat1)
-                .build();
-        BookingSeat bookingSeat2 = BookingSeat.builder()
-                .id(2L)
-                .seat(seat2)
-                .build();
+        BookingSeat bookingSeat1 = createBookingSeat(1L, seat1);
+        BookingSeat bookingSeat2 = createBookingSeat(2L, seat2);
         Booking booking = Booking.builder().build();
         booking.addAllBookingSeats(List.of(bookingSeat1, bookingSeat2));
 
         // when
-        booking.reserveAllSeats();
+        booking.markSeatsAsBooked();
 
         // then
         List<BookingSeat> bookingSeats = booking.getBookingSeats();
@@ -200,5 +177,15 @@ class BookingTest {
 
         long passedMinutes = Duration.between(bookingDateTime, verificationTime).toMinutes();
         Assertions.assertThat(passedMinutes).isEqualTo(3 - 1);
+    }
+
+    private BookingSeat createBookingSeat(Long id, Seat seat) {
+        BookingSeat bookingSeat = BookingSeat.builder().seat(seat).build();
+        ReflectionTestUtils.setField(bookingSeat, "id", id);
+        return bookingSeat;
+    }
+
+    private BookingSeat createBookingSeat(Long id) {
+        return createBookingSeat(id, null);
     }
 }

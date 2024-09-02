@@ -42,7 +42,7 @@ class QueueWriterTest {
         queueWriter.addActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addUserToActiveSet(eq(queue));
+        verify(queueWriterRepository, times(1)).addTokenToSet(eq(queue));
     }
 
     @DisplayName("활성 유저를 활성 Key Set에서 삭제한다.")
@@ -56,7 +56,7 @@ class QueueWriterTest {
         queueWriter.removeActiveToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeUserFromActiveSet(eq(queue));
+        verify(queueWriterRepository, times(1)).removeTokenFromSet(eq(queue));
     }
 
     @DisplayName("대기 유저를 대기 Key SortedSet에 추가한다.")
@@ -70,7 +70,7 @@ class QueueWriterTest {
         queueWriter.addWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).addUserToWaitingSortedSet(eq(queue));
+        verify(queueWriterRepository, times(1)).addTokenToSortedSet(eq(queue));
     }
 
     @DisplayName("대기 유저를 대기 Key SortedSet에서 삭제한다.")
@@ -84,7 +84,7 @@ class QueueWriterTest {
         queueWriter.removeWaitingToken(queue);
 
         // then
-        verify(queueWriterRepository, times(1)).removeUserFromWaitingSortedSet(eq(queue));
+        verify(queueWriterRepository, times(1)).removeTokenFromSortedSet(eq(queue));
     }
 
     @DisplayName("유저의 토큰값으로 유효기간이 있는 key를 등록한다.")
@@ -104,6 +104,6 @@ class QueueWriterTest {
 
         // then
         verify(queueWriterRepository, times(1))
-                .createUserTimeout(eq(queue), eq(300L), eq(SECONDS));
+                .createTtlToken(eq(queue), eq(300L), eq(SECONDS));
     }
 }

@@ -1,15 +1,15 @@
 package hhplus.concert.api.queue.usecase;
 
+import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.api.queue.usecase.response.QueueResponse;
-import hhplus.concert.domain.queue.support.QueueService;
+import hhplus.concert.domain.queue.service.QueueService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 import static hhplus.concert.api.queue.usecase.response.QueueResponse.createQueueResponse;
 
-@Service
 @RequiredArgsConstructor
+@UseCase
 public class FindTokenUseCase {
 
     private final QueueService queueService;

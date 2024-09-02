@@ -5,7 +5,7 @@ import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
 import hhplus.concert.api.balance.usecase.ChargeBalanceUseCase;
 import hhplus.concert.api.balance.usecase.GetBalanceUseCase;
 import hhplus.concert.api.common.response.UserResponse;
-import hhplus.concert.domain.queue.support.TokenValidator;
+import hhplus.concert.domain.queue.service.QueueService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +41,7 @@ class BalanceControllerTest {
     private ChargeBalanceUseCase chargeBalanceUseCase;
 
     @MockBean
-    private TokenValidator tokenValidator;
+    private QueueService queueService;
 
     @DisplayName("잔액을 조회한다.")
     @Test

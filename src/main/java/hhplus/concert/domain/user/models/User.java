@@ -51,19 +51,10 @@ public class User {
     }
 
     public void chargeBalance(long amount) {
-        if (amount <= 0 ) {
-            throw new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT);
-        }
         this.balance += amount;
     }
 
     public void useBalance(long amount) {
-        if (this.balance < amount) {
-            throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
-        }
-        if (amount <= 0 ) {
-            throw new RestApiException(BalanceErrorCode.NEGATIVE_NUMBER_AMOUNT);
-        }
         this.balance -= amount;
     }
 
@@ -85,5 +76,9 @@ public class User {
 
     public boolean doesNotEqual(User user) {
         return !equals(user);
+    }
+
+    public boolean isBalanceLessThan(long amount) {
+        return this.balance < amount;
     }
 }

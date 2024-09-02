@@ -1,13 +1,13 @@
 package hhplus.concert.api.concert.usecase;
 
+import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 
-@Service
 @RequiredArgsConstructor
+@UseCase
 public class GetConcertOptionsUseCase {
 
     private final ConcertOptionReader concertOptionReader;

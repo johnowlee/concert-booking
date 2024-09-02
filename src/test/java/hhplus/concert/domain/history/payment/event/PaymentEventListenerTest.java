@@ -1,8 +1,8 @@
-package hhplus.concert.domain.payment.event;
+package hhplus.concert.domain.history.payment.event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import hhplus.concert.domain.history.payment.event.PaymentCompleteEvent;
+import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;
 import hhplus.concert.domain.history.payment.event.PaymentEventListener;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -34,7 +34,7 @@ class PaymentEventListenerTest {
     @Test
     void handle() throws JsonProcessingException {
         // given
-        PaymentCompleteEvent event = new PaymentCompleteEvent(1L, 2L, 3000L);
+        PaymentCompletionEvent event = new PaymentCompletionEvent(1L, 2L, 3000L);
         String message = new ObjectMapper().writeValueAsString(event);
 
         given(objectMapper.writeValueAsString(event)).willReturn(message);

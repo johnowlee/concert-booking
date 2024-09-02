@@ -1,57 +1,61 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.controller.request.PaymentRequest;
+import hhplus.concert.api.common.UseCase;
 import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.payment.support.PaymentService;
-import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.history.payment.support.PaymentValidator;
+import hhplus.concert.domain.history.payment.service.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
+import java.time.LocalDateTime;
+
 @Slf4j
+@RequiredArgsConstructor
+@UseCase
 public class PayBookingUseCase {
 
     private final BookingReader bookingReader;
-    private final PaymentWriter paymentWriter;
+    private final PaymentHistoryWriter paymentHistoryWriter;
+    private final BalanceHistoryWriter balanceHistoryWriter;
     private final PaymentService paymentService;
     private final ClockManager clockManager;
     private final UserReader userReader;
-    private final PaymentValidator paymentValidator;
 
     @Transactional
     public PaymentResponse execute(Long id, PaymentRequest request) {
 
-        Booking booking = bookingReader.getBookingById(id);
+        Payment payment = createPayment(id, request);
 
-        // 결제 가능 시간 초과 검증
-        paymentValidator.validatePayableTime(booking, clockManager.getNowDateTime());
+        paymentService.pay(payment);
 
-        // 결제자 ID 검증
-        User payer = userReader.getUserById(request.userId());
-        paymentValidator.validatePayer(booking, payer);
+        balanceHistoryWriter.save(Balance.createUseBalanceFrom(payment));
 
-        // 결제
-        paymentService.pay(booking);
+        paymentHistoryWriter.save(payment);
 
-        // 결제 내역 save
-        Payment payment = paymentWriter.save(booking, clockManager.getNowDateTime());
-
-        // 예약 완료
-        booking.markAsComplete();
-
-        // 좌석 예약
-        booking.reserveAllSeats();
+        completeBooking(payment);
 
         return PaymentResponse.from(payment);
+    }
+
+    private Payment createPayment(Long id, PaymentRequest request) {
+        Booking booking = bookingReader.getBookingById(id);
+        User payer = userReader.getUserById(request.userId());
+        LocalDateTime paymentDateTime = clockManager.getNowDateTime();
+        return Payment.of(booking, payer, paymentDateTime);
+    }
+
+    private void completeBooking(Payment payment) {
+        payment.getBooking().markAsComplete();
+        payment.getBooking().markSeatsAsBooked();
     }
 }

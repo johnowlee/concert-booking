@@ -1,6 +1,7 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.domain.concert.models.Seat;
+import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -43,20 +44,19 @@ public class Booking {
     private List<BookingSeat> bookingSeats = new ArrayList<>();
 
     @Builder
-    private Booking(Long id, BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
-        this.id = id;
+    private Booking(BookingStatus bookingStatus, LocalDateTime bookingDateTime, String concertTitle, User user) {
         this.bookingStatus = bookingStatus;
         this.bookingDateTime = bookingDateTime;
         this.concertTitle = concertTitle;
         this.user = user;
     }
 
-    public static Booking createBooking(String concertTitle, LocalDateTime bookingDateTime, User user) {
+    public static Booking initializeBooking(String concertTitle, ClockManager clockManager, User booker) {
         return Booking.builder()
                 .bookingStatus(INCOMPLETE)
-                .bookingDateTime(bookingDateTime)
+                .bookingDateTime(clockManager.getNowDateTime())
                 .concertTitle(concertTitle)
-                .user(user)
+                .user(booker)
                 .build();
     }
 
@@ -85,7 +85,7 @@ public class Booking {
                 .sum();
     }
 
-    public void reserveAllSeats() {
+    public void markSeatsAsBooked() {
         bookingSeats.stream()
                 .map(BookingSeat::getSeat)
                 .forEach(Seat::markAsBooked);
@@ -101,14 +101,17 @@ public class Booking {
 
     @Override
     public boolean equals(Object object) {
-        if (this == object) return true;
-        if (object == null || getClass() != object.getClass()) return false;
-        Booking booking = (Booking) object;
-        return Objects.equals(id, booking.id);
+        if (this == object){
+            return true;
+        }
+        if (!(object instanceof Booking booking)) {
+            return false;
+        }
+        return this.getId() != null && Objects.equals(getId(), booking.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(getId());
     }
 }

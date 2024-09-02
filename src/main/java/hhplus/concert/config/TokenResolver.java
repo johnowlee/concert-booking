@@ -1,7 +1,7 @@
 package hhplus.concert.config;
 
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
-import hhplus.concert.domain.queue.support.TokenValidator;
+import hhplus.concert.domain.queue.service.QueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
@@ -14,7 +14,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class TokenResolver implements HandlerMethodArgumentResolver {
 
-    private final TokenValidator tokenValidator;
+    private final QueueService queueService;
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
@@ -24,7 +24,7 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
     @Override
     public QueueTokenRequest resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = webRequest.getHeader("Queue-Token");
-        tokenValidator.validateToken(token);
+        queueService.validateToken(token);
         return QueueTokenRequest.from(token);
     }
 }

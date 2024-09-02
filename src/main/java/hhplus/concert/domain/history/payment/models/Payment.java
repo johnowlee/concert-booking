@@ -41,12 +41,20 @@ public class Payment {
         this.booking = booking;
     }
 
-    public static Payment createPayment(Booking booking, LocalDateTime paymentDateTime) {
+    public static Payment of(Booking booking, User payer, LocalDateTime payTime) {
         return Payment.builder()
-                .paymentDateTime(paymentDateTime)
+                .paymentDateTime(payTime)
                 .paymentAmount(booking.getTotalPrice())
-                .user(booking.getUser())
+                .user(payer)
                 .booking(booking)
                 .build();
+    }
+
+    public static Payment of(Booking booking, User payer) {
+        return of(booking, payer, null);
+    }
+
+    public static Payment createPayment(Booking booking, LocalDateTime paymentDateTime) {
+        return of(booking, booking.getUser(), paymentDateTime);
     }
 }

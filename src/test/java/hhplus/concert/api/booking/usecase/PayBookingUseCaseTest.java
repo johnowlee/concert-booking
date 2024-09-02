@@ -1,13 +1,13 @@
 package hhplus.concert.api.booking.usecase;
 
 import hhplus.concert.api.booking.controller.request.PaymentRequest;
-import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.payment.support.PaymentService;
-import hhplus.concert.domain.history.payment.components.PaymentWriter;
+import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
+import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
 import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.history.payment.support.PaymentValidator;
+import hhplus.concert.domain.history.payment.service.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -20,10 +20,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.times;
 
 @ExtendWith(MockitoExtension.class)
 class PayBookingUseCaseTest {
@@ -33,7 +34,7 @@ class PayBookingUseCaseTest {
     BookingReader bookingReader;
 
     @Mock
-    PaymentWriter paymentWriter;
+    PaymentHistoryWriter paymentHistoryWriter;
 
     @Mock
     PaymentService paymentService;
@@ -45,7 +46,7 @@ class PayBookingUseCaseTest {
     UserReader userReader;
 
     @Mock
-    PaymentValidator paymentValidator;
+    BalanceHistoryWriter balanceHistoryWriter;
 
     @InjectMocks
     PayBookingUseCase payBookingUseCase;
@@ -56,36 +57,27 @@ class PayBookingUseCaseTest {
         // given
         Long bookingId = 1L;
         Long userId = 2L;
-        PaymentRequest request = new PaymentRequest(userId);
+        PaymentRequest paymentRequest = new PaymentRequest(userId);
+
         Booking booking = mock(Booking.class);
-        User user = mock(User.class);
-        LocalDateTime now = LocalDateTime.now();
-        Payment payment = mock(Payment.class);
+        User payer = mock(User.class);
+        LocalDateTime paymentDateTime = LocalDateTime.now();
 
         given(bookingReader.getBookingById(bookingId)).willReturn(booking);
-        given(clockManager.getNowDateTime()).willReturn(now);
-        given(userReader.getUserById(userId)).willReturn(user);
-        given(paymentWriter.save(booking, now)).willReturn(payment);
-
-        given(payment.getId()).willReturn(1L);
-        given(payment.getPaymentDateTime()).willReturn(now);
-        given(payment.getPaymentAmount()).willReturn(100000);
-        given(payment.getUser()).willReturn(user);
-        given(payment.getBooking()).willReturn(booking);
+        given(userReader.getUserById(userId)).willReturn(payer);
+        given(clockManager.getNowDateTime()).willReturn(paymentDateTime);
 
         // when
-        PaymentResponse response = payBookingUseCase.execute(bookingId, request);
+        payBookingUseCase.execute(bookingId, paymentRequest);
 
         // then
-        verify(paymentValidator).validatePayableTime(booking, now);
-        verify(paymentValidator).validatePayer(booking, user);
-        verify(paymentService).pay(booking);
-        verify(paymentWriter).save(booking, now);
-        verify(booking).markAsComplete();
-        verify(booking).reserveAllSeats();
-
-        assertThat(response.id()).isEqualTo(1L);
-        assertThat(response.paymentDateTime()).isEqualTo(now);
-        assertThat(response.paymentAmount()).isEqualTo(100000);
+        then(bookingReader).should(times(1)).getBookingById(bookingId);
+        then(userReader).should(times(1)).getUserById(userId);
+        then(clockManager).should(times(1)).getNowDateTime();
+        then(paymentService).should(times(1)).pay(any(Payment.class));
+        then(balanceHistoryWriter).should(times(1)).save(any(Balance.class));
+        then(paymentHistoryWriter).should(times(1)).save(any(Payment.class));
+        then(booking).should(times(1)).markAsComplete();
+        then(booking).should(times(1)).markSeatsAsBooked();
     }
 }

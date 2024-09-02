@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-public class BalanceReader {
+public class BalanceHistoryReader {
 
     private final BalanceReaderRepository balanceReaderRepository;
 

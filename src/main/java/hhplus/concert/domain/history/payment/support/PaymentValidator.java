@@ -1,7 +1,9 @@
 package hhplus.concert.domain.history.payment.support;
 
 import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
 import org.springframework.stereotype.Component;
 
@@ -14,21 +16,33 @@ import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolic
 @Component
 public class PaymentValidator {
 
-    public void validatePayer(Booking booking, User payer) {
-        User booker = booking.getUser();
+    public void validatePayerEquality(Payment payment) {
+        User booker = payment.getBooking().getUser();
+        User payer = payment.getUser();
         if (booker.doesNotEqual(payer)) {
             throw new RestApiException(INVALID_PAYER);
         }
     }
 
-    public void validatePayableTime(Booking booking, LocalDateTime verificationTime) {
-        long passedMinutes = booking.getPassedMinutesSinceBookingFrom(verificationTime);
+    public void validatePayableTime(Payment payment) {
+        Booking booking = payment.getBooking();
+        LocalDateTime paymentDateTIme = payment.getPaymentDateTime();
+        long passedMinutes = booking.getPassedMinutesSinceBookingFrom(paymentDateTIme);
         if (isPayableTimeOver(passedMinutes)) {
             throw new RestApiException(PAYABLE_TIME_OVER);
+        }
+    }
+
+    public void checkPayerBalance(Payment payment) {
+        User payer = payment.getUser();
+        int totalPrice = payment.getPaymentAmount();
+        if (payer.isBalanceLessThan(totalPrice)) {
+            throw new RestApiException(BalanceErrorCode.NOT_ENOUGH_BALANCE);
         }
     }
 
     private boolean isPayableTimeOver(long passedMinutes) {
         return passedMinutes >= ALLOWED_MINUTES.getMinutes();
     }
+
 }

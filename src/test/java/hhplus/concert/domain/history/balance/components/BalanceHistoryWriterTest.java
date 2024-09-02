@@ -1,8 +1,10 @@
 package hhplus.concert.domain.history.balance.components;
 
 import hhplus.concert.IntegrationTestSupport;
+import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
 import hhplus.concert.domain.history.balance.models.Balance;
+import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
@@ -20,12 +22,13 @@ import static hhplus.concert.domain.history.balance.models.TransactionType.USE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 @Transactional
-class BalanceWriterTest extends IntegrationTestSupport {
+class BalanceHistoryWriterTest extends IntegrationTestSupport {
 
     @Autowired
-    BalanceWriter balanceWriter;
+    BalanceHistoryWriter balanceHistoryWriter;
 
     @Autowired
     BalanceJpaRepository balanceJpaRepository;
@@ -49,8 +52,10 @@ class BalanceWriterTest extends IntegrationTestSupport {
         LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
         given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
 
+        Balance chargeBalance = Balance.createChargeBalance(savedUser, amount, clockManager);
+
         // when
-        balanceWriter.saveChargeBalance(savedUser, amount, clockManager);
+        balanceHistoryWriter.save(chargeBalance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
@@ -70,19 +75,27 @@ class BalanceWriterTest extends IntegrationTestSupport {
                 .build();
         User savedUser = userJpaRepository.save(user);
 
-        long amount = 10000L;
-        LocalDateTime transactionDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
-        given(clockManager.getNowDateTime()).willReturn(transactionDateTime);
+        long totalPrice = 10000L;
+
+        Booking booking = mock(Booking.class);
+        given(booking.getUser()).willReturn(savedUser);
+        given(booking.getTotalPrice()).willReturn((int) totalPrice);
+
+        User payer = userJpaRepository.findById(savedUser.getId()).get();
+        LocalDateTime paymentDateTime = LocalDateTime.of(2024, 8, 9, 11, 30, 30);
+
+        Payment payment = Payment.of(booking, payer, paymentDateTime);
+        Balance balance = Balance.createUseBalanceFrom(payment);
 
         // when
-        balanceWriter.saveUseBalance(savedUser, amount, clockManager);
+        balanceHistoryWriter.save(balance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
         assertThat(balances).hasSize(1)
                 .extracting("transactionType", "transactionDateTime", "amount")
                 .contains(
-                        tuple(USE, transactionDateTime, 10000L)
+                        tuple(USE, paymentDateTime, 10000L)
                 );
     }
 

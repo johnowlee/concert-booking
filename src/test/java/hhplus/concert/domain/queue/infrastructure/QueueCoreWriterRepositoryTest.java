@@ -41,7 +41,7 @@ class QueueCoreWriterRepositoryTest {
 
     @DisplayName("유저 토큰을 Active Key Set에 저장한다.")
     @Test
-    void addUserToActiveSet() {
+    void addTokenToSet() {
         // give
         String token = "abc123";
         Queue queue = Queue.createActiveQueue(token);
@@ -49,7 +49,7 @@ class QueueCoreWriterRepositoryTest {
 
 
         // when
-        queueCoreWriterRepository.addUserToActiveSet(queue);
+        queueCoreWriterRepository.addTokenToSet(queue);
 
         // then
         String keyName = queue.getKeyName();
@@ -59,14 +59,14 @@ class QueueCoreWriterRepositoryTest {
 
     @DisplayName("유저 토큰을 Active Key Set에서 삭제한다.")
     @Test
-    void removeUserFromActiveSet() {
+    void removeTokenFromSet() {
         // given
         String token = "abc123";
         Queue queue = Queue.createActiveQueue(token);
         given(redisTemplate.opsForSet()).willReturn(setOperations);
 
         // when
-        queueCoreWriterRepository.removeUserFromActiveSet(queue);
+        queueCoreWriterRepository.removeTokenFromSet(queue);
 
         // then
         String keyName = queue.getKeyName();
@@ -76,7 +76,7 @@ class QueueCoreWriterRepositoryTest {
 
     @DisplayName("유저 토큰을 Waiting Key SortedSet에 저장한다.")
     @Test
-    void addUserToWaitingSortedSet() {
+    void addTokenToSortedSet() {
         // given
         String token = "abc123";
         long score = 1723440620696L;
@@ -84,7 +84,7 @@ class QueueCoreWriterRepositoryTest {
         given(redisTemplate.opsForZSet()).willReturn(zSetOperations);
 
         // when
-        queueCoreWriterRepository.addUserToWaitingSortedSet(queue);
+        queueCoreWriterRepository.addTokenToSortedSet(queue);
 
         // then
         String keyName = queue.getKeyName();
@@ -94,14 +94,14 @@ class QueueCoreWriterRepositoryTest {
 
     @DisplayName("유저 토큰을 Waiting Key SortedSet에서 삭제한다.")
     @Test
-    void removeUserFromWaitingSortedSet() {
+    void removeTokenFromSortedSet() {
         // given
         String token = "abc123";
         Queue queue = Queue.createWaitingQueue(token);
         given(redisTemplate.opsForZSet()).willReturn(zSetOperations);
 
         // when
-        queueCoreWriterRepository.removeUserFromWaitingSortedSet(queue);
+        queueCoreWriterRepository.removeTokenFromSortedSet(queue);
 
         // then
         String keyName = queue.getKeyName();
@@ -111,7 +111,7 @@ class QueueCoreWriterRepositoryTest {
 
     @DisplayName("유저 토큰 값으로 유효시간을 갖는 key를 저장한다. ")
     @Test
-    void createUserTimeout() {
+    void createTtlToken() {
         // given
         String token = "abc123";
         Queue queue = Queue.createActiveQueue(token);
@@ -121,7 +121,7 @@ class QueueCoreWriterRepositoryTest {
         given(redisTemplate.opsForValue()).willReturn(valueOperations);
 
         // when
-        queueCoreWriterRepository.createUserTimeout(queue, timeout, timeUnit);
+        queueCoreWriterRepository.createTtlToken(queue, timeout, timeUnit);
 
         // then
         String keyName = queue.getKeyName();

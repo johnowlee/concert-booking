@@ -15,7 +15,8 @@ import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.concert.models.Concert;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.queue.support.TokenValidator;
+import hhplus.concert.domain.concert.models.SeatBookingStatus;
+import hhplus.concert.domain.queue.service.QueueService;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -58,17 +59,13 @@ class ConcertControllerTest {
     private BookConcertUseCase bookConcertUseCase;
 
     @MockBean
-    private TokenValidator tokenValidator;
+    private QueueService queueService;
 
     @DisplayName("콘서트 목록 조회")
     @Test
     public void getConcerts() throws Exception {
         // given
-        Concert concert = Concert.builder()
-                .id(1L)
-                .title("아이유 콘서트")
-                .organizer("아이유")
-                .build();
+        Concert concert = createConcert();
         List<Concert> concerts = new ArrayList<>(List.of(concert));
 
         ConcertsResponse concertsResponse = ConcertsResponse.from(concerts);
@@ -80,7 +77,6 @@ class ConcertControllerTest {
                 )
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.concerts[0].id").value(1L))
                 .andExpect(jsonPath("$.data.concerts[0].title").value("아이유 콘서트"))
                 .andExpect(jsonPath("$.data.concerts[0].organizer").value("아이유"));
     }
@@ -109,16 +105,8 @@ class ConcertControllerTest {
     @Test
     public void getConcertOption() throws Exception {
         // given
-        Concert concert = Concert.builder()
-                .id(1L)
-                .build();
-        Seat seat = Seat.builder()
-                .id(5L)
-                .seatNo("A1")
-                .seatBookingStatus(AVAILABLE)
-                .build();
+        Seat seat = createSeat("A1", AVAILABLE, null);
         ConcertOption concertOption = ConcertOption.builder()
-                .concert(concert)
                 .place("월드컵경기장")
                 .build();
 
@@ -132,7 +120,6 @@ class ConcertControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.concertOption.place").value("월드컵경기장"))
-                .andExpect(jsonPath("$.data.seats[0].id").value(5L))
                 .andExpect(jsonPath("$.data.seats[0].seatNo").value("A1"))
                 .andExpect(jsonPath("$.data.seats[0].seatBookingStatus").value(AVAILABLE.name()));
     }
@@ -142,34 +129,24 @@ class ConcertControllerTest {
     public void bookConcert() throws Exception {
         // given
         User user = User.builder().name("홍길동").build();
-        Concert concert = Concert.builder()
-                .id(1L)
-                .build();
-
+        Concert concert = createConcert();
         ConcertOption concertOption = ConcertOption.builder()
                 .concert(concert)
                 .place("월드컵경기장")
                 .build();
 
-        Seat seat = Seat.builder()
-                .id(5L)
-                .seatNo("A1")
-                .seatBookingStatus(AVAILABLE)
-                .concertOption(concertOption)
-                .build();
-        List<Seat> seats = List.of(seat);
+        Seat seat = createSeat("A1", AVAILABLE, concertOption);
 
         BookingSeat bookingSeat = BookingSeat.builder()
                 .seat(seat)
                 .build();
         Booking booking = Booking.builder()
-                .id(1L)
                 .user(user)
                 .concertTitle("아이유콘서트")
                 .build();
-        booking.addBookingSeat(bookingSeat);
+        bookingSeat.setBooking(booking);
 
-        BookConcertResponse bookConcertResponse = BookConcertResponse.of(user, booking, seats);
+        BookConcertResponse bookConcertResponse = BookConcertResponse.from(booking);
         ConcertBookingRequest concertBookingRequest = new ConcertBookingRequest(10L, "1");
         given(bookConcertUseCase.execute(concertBookingRequest)).willReturn(bookConcertResponse);
 
@@ -226,7 +203,7 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.message").value("아이디가 부적합 합니다."));
     }
 
-    @DisplayName("콘서트 예약시 좌석 ID는 필수다.ㄱ")
+    @DisplayName("콘서트 예약시 좌석 ID는 필수다.")
     @Test
     public void bookConcertWithNoSeatId() throws Exception {
         // given
@@ -264,5 +241,20 @@ class ConcertControllerTest {
                 .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.name()))
                 .andExpect(jsonPath("$.name").value("INVALID_FIELD_VALUE"))
                 .andExpect(jsonPath("$.message").value("좌석 ID가 유효하지 않습니다."));
+    }
+
+    private static Concert createConcert() {
+        return Concert.builder()
+                .title("아이유 콘서트")
+                .organizer("아이유")
+                .build();
+    }
+
+    private static Seat createSeat(String seatNo, SeatBookingStatus seatBookingStatus, ConcertOption concertOption) {
+        return Seat.builder()
+                .seatNo(seatNo)
+                .seatBookingStatus(seatBookingStatus)
+                .concertOption(concertOption)
+                .build();
     }
 }
