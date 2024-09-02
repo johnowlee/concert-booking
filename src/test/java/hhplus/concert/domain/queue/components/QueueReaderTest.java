@@ -14,6 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Set;
 
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
+import static hhplus.concert.domain.queue.model.Key.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -142,6 +143,36 @@ class QueueReaderTest {
         // then
         assertThat(result).isZero();
         verify(queueReaderRepository, times(1)).getTokenRankFromSortedSet(eq("WAITING"), eq("abc123"));
+    }
+
+    @DisplayName("대기 Sorted Set에서 토큰의 rank를 조회한다.")
+    @Test
+    void getTokenRankFromSortedSet() {
+        // given
+        String token = "abc123";
+        Key key = WAITING;
+        given(queueReaderRepository.getTokenRankFromSortedSet(key.getKeyName(), token)).willReturn(1L);
+
+        // when
+        Long result = queueReader.getTokenRankFromSortedSet(key, token);
+
+        // then
+        assertThat(result).isEqualTo(1L);
+    }
+
+    @DisplayName("대기 Sorted Set에서 존재하지 않는 토큰의 rank를 조회 시 null을 반환한다.")
+    @Test
+    void getTokenRankFromSortedSetWithNotExistedToken() {
+        // given
+        String token = "abc123";
+        Key key = WAITING;
+        given(queueReaderRepository.getTokenRankFromSortedSet(key.getKeyName(), token)).willReturn(null);
+
+        // when
+        Long result = queueReader.getTokenRankFromSortedSet(key, token);
+
+        // then
+        assertThat(result).isNull();
     }
 
     @DisplayName("대기열의 첫번째 대기자의 토큰을 반환한다.")

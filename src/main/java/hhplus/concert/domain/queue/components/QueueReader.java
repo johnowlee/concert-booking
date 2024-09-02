@@ -32,6 +32,10 @@ public class QueueReader {
         return calculateWaitingNumberBy(rank);
     }
 
+    public Long getTokenRankFromSortedSet(Key key, String token) {
+        return queueReaderRepository.getTokenRankFromSortedSet(key.getKeyName(), token);
+    }
+
     public Set<String> getFirstWaiter() {
         return queueReaderRepository.getTokensFromSortedSetByRange(WAITING.getKeyName(), 0, 0);
     }
