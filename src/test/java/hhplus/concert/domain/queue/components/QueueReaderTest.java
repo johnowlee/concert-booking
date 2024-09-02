@@ -112,39 +112,6 @@ class QueueReaderTest {
         Assertions.assertThat(result).isNull();
     }
 
-    @DisplayName("대기열에서 토큰의 대기순번을 조회한다.")
-    @Test
-    void getWaitingNumber() {
-        // given
-        String token = "abc123";
-        Long rank = 5L;
-        String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token)).willReturn(rank);
-
-        // when
-        int waitingNumber = queueReader.getWaitingNumber(token);
-
-        // then
-        assertThat(waitingNumber).isEqualTo(5 + 1);
-        verify(queueReaderRepository).getTokenRankFromSortedSet("WAITING", "abc123");
-    }
-
-    @DisplayName("대기열에 토큰이 없을 경우 0을 반환한다.")
-    @Test
-    void getWaitingNumberIfNotExists() {
-        // given
-        String token = "abc123";
-        String waitingUserKey = "WAITING";
-        given(queueReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token)).willReturn(null);
-
-        // when
-        int result = queueReader.getWaitingNumber(token);
-
-        // then
-        assertThat(result).isZero();
-        verify(queueReaderRepository, times(1)).getTokenRankFromSortedSet(eq("WAITING"), eq("abc123"));
-    }
-
     @DisplayName("대기 Sorted Set에서 토큰의 rank를 조회한다.")
     @Test
     void getTokenRankFromSortedSet() {
