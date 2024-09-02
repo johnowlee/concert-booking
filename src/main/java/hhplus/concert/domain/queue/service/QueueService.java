@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 
 @Component
 @RequiredArgsConstructor
@@ -30,6 +31,11 @@ public class QueueService {
 
     public Queue createNewQueue(String token, long score) {
         return queueReader.isAccessible(queueMonitor) ? createActiveQueue(token) : createWaitingQueue(token, score);
+    }
+
+    public void validateToken(String token) {
+        if (queueReader.isWaitingToken(token)) throw new RestApiException(WAITING_TOKEN);
+        if (queueReader.isNotActiveToken(token)) throw new RestApiException(NOT_FOUND_TOKEN);
     }
 
     private Queue createActiveQueue(String token) {

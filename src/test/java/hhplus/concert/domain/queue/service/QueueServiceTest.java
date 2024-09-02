@@ -13,11 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -118,5 +119,51 @@ class QueueServiceTest extends IntegrationTestSupport {
         assertThat(result.getToken()).isEqualTo("abc");
         assertThat(result.getKeyName()).isEqualTo("WAITING");
         verify(queueWriter, times(1)).addWaitingToken(any(Queue.class));
+    }
+
+    @DisplayName("활성 토큰이면 예외가 발생하지 않는다.")
+    @Test
+    void validateToken() {
+        // given
+        String token = "abc";
+        given(queueReader.isWaitingToken(token)).willReturn(false);
+        given(queueReader.isNotActiveToken(token)).willReturn(false);
+
+        // when
+        queueService.validateToken(token);
+
+        // then
+        then(queueReader).should(times(1)).isWaitingToken(token);
+        then(queueReader).should(times(1)).isNotActiveToken(token);
+    }
+
+    @DisplayName("대기 토큰이면 예외 발생한다.")
+    @Test
+    void validateTokenWithWaitingToken() {
+        // given
+        String token = "abc";
+        given(queueReader.isWaitingToken(token)).willReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> queueService.validateToken(token))
+                        .isInstanceOf(RestApiException.class)
+                        .hasMessage(WAITING_TOKEN.getMessage());
+        then(queueReader).should(times(1)).isWaitingToken(token);
+    }
+
+    @DisplayName("유효하지 않은 토큰이면 예외 발생한다.")
+    @Test
+    void validateTokenWithNotFoundToken() {
+        // given
+        String token = "abc";
+        given(queueReader.isWaitingToken(token)).willReturn(false);
+        given(queueReader.isNotActiveToken(token)).willReturn(true);
+
+        // when & then
+        assertThatThrownBy(() -> queueService.validateToken(token))
+                .isInstanceOf(RestApiException.class)
+                .hasMessage(NOT_FOUND_TOKEN.getMessage());
+        then(queueReader).should(times(1)).isWaitingToken(token);
+        then(queueReader).should(times(1)).isNotActiveToken(token);
     }
 }
