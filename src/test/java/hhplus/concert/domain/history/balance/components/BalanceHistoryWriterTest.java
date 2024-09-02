@@ -55,7 +55,7 @@ class BalanceHistoryWriterTest extends IntegrationTestSupport {
         Balance chargeBalance = Balance.createChargeBalance(savedUser, amount, clockManager);
 
         // when
-        balanceHistoryWriter.saveBalance(chargeBalance);
+        balanceHistoryWriter.save(chargeBalance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();
@@ -88,7 +88,7 @@ class BalanceHistoryWriterTest extends IntegrationTestSupport {
         Balance balance = Balance.createUseBalanceFrom(payment);
 
         // when
-        balanceHistoryWriter.saveBalance(balance);
+        balanceHistoryWriter.save(balance);
 
         // then
         List<Balance> balances = balanceJpaRepository.findAll();

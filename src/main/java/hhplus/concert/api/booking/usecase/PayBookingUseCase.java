@@ -38,7 +38,7 @@ public class PayBookingUseCase {
 
         paymentService.pay(payment);
 
-        balanceHistoryWriter.saveBalance(Balance.createUseBalanceFrom(payment));
+        balanceHistoryWriter.save(Balance.createUseBalanceFrom(payment));
 
         paymentHistoryWriter.save(payment);
 

@@ -33,7 +33,7 @@ public class ChargeBalanceUseCase {
 
             chargeBalance(balance);
 
-            balanceHistoryWriter.saveBalance(balance);
+            balanceHistoryWriter.save(balance);
             return UserResponse.from(balance.getUser());
         } catch (OptimisticLockException e) {
             throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);

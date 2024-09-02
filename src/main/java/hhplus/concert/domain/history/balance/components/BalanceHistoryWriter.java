@@ -11,7 +11,7 @@ public class BalanceHistoryWriter {
 
     private final BalanceWriterRepository balanceWriterRepository;
 
-    public Balance saveBalance(Balance balance) {
+    public Balance save(Balance balance) {
         return balanceWriterRepository.save(balance);
     }
 }

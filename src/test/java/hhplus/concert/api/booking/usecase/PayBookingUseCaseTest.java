@@ -75,7 +75,7 @@ class PayBookingUseCaseTest {
         then(userReader).should(times(1)).getUserById(userId);
         then(clockManager).should(times(1)).getNowDateTime();
         then(paymentService).should(times(1)).pay(any(Payment.class));
-        then(balanceHistoryWriter).should(times(1)).saveBalance(any(Balance.class));
+        then(balanceHistoryWriter).should(times(1)).save(any(Balance.class));
         then(paymentHistoryWriter).should(times(1)).save(any(Payment.class));
         then(booking).should(times(1)).markAsComplete();
         then(booking).should(times(1)).markSeatsAsBooked();
