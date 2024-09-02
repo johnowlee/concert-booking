@@ -3,6 +3,7 @@ package hhplus.concert.domain.queue.service;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ public class QueueService {
     }
 
     public Queue createNewQueue(String token, long score) {
-        return queueReader.isAccessible(queueMonitor) ? createActiveQueue(token) : createWaitingQueue(token, score);
+        return isAccessible() ? createActiveQueue(token) : createWaitingQueue(token, score);
     }
 
     public void validateToken(String token) {
@@ -53,5 +54,10 @@ public class QueueService {
 
     private int getWaitingNumber(String token) {
         return queueReader.getWaitingNumber(token);
+    }
+
+    private boolean isAccessible() {
+        Long currentActiveTokenCount = queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName());
+        return currentActiveTokenCount == null || currentActiveTokenCount < queueMonitor.getMaxActiveUserCount();
     }
 }

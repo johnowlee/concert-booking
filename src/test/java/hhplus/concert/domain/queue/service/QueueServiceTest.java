@@ -4,8 +4,10 @@ import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
+import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,31 +88,34 @@ class QueueServiceTest extends IntegrationTestSupport {
                 .hasMessage(NOT_FOUND_TOKEN.getMessage());
     }
 
-    @DisplayName("활성 유저로 입장이 가능하면 활성 토큰이 발급된다.")
+    @DisplayName("현재 활성 토큰의 갯수가 활성 최대 수용치 보다 적으면 활성 토큰이 발급된다.")
     @Test
     void createNewQueueWhenAccessible() {
         // given
         String token = "abc";
         long score = 123456L;
-        given(queueReader.isAccessible(queueMonitor)).willReturn(true);
+        given(queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName())).willReturn(49L);
+        given(queueMonitor.getMaxActiveUserCount()).willReturn(50);
 
         // when
         Queue result = queueService.createNewQueue(token, score);
 
         // then
+        assertThat(49L).isLessThan(queueMonitor.getMaxActiveUserCount());
         assertThat(result.getToken()).isEqualTo("abc");
         assertThat(result.getKeyName()).isEqualTo("ACTIVE");
-        verify(queueWriter, times(1)).addActiveToken(any(Queue.class));
-        verify(queueWriter, times(1)).createActiveKey(any(Queue.class), eq(queueMonitor));
+        then(queueWriter).should(times(1)).addActiveToken(any(Queue.class));
+        then(queueWriter).should(times(1)).createActiveKey(any(Queue.class), eq(queueMonitor));
     }
 
-    @DisplayName("활성 유저로 입장이 불가능하면 대기 토큰이 발급된다.")
+    @DisplayName("현재 활성 토큰의 갯수가 활성 최대 수용치 보다 크거나 같으면 대기 토큰이 발급된다.")
     @Test
     void createNewQueueWhenNotAccessible() {
         // given
         String token = "abc";
         long score = 123456L;
-        given(queueReader.isAccessible(queueMonitor)).willReturn(false);
+        given(queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName())).willReturn(50L);
+        given(queueMonitor.getMaxActiveUserCount()).willReturn(50);
 
         // when
         Queue result = queueService.createNewQueue(token, score);
@@ -117,7 +123,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result.getToken()).isEqualTo("abc");
         assertThat(result.getKeyName()).isEqualTo("WAITING");
-        verify(queueWriter, times(1)).addWaitingToken(any(Queue.class));
+        then(queueWriter).should(times(1)).addWaitingToken(any(Queue.class));
     }
 
     @DisplayName("활성 토큰이면 예외가 발생하지 않는다.")
