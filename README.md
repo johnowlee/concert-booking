@@ -27,7 +27,7 @@
 ***
 
 ## API 명세
-🔗 [API 명세](https://velog.io/@wonholee/%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4API%EC%84%A4%EA%B3%84)
+🔗 [API 명세](docs%2Fapi-spec.md)
 ***
 
 
