@@ -1,7 +1,7 @@
 package hhplus.concert.domain.queue.components;
 
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
-import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +16,8 @@ public class QueueReader {
 
     private final QueueReaderRepository queueReaderRepository;
 
-    public Long getTokenCountFromSet(String keyName) {
-        return queueReaderRepository.getTokenSizeFromSet(keyName);
+    public Long getTokenCountFromSet(Key key) {
+        return queueReaderRepository.getTokenSizeFromSet(key.getKeyName());
     }
 
     public boolean isActiveToken(String token) {

@@ -7,7 +7,6 @@ import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +14,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
-import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -94,7 +93,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         long score = 123456L;
-        given(queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName())).willReturn(49L);
+        given(queueReader.getTokenCountFromSet(Key.ACTIVE)).willReturn(49L);
         given(queueMonitor.getMaxActiveUserCount()).willReturn(50);
 
         // when
@@ -114,7 +113,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         long score = 123456L;
-        given(queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName())).willReturn(50L);
+        given(queueReader.getTokenCountFromSet(Key.ACTIVE)).willReturn(50L);
         given(queueMonitor.getMaxActiveUserCount()).willReturn(50);
 
         // when

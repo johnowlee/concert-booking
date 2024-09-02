@@ -1,5 +1,6 @@
 package hhplus.concert.domain.queue.components;
 
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.repositories.QueueReaderRepository;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
@@ -35,11 +36,11 @@ class QueueReaderTest {
     void getTokenCountFromSet() {
         // given
         Long activeUserCount = 30L;
-        String keyName = ACTIVE.getKeyName();
-        given(queueReaderRepository.getTokenSizeFromSet(keyName)).willReturn(activeUserCount);
+        Key key = ACTIVE;
+        given(queueReaderRepository.getTokenSizeFromSet(key.getKeyName())).willReturn(activeUserCount);
 
         // when
-        Long result = queueReader.getTokenCountFromSet(keyName);
+        Long result = queueReader.getTokenCountFromSet(key);
 
         // then
         assertThat(result).isEqualTo(30L);

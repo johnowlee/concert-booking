@@ -57,7 +57,7 @@ public class QueueService {
     }
 
     private boolean isAccessible() {
-        Long currentActiveTokenCount = queueReader.getTokenCountFromSet(Key.ACTIVE.getKeyName());
+        Long currentActiveTokenCount = queueReader.getTokenCountFromSet(Key.ACTIVE);
         return currentActiveTokenCount == null || currentActiveTokenCount < queueMonitor.getMaxActiveUserCount();
     }
 }
