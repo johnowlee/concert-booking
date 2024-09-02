@@ -3,8 +3,8 @@ package hhplus.concert.domain.queue.service;
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.service.RedisKeyEventService;
 import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ class RedisKeyEventServiceTest extends IntegrationTestSupport {
         String removeToken = "abc";
         Set<String> firstWaiter = Set.of("qwer");
 
-        given(queueReader.getFirstWaiter()).willReturn(firstWaiter);
+        given(queueReader.getTokensFromSortedSetByRange(Key.WAITING, 0, 0)).willReturn(firstWaiter);
 
         // when
         redisKeyEventService.expire(removeToken);
@@ -59,7 +59,7 @@ class RedisKeyEventServiceTest extends IntegrationTestSupport {
         String removeToken = "abc";
         Set<String> firstWaiter = null;
 
-        given(queueReader.getFirstWaiter()).willReturn(firstWaiter);
+        given(queueReader.getTokensFromSortedSetByRange(Key.WAITING, 0, 0)).willReturn(firstWaiter);
 
         // when
         redisKeyEventService.expire(removeToken);
