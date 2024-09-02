@@ -30,38 +30,6 @@ class QueueReaderTest {
     @Mock
     QueueMonitor queueMonitor;
 
-    @DisplayName("활성 유저의 수가 최대 활성 유저 수 보다 적으면 true를 반환한다.")
-    @Test
-    void isAccessible() {
-        // given
-        Long activeUserCount = 5L;
-        given(queueReaderRepository.getTokenSizeFromSet("ACTIVE")).willReturn(activeUserCount);
-        given(queueMonitor.getMaxActiveUserCount()).willReturn(10);
-
-        // when
-        Boolean result = queueReader.isAccessible(queueMonitor);
-
-        // then
-        assertThat(result).isTrue();
-        verify(queueReaderRepository, times(1)).getTokenSizeFromSet("ACTIVE");
-    }
-
-    @DisplayName("활성 유저의 수가 최대 활성 유저 수 보다 같거나 많으면 false를 반환한다.")
-    @Test
-    void isAccessibleWhenActiveUserCountIsFull() {
-        // given
-        Long activeUserCount = 10L;
-        given(queueReaderRepository.getTokenSizeFromSet("ACTIVE")).willReturn(activeUserCount);
-        given(queueMonitor.getMaxActiveUserCount()).willReturn(10);
-
-        // when
-        Boolean result = queueReader.isAccessible(queueMonitor);
-
-        // then
-        assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).getTokenSizeFromSet("ACTIVE");
-    }
-
     @DisplayName("활성 유저 key에 등록된 토큰 수를 반환한다.")
     @Test
     void getTokenCountFromSet() {

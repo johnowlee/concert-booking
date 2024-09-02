@@ -16,11 +16,6 @@ public class QueueReader {
 
     private final QueueReaderRepository queueReaderRepository;
 
-    public Boolean isAccessible(QueueMonitor queueMonitor) {
-        Long concurrentSize = queueReaderRepository.getTokenSizeFromSet(ACTIVE.getKeyName());
-        return concurrentSize == null || concurrentSize < queueMonitor.getMaxActiveUserCount();
-    }
-
     public Long getTokenCountFromSet(String keyName) {
         return queueReaderRepository.getTokenSizeFromSet(keyName);
     }
