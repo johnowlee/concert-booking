@@ -1,4 +1,4 @@
-package hhplus.concert.domain.booking.support;
+package hhplus.concert.domain.booking.service;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.booking.components.BookingSeatReader;
@@ -6,6 +6,9 @@ import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
 import hhplus.concert.domain.booking.infrastructure.BookingSeatJpaRepository;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
+import hhplus.concert.domain.booking.service.BookingService;
+import hhplus.concert.domain.booking.support.BookingSeatManager;
+import hhplus.concert.domain.booking.support.BookingValidator;
 import hhplus.concert.domain.concert.infrastructure.ConcertJpaRepository;
 import hhplus.concert.domain.concert.infrastructure.ConcertOptionJpaRepository;
 import hhplus.concert.domain.concert.infrastructure.SeatJpaRepository;

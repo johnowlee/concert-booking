@@ -4,7 +4,7 @@ import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
 import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
-import hhplus.concert.domain.booking.support.BookingService;
+import hhplus.concert.domain.booking.service.BookingService;
 import hhplus.concert.domain.concert.components.SeatReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.models.Seat;

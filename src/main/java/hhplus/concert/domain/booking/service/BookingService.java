@@ -1,10 +1,12 @@
-package hhplus.concert.domain.booking.support;
+package hhplus.concert.domain.booking.service;
 
 import hhplus.concert.domain.booking.components.BookingSeatReader;
 import hhplus.concert.domain.booking.components.BookingSeatWriter;
 import hhplus.concert.domain.booking.components.BookingWriter;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
+import hhplus.concert.domain.booking.support.BookingSeatManager;
+import hhplus.concert.domain.booking.support.BookingValidator;
 import hhplus.concert.domain.concert.models.Seat;
 import hhplus.concert.domain.concert.support.SeatManager;
 import hhplus.concert.domain.concert.support.SeatValidator;
