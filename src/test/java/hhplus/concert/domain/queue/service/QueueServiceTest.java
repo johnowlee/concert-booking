@@ -59,8 +59,8 @@ class QueueServiceTest extends IntegrationTestSupport {
     void getQueueByTokenWhenWaitingToken() {
         // given
         String token = "abc";
-        int waitingNumber = 10;
-        given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
+        Long rank = 10L;
+        given(queueReader.getTokenRankFromSortedSet(WAITING, token)).willReturn(rank);
         given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(false);
         given(queueReader.getTokenScoreFromSortedSet(WAITING, token)).willReturn(1.0);
 
@@ -70,8 +70,8 @@ class QueueServiceTest extends IntegrationTestSupport {
         // then
         assertThat(result.getToken()).isEqualTo("abc");
         assertThat(result.getKeyName()).isEqualTo("WAITING");
-        assertThat(result.getWaitingNumber()).isEqualTo(10);
-        verify(queueReader, times(1)).getWaitingNumber("abc");
+        assertThat(result.getWaitingNumber()).isEqualTo(11);
+        verify(queueReader, times(1)).getTokenRankFromSortedSet(WAITING, "abc");
 
     }
 

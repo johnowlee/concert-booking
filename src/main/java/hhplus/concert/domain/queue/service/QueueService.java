@@ -54,6 +54,11 @@ public class QueueService {
         return score != null;
     }
 
+    private boolean isAccessible() {
+        Long currentActiveTokenCount = queueReader.getTokenCountFromSet(Key.ACTIVE);
+        return currentActiveTokenCount == null || currentActiveTokenCount < queueMonitor.getMaxActiveUserCount();
+    }
+
     private Queue createActiveQueue(String token) {
         Queue queue = Queue.createActiveQueue(token);
         queueWriter.addActiveToken(queue);
@@ -64,15 +69,15 @@ public class QueueService {
     private Queue createWaitingQueue(String token, long score) {
         Queue queue = Queue.createWaitingQueue(token, score);
         queueWriter.addWaitingToken(queue);
-        return Queue.createWaitingQueue(queue.getToken(), getWaitingNumber(queue.getToken()));
+        return Queue.createWaitingQueue(queue.getToken(), getWaitingNumber(token));
     }
 
     private int getWaitingNumber(String token) {
-        return queueReader.getWaitingNumber(token);
+        Long rank = queueReader.getTokenRankFromSortedSet(WAITING, token);
+        return calculateWaitingNumberBy(rank);
     }
 
-    private boolean isAccessible() {
-        Long currentActiveTokenCount = queueReader.getTokenCountFromSet(Key.ACTIVE);
-        return currentActiveTokenCount == null || currentActiveTokenCount < queueMonitor.getMaxActiveUserCount();
+    private int calculateWaitingNumberBy(Long rank) {
+        return rank != null ? (int) (rank + 1) : 0;
     }
 }
