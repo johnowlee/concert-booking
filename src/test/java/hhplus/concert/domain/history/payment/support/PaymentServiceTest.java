@@ -1,4 +1,4 @@
-package hhplus.concert.domain.payment.support;
+package hhplus.concert.domain.history.payment.support;
 
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;

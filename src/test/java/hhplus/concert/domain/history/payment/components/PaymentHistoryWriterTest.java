@@ -1,4 +1,4 @@
-package hhplus.concert.domain.payment.components;
+package hhplus.concert.domain.history.payment.components;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;

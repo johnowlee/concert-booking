@@ -4,6 +4,7 @@ import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.api.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
+import hhplus.concert.domain.history.payment.support.PaymentValidator;
 import hhplus.concert.domain.user.models.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;

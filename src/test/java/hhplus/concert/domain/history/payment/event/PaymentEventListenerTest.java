@@ -1,4 +1,4 @@
-package hhplus.concert.domain.payment.event;
+package hhplus.concert.domain.history.payment.event;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
