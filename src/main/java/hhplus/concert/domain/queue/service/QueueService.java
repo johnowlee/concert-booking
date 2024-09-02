@@ -22,10 +22,10 @@ public class QueueService {
     private final QueueMonitor queueMonitor;
 
     public Queue getQueueByToken(String token) {
-        if (queueReader.doseTokenBelongToSet(ACTIVE, token)) {
+        if (isActiveToken(token)) {
             return Queue.createActiveQueue(token);
         }
-        if (queueReader.isWaitingToken(token)) {
+        if (isWaitingToken(token)) {
             return Queue.createWaitingQueue(token, getWaitingNumber(token));
         }
         throw new RestApiException(NOT_FOUND_TOKEN);
@@ -36,8 +36,20 @@ public class QueueService {
     }
 
     public void validateToken(String token) {
-        if (queueReader.isWaitingToken(token)) throw new RestApiException(WAITING_TOKEN);
-        if (queueReader.isNotActiveToken(token)) throw new RestApiException(NOT_FOUND_TOKEN);
+        if (isWaitingToken(token)) throw new RestApiException(WAITING_TOKEN);
+        if (isNotActiveToken(token)) throw new RestApiException(NOT_FOUND_TOKEN);
+    }
+
+    private boolean isActiveToken(String token) {
+        return queueReader.doseTokenBelongToSet(ACTIVE, token);
+    }
+
+    private boolean isNotActiveToken(String token) {
+        return !isActiveToken(token);
+    }
+
+    private Boolean isWaitingToken(String token) {
+        return queueReader.isWaitingToken(token);
     }
 
     private Queue createActiveQueue(String token) {

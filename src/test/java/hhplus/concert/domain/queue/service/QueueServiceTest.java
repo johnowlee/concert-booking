@@ -131,15 +131,17 @@ class QueueServiceTest extends IntegrationTestSupport {
     void validateToken() {
         // given
         String token = "abc";
+        Key key = ACTIVE;
         given(queueReader.isWaitingToken(token)).willReturn(false);
-        given(queueReader.isNotActiveToken(token)).willReturn(false);
+//        given(queueReader.isNotActiveToken(token)).willReturn(false);
+        given(queueReader.doseTokenBelongToSet(key, token)).willReturn(true);
 
         // when
         queueService.validateToken(token);
 
         // then
         then(queueReader).should(times(1)).isWaitingToken(token);
-        then(queueReader).should(times(1)).isNotActiveToken(token);
+        then(queueReader).should(times(1)).doseTokenBelongToSet(key, token);
     }
 
     @DisplayName("대기 토큰이면 예외 발생한다.")
@@ -161,14 +163,15 @@ class QueueServiceTest extends IntegrationTestSupport {
     void validateTokenWithNotFoundToken() {
         // given
         String token = "abc";
+        Key key = ACTIVE;
         given(queueReader.isWaitingToken(token)).willReturn(false);
-        given(queueReader.isNotActiveToken(token)).willReturn(true);
+        given(queueReader.doseTokenBelongToSet(key, token)).willReturn(false);
 
         // when & then
         assertThatThrownBy(() -> queueService.validateToken(token))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_TOKEN.getMessage());
         then(queueReader).should(times(1)).isWaitingToken(token);
-        then(queueReader).should(times(1)).isNotActiveToken(token);
+        then(queueReader).should(times(1)).doseTokenBelongToSet(key, token);
     }
 }
