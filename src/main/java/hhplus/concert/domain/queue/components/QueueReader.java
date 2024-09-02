@@ -7,8 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static hhplus.concert.domain.queue.model.Key.WAITING;
-
 @Component
 @RequiredArgsConstructor
 public class QueueReader {
@@ -29,10 +27,6 @@ public class QueueReader {
 
     public Long getTokenRankFromSortedSet(Key key, String token) {
         return queueReaderRepository.getTokenRankFromSortedSet(key.getKeyName(), token);
-    }
-
-    public Set<String> getFirstWaiter() {
-        return queueReaderRepository.getTokensFromSortedSetByRange(WAITING.getKeyName(), 0, 0);
     }
 
     public Set<String> getTokensFromSortedSetByRange(Key key, long start, long end) {

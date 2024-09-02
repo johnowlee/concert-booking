@@ -142,21 +142,6 @@ class QueueReaderTest {
         assertThat(result).isNull();
     }
 
-    @DisplayName("대기열의 첫번째 대기자의 토큰을 반환한다.")
-    @Test
-    void getFirstWaiter() {
-        // given
-        Set<String> firstWaiter = Set.of("abc123");
-        given(queueReaderRepository.getTokensFromSortedSetByRange("WAITING", 0, 0)).willReturn(firstWaiter);
-
-        // when
-        Set<String> result = queueReader.getFirstWaiter();
-
-        // then
-        assertThat(result).isEqualTo(Set.of("abc123"));
-        verify(queueReaderRepository).getTokensFromSortedSetByRange("WAITING", 0, 0);
-    }
-
     @DisplayName("대기 Sorted Set의 토큰들을 범위에 따라 조회한다.")
     @Test
     void getTokensFromSortedSetByRange() {
