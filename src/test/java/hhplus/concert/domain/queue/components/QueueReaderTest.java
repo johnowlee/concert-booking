@@ -62,22 +62,6 @@ class QueueReaderTest {
         verify(queueReaderRepository).doseTokenBelongToSet("ACTIVE", "abc123");
     }
 
-    @DisplayName("토큰이 활성 유저에 포함되어 있지 않으면 true를 반환한다.")
-    @Test
-    void isNotActiveToken() {
-        // given
-        String token = "abc123";
-        String activeUserKey = "ACTIVE";
-        given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(true);
-
-        // when
-        Boolean result = queueReader.isNotActiveToken(token);
-
-        // then
-        assertThat(result).isFalse();
-        verify(queueReaderRepository).doseTokenBelongToSet("ACTIVE", "abc123");
-    }
-
     @DisplayName("토큰이 활성 유저에 포함되어 있지 않으면 false 반환한다.")
     @Test
     void isActiveTokenIfNotExists() {

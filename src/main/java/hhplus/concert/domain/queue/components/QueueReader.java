@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Set;
 
-import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static hhplus.concert.domain.queue.model.Key.WAITING;
 
 @Component
@@ -22,10 +21,6 @@ public class QueueReader {
 
     public boolean doseTokenBelongToSet(Key key, String token) {
         return queueReaderRepository.doseTokenBelongToSet(key.getKeyName(), token);
-    }
-
-    public boolean isNotActiveToken(String token) {
-        return !doseTokenBelongToSet(ACTIVE, token);
     }
 
     public Boolean isWaitingToken(String token) {
