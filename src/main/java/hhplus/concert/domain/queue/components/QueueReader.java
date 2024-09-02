@@ -20,12 +20,12 @@ public class QueueReader {
         return queueReaderRepository.getTokenSizeFromSet(key.getKeyName());
     }
 
-    public boolean isActiveToken(String token) {
-        return queueReaderRepository.doseTokenBelongToSet(ACTIVE.getKeyName(), token);
+    public boolean doseTokenBelongToSet(Key key, String token) {
+        return queueReaderRepository.doseTokenBelongToSet(key.getKeyName(), token);
     }
 
     public boolean isNotActiveToken(String token) {
-        return !isActiveToken(token);
+        return !doseTokenBelongToSet(ACTIVE, token);
     }
 
     public Boolean isWaitingToken(String token) {

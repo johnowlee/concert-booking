@@ -14,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 
 import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
+import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -42,7 +43,7 @@ class QueueServiceTest extends IntegrationTestSupport {
     void getQueueByTokenWhenActiveToken() {
         // given
         String token = "abc";
-        given(queueReader.isActiveToken(token)).willReturn(true);
+        given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(true);
 
         // when
         Queue result = queueService.getQueueByToken(token);
@@ -59,7 +60,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         String token = "abc";
         int waitingNumber = 10;
         given(queueReader.getWaitingNumber(token)).willReturn(waitingNumber);
-        given(queueReader.isActiveToken(token)).willReturn(false);
+        given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(false);
         given(queueReader.isWaitingToken(token)).willReturn(true);
 
         // when
@@ -78,7 +79,7 @@ class QueueServiceTest extends IntegrationTestSupport {
     void getQueueByTokenWithInvalidToken() {
         // given
         String token = "abc";
-        given(queueReader.isActiveToken(token)).willReturn(false);
+        given(queueReader.doseTokenBelongToSet(ACTIVE, token)).willReturn(false);
         given(queueReader.isWaitingToken(token)).willReturn(false);
 
         // when & then

@@ -55,7 +55,7 @@ class QueueReaderTest {
         given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(true);
 
         // when
-        Boolean result = queueReader.isActiveToken(token);
+        Boolean result = queueReader.doseTokenBelongToSet(ACTIVE, token);
 
         // then
         assertThat(result).isTrue();
@@ -87,7 +87,7 @@ class QueueReaderTest {
         given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(false);
 
         // when
-        Boolean result = queueReader.isActiveToken(token);
+        Boolean result = queueReader.doseTokenBelongToSet(ACTIVE, token);
 
         // then
         assertThat(result).isFalse();
