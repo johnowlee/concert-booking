@@ -53,7 +53,7 @@ class QueueReaderTest {
     void isActiveToken() {
         // given
         String token = "abc123";
-        String activeUserKey = "ACTIVE";
+        String activeUserKey = ACTIVE.getKeyName();
         given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(true);
 
         // when
@@ -61,7 +61,7 @@ class QueueReaderTest {
 
         // then
         assertThat(result).isTrue();
-        verify(queueReaderRepository).doseTokenBelongToSet("ACTIVE", "abc123");
+        verify(queueReaderRepository).doseTokenBelongToSet(activeUserKey, "abc123");
     }
 
     @DisplayName("토큰이 활성 유저에 포함되어 있지 않으면 false 반환한다.")
@@ -69,7 +69,7 @@ class QueueReaderTest {
     void isActiveTokenIfNotExists() {
         // given
         String token = "abc123";
-        String activeUserKey = "ACTIVE";
+        String activeUserKey = ACTIVE.getKeyName();
         given(queueReaderRepository.doseTokenBelongToSet(activeUserKey, token)).willReturn(false);
 
         // when
@@ -77,7 +77,7 @@ class QueueReaderTest {
 
         // then
         assertThat(result).isFalse();
-        verify(queueReaderRepository, times(1)).doseTokenBelongToSet(eq("ACTIVE"), eq("abc123"));
+        verify(queueReaderRepository, times(1)).doseTokenBelongToSet(eq(activeUserKey), eq("abc123"));
     }
     
     @DisplayName("Sorted Set 토큰의 스코어를 조회 한다.")

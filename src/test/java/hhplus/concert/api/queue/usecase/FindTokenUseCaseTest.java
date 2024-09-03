@@ -41,6 +41,6 @@ class FindTokenUseCaseTest {
 
         // then
         assertThat(result.token()).isEqualTo("a1b2b3");
-        assertThat(result.key()).isEqualTo(ACTIVE.getKeyName());
+        assertThat(result.key()).isEqualTo(ACTIVE.toString());
     }
 }
