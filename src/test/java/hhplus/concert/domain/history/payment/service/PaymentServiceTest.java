@@ -4,7 +4,6 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentValidator;
-import hhplus.concert.domain.support.event.EventPublisher;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -12,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -27,7 +27,7 @@ class PaymentServiceTest {
     PaymentValidator paymentValidator;
 
     @Mock
-    EventPublisher eventPublisher;
+    ApplicationEventPublisher eventPublisher;
 
     @DisplayName("결제 시 결제 가능 여부를 검증하고 잔액 차감 후 결제완료 이벤트를 발행한다.")
     @Test
@@ -48,7 +48,7 @@ class PaymentServiceTest {
 
         // then
         then(payer).should(times(1)).useBalance(10000L);
-        then(eventPublisher).should(times(1)).publish(PaymentCompletionEvent.from(payment));
+        then(eventPublisher).should(times(1)).publishEvent(PaymentCompletionEvent.from(payment));
         then(paymentValidator).should(times(1)).validatePayableTime(payment);
         then(paymentValidator).should(times(1)).validatePayerEquality(payment);
         then(paymentValidator).should(times(1)).checkPayerBalance(payment);
