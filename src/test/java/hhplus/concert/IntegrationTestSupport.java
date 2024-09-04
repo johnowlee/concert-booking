@@ -28,29 +28,29 @@ public abstract class IntegrationTestSupport {
 
 
     @Autowired
-    BookingSeatJpaRepository bookingSeatJpaRepository;
+    protected BookingSeatJpaRepository bookingSeatJpaRepository;
 
     @Autowired
-    SeatJpaRepository seatJpaRepository;
+    protected SeatJpaRepository seatJpaRepository;
 
     @Autowired
-    ConcertOptionJpaRepository concertOptionJpaRepository;
+    protected ConcertOptionJpaRepository concertOptionJpaRepository;
 
     @Autowired
-    ConcertJpaRepository concertJpaRepository;
+    protected ConcertJpaRepository concertJpaRepository;
 
 
     @Autowired
-    BalanceJpaRepository balanceJpaRepository;
+    protected BalanceJpaRepository balanceJpaRepository;
 
     @Autowired
-    PaymentJpaRepository paymentJpaRepository;
+    protected PaymentJpaRepository paymentJpaRepository;
 
     @Autowired
-    BookingJpaRepository bookingJpaRepository;
+    protected BookingJpaRepository bookingJpaRepository;
 
     @Autowired
-    UserJpaRepository userJpaRepository;
+    protected UserJpaRepository userJpaRepository;
 
 
     @AfterEach
