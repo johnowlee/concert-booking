@@ -21,12 +21,12 @@ public class PaymentEventListener {
     @EventListener(PaymentCompletion.class)
     @Async
     public void handle(PaymentCompletion event) {
-        log.info("send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.userId(), event.bookingId(), event.amount());
+        log.info("send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.payerId(), event.bookingId(), event.paymentAmount());
 
         try {
             kafkaTemplate.send(PAYMENT_COMPLETE_TOPIC, objectMapper.writeValueAsString(event));
         } catch (JsonProcessingException e) {
-            log.error("failed to send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.userId(), event.bookingId(), event.amount());
+            log.error("failed to send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.payerId(), event.bookingId(), event.paymentAmount());
         }
     }
 }
