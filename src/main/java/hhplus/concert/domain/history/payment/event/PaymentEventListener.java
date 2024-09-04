@@ -4,9 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,8 +16,8 @@ public class PaymentEventListener {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    @EventListener(PaymentCompletion.class)
-    @Async
+//    @EventListener(PaymentCompletion.class)
+//    @Async
     public void handle(PaymentCompletion event) {
         log.info("send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.payerId(), event.bookingId(), event.paymentAmount());
 
