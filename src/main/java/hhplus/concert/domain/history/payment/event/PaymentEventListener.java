@@ -18,9 +18,9 @@ public class PaymentEventListener {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper;
 
-    @EventListener(PaymentCompletionEvent.class)
+    @EventListener(PaymentCompletion.class)
     @Async
-    public void handle(PaymentCompletionEvent event) {
+    public void handle(PaymentCompletion event) {
         log.info("send message to kafka topic : {}, userId : {}, bookingId : {}, amount : {}", PAYMENT_COMPLETE_TOPIC, event.userId(), event.bookingId(), event.amount());
 
         try {

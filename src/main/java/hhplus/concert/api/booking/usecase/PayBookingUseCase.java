@@ -8,7 +8,7 @@ import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
-import hhplus.concert.domain.history.payment.event.PaymentCompletionEvent;
+import hhplus.concert.domain.history.payment.event.PaymentCompletion;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.service.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
@@ -66,6 +66,6 @@ public class PayBookingUseCase {
     }
 
     private void publishPaymentCompletionEvent(Payment payment) {
-        eventPublisher.publishEvent(PaymentCompletionEvent.from(payment));
+        eventPublisher.publishEvent(PaymentCompletion.from(payment));
     }
 }
