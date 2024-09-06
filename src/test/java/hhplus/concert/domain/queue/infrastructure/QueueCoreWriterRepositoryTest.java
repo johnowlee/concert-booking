@@ -1,5 +1,6 @@
 package hhplus.concert.domain.queue.infrastructure;
 
+import hhplus.concert.domain.queue.model.Key;
 import hhplus.concert.domain.queue.model.Queue;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ import org.springframework.data.redis.core.ZSetOperations;
 
 import java.util.concurrent.TimeUnit;
 
-import static java.util.concurrent.TimeUnit.*;
+import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -50,11 +51,12 @@ class QueueCoreWriterRepositoryTest {
 
         // when
         queueCoreWriterRepository.addTokenToSet(queue);
+        String result = queue.getKeyName();
 
         // then
-        String keyName = queue.getKeyName();
-        assertThat(keyName).isEqualTo("ACTIVE");
-        verify(setOperations, times(1)).add(eq("ACTIVE"), eq("abc123"));
+        String activeKeyName = Key.ACTIVE.getKeyName();
+        assertThat(result).isEqualTo(activeKeyName);
+        verify(setOperations, times(1)).add(eq(activeKeyName), eq("abc123"));
     }
 
     @DisplayName("유저 토큰을 Active Key Set에서 삭제한다.")
@@ -67,11 +69,12 @@ class QueueCoreWriterRepositoryTest {
 
         // when
         queueCoreWriterRepository.removeTokenFromSet(queue);
+        String result = queue.getKeyName();
 
         // then
-        String keyName = queue.getKeyName();
-        assertThat(keyName).isEqualTo("ACTIVE");
-        verify(setOperations, times(1)).remove(eq("ACTIVE"), eq("abc123"));
+        String activeKeyName = Key.ACTIVE.getKeyName();
+        assertThat(result).isEqualTo(activeKeyName);
+        verify(setOperations, times(1)).remove(eq(activeKeyName), eq("abc123"));
     }
 
     @DisplayName("유저 토큰을 Waiting Key SortedSet에 저장한다.")
@@ -85,11 +88,12 @@ class QueueCoreWriterRepositoryTest {
 
         // when
         queueCoreWriterRepository.addTokenToSortedSet(queue);
+        String result = queue.getKeyName();
 
         // then
-        String keyName = queue.getKeyName();
-        assertThat(keyName).isEqualTo("WAITING");
-        verify(zSetOperations, times(1)).add(eq("WAITING"), eq("abc123"), eq((double) 1723440620696L));
+        String waitingKeyName = Key.WAITING.getKeyName();
+        assertThat(result).isEqualTo(waitingKeyName);
+        verify(zSetOperations, times(1)).add(eq(waitingKeyName), eq("abc123"), eq((double) 1723440620696L));
     }
 
     @DisplayName("유저 토큰을 Waiting Key SortedSet에서 삭제한다.")
@@ -102,11 +106,12 @@ class QueueCoreWriterRepositoryTest {
 
         // when
         queueCoreWriterRepository.removeTokenFromSortedSet(queue);
+        String result = queue.getKeyName();
 
         // then
-        String keyName = queue.getKeyName();
-        assertThat(keyName).isEqualTo("WAITING");
-        verify(zSetOperations, times(1)).remove(eq("WAITING"), eq("abc123"));
+        String waitingKeyName = Key.WAITING.getKeyName();
+        assertThat(result).isEqualTo(waitingKeyName);
+        verify(zSetOperations, times(1)).remove(eq(waitingKeyName), eq("abc123"));
     }
 
     @DisplayName("유저 토큰 값으로 유효시간을 갖는 key를 저장한다. ")
@@ -122,10 +127,11 @@ class QueueCoreWriterRepositoryTest {
 
         // when
         queueCoreWriterRepository.createTtlToken(queue, timeout, timeUnit);
+        String result = queue.getKeyName();
 
         // then
-        String keyName = queue.getKeyName();
-        assertThat(keyName).isEqualTo("ACTIVE");
-        verify(valueOperations, times(1)).set(eq("abc123"), eq("ACTIVE"), eq(300L), eq(SECONDS));
+        String activeUserKey = Key.ACTIVE.getKeyName();
+        assertThat(result).isEqualTo(activeUserKey);
+        verify(valueOperations, times(1)).set(eq("abc123"), eq(activeUserKey), eq(300L), eq(SECONDS));
     }
 }

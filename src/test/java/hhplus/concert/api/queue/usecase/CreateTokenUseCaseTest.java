@@ -51,6 +51,6 @@ class CreateTokenUseCaseTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.token()).isEqualTo("abc123");
-        assertThat(result.key()).isEqualTo(ACTIVE.getKeyName());
+        assertThat(result.key()).isEqualTo(ACTIVE.toString());
     }
 }

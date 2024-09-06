@@ -51,7 +51,7 @@ class QueueServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.getToken()).isEqualTo("abc");
-        assertThat(result.getKeyName()).isEqualTo("ACTIVE");
+        assertThat(result.getKey()).isEqualTo(ACTIVE);
     }
 
     @DisplayName("대기 유저의 토큰이면 WAITING 토큰을 반환한다.")
@@ -69,7 +69,7 @@ class QueueServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.getToken()).isEqualTo("abc");
-        assertThat(result.getKeyName()).isEqualTo("WAITING");
+        assertThat(result.getKey()).isEqualTo(WAITING);
         assertThat(result.getWaitingNumber()).isEqualTo(11);
         verify(queueReader, times(1)).getTokenRankFromSortedSet(WAITING, "abc");
 
@@ -95,7 +95,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // given
         String token = "abc";
         long score = 123456L;
-        given(queueReader.getTokenCountFromSet(Key.ACTIVE)).willReturn(49L);
+        given(queueReader.getTokenCountFromSet(ACTIVE)).willReturn(49L);
         given(queueMonitor.getMaxActiveUserCount()).willReturn(50);
 
         // when
@@ -104,7 +104,7 @@ class QueueServiceTest extends IntegrationTestSupport {
         // then
         assertThat(49L).isLessThan(queueMonitor.getMaxActiveUserCount());
         assertThat(result.getToken()).isEqualTo("abc");
-        assertThat(result.getKeyName()).isEqualTo("ACTIVE");
+        assertThat(result.getKey()).isEqualTo(ACTIVE);
         then(queueWriter).should(times(1)).addActiveToken(any(Queue.class));
         then(queueWriter).should(times(1)).createActiveKey(any(Queue.class), eq(queueMonitor));
     }
@@ -123,7 +123,7 @@ class QueueServiceTest extends IntegrationTestSupport {
 
         // then
         assertThat(result.getToken()).isEqualTo("abc");
-        assertThat(result.getKeyName()).isEqualTo("WAITING");
+        assertThat(result.getKey()).isEqualTo(WAITING);
         then(queueWriter).should(times(1)).addWaitingToken(any(Queue.class));
     }
 

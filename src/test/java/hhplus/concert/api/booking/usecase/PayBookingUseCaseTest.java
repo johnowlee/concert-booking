@@ -3,9 +3,7 @@ package hhplus.concert.api.booking.usecase;
 import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
-import hhplus.concert.domain.history.balance.models.Balance;
-import hhplus.concert.domain.history.payment.components.PaymentHistoryWriter;
+import hhplus.concert.domain.history.payment.event.PaymentCompletion;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.service.PaymentService;
 import hhplus.concert.domain.support.ClockManager;
@@ -17,6 +15,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.ApplicationEventPublisher;
 
 import java.time.LocalDateTime;
 
@@ -34,9 +33,6 @@ class PayBookingUseCaseTest {
     BookingReader bookingReader;
 
     @Mock
-    PaymentHistoryWriter paymentHistoryWriter;
-
-    @Mock
     PaymentService paymentService;
 
     @Mock
@@ -46,12 +42,12 @@ class PayBookingUseCaseTest {
     UserReader userReader;
 
     @Mock
-    BalanceHistoryWriter balanceHistoryWriter;
+    ApplicationEventPublisher eventPublisher;
 
     @InjectMocks
     PayBookingUseCase payBookingUseCase;
 
-    @DisplayName("예약을 결제한다.")
+    @DisplayName("예약을 결제하고 결제 완료 이벤트를 발행한다.")
     @Test
     void execute() {
         // given
@@ -75,9 +71,6 @@ class PayBookingUseCaseTest {
         then(userReader).should(times(1)).getUserById(userId);
         then(clockManager).should(times(1)).getNowDateTime();
         then(paymentService).should(times(1)).pay(any(Payment.class));
-        then(balanceHistoryWriter).should(times(1)).save(any(Balance.class));
-        then(paymentHistoryWriter).should(times(1)).save(any(Payment.class));
-        then(booking).should(times(1)).markAsComplete();
-        then(booking).should(times(1)).markSeatsAsBooked();
+        then(eventPublisher).should(times(1)).publishEvent(any(PaymentCompletion.class));
     }
 }

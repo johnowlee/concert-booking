@@ -24,7 +24,6 @@ public class RedisKeyExpirationListener implements MessageListener {
 
     @PostConstruct
     public void init() {
-        // "__keyevent@0__:expired"는 디폴트 Redis 인스턴스의 만료 이벤트를 수신합니다.
         redisMessageListenerContainer.addMessageListener(this, new ChannelTopic("__keyevent@0__:expired"));
     }
 
@@ -32,7 +31,6 @@ public class RedisKeyExpirationListener implements MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         String expiredKey = message.toString();
         log.info("Expired key={}", expiredKey);
-        // 여기에서 만료된 키에 대한 로직을 처리합니다.
         redisKeyEventService.expire(expiredKey);
     }
 }

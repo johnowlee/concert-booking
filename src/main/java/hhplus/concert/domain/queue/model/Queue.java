@@ -14,7 +14,7 @@ public class Queue {
     private double score;
 
     public String getKeyName() {
-        return key.toString();
+        return key.getKeyName();
     }
 
     @Builder

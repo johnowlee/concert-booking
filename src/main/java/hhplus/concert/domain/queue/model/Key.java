@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum Key {
-    ACTIVE("ACTIVE"),
-    WAITING("WAITING");
+    ACTIVE("booking:concert:active:users"),
+    WAITING("booking:concert:waiting:users");
 
     private final String keyName;
 }
