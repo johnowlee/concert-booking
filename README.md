@@ -36,6 +36,6 @@
 
 🔗 [동시성 처리](docs%2Fconcurrency%2Fconcurrency-handling.md)
 
-🔗 [인덱스 적용](https://velog.io/@wonholee/DB-%EC%BD%98%EC%84%9C%ED%8A%B8-%EC%98%88%EC%95%BD-%EC%84%9C%EB%B9%84%EC%8A%A4-%EC%9D%B8%EB%8D%B1%EC%8A%A4-%EB%8F%84%EC%9E%85%EA%B8%B0)
+🔗 [인덱스 적용](docs%2Findex%2Findex.md)
 
-🔗 [트랜잭션 핸들링](https://velog.io/@wonholee/%ED%8A%B8%EB%9E%9C%EC%9E%AD%EC%85%98-%EA%B3%A0%EC%B0%B0)
+🔗 [트랜잭션 핸들링](docs%2Ftransaction%2Ftransaction-handling.md)
