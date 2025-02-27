@@ -1,4 +1,4 @@
-package hhplus.concert.api.balance.controller.request;
+package hhplus.concert.api.user.request;
 
 import jakarta.validation.constraints.Positive;
 

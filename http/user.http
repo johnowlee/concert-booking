@@ -8,3 +8,14 @@ GET localhost:8080/users/1/bookings/1
 POST localhost:8080/users/1/bookings/1/payment
 Queue-Token: 165ffddb-1580-4267-a5f8-0b50fed2e1f5
 Content-Type: application/json
+
+### 잔액 조회
+GET localhost:8080/users/1/balance
+
+### 잔액 충전
+PATCH localhost:8080/users/1/balance
+Content-Type: application/json
+
+{
+  "balance": 10000
+}

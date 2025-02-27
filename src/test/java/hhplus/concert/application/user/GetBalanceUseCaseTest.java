@@ -1,6 +1,5 @@
-package hhplus.concert.api.balance.usecase;
+package hhplus.concert.application.user;
 
-import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
@@ -38,11 +37,11 @@ public class GetBalanceUseCaseTest {
         given(user.getBalance()).willReturn(expectedBalance);
 
         // when
-        UserResponse result = getBalanceUseCase.execute(userId);
+        User result = getBalanceUseCase.execute(userId);
 
         // then
         assertThat(result).isNotNull();
-        assertThat(result.balance()).isEqualTo(1000L);
+        assertThat(result.getBalance()).isEqualTo(1000L);
     }
 
     @DisplayName("등록되지 않은 유저의 잔액 조회 시 예외가 발생한다.")

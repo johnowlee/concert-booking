@@ -1,6 +1,5 @@
 package hhplus.concert.application.user;
 
-import hhplus.concert.api.common.UseCase;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompletion;
@@ -12,13 +11,14 @@ import hhplus.concert.domain.user.models.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Slf4j
 @RequiredArgsConstructor
-@UseCase
+@Service
 public class PayBookingUseCase {
 
     private final BookingReader bookingReader;

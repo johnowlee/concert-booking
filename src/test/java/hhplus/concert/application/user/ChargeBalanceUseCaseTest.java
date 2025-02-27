@@ -1,9 +1,8 @@
-package hhplus.concert.api.balance.usecase;
+package hhplus.concert.application.user;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.balance.controller.request.BalanceChargeRequest;
-import hhplus.concert.api.common.response.UserResponse;
 import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.application.dto.BalanceChargeDto;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;
@@ -61,13 +60,13 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
         long version = user.getVersion();
 
         // when
-        UserResponse result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeRequest(30000L));
+        User result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeDto(30000L));
 
         // then
         assertThat(user.getVersion()).isEqualTo(version + 1);
-        assertThat(result.id()).isEqualTo(user.getId());
-        assertThat(result.name()).isEqualTo("jon");
-        assertThat(result.balance()).isEqualTo(balance + 30000L);
+        assertThat(result.getId()).isEqualTo(user.getId());
+        assertThat(result.getName()).isEqualTo("jon");
+        assertThat(result.getBalance()).isEqualTo(balance + 30000L);
     }
 
     @DisplayName("등록되지 않은 유저의 잔액 충전 시 예외가 발생한다.")
@@ -86,7 +85,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
 
         // when & then
         assertThat(userId).isNotEqualTo(notFoundUserId);
-        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, new BalanceChargeRequest(30000L)))
+        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, new BalanceChargeDto(30000L)))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_USER.getMessage());
     }
@@ -112,7 +111,7 @@ class ChargeBalanceUseCaseTest extends IntegrationTestSupport {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    chargeBalanceUseCase.execute(userId, new BalanceChargeRequest(30000L));
+                    chargeBalanceUseCase.execute(userId, new BalanceChargeDto(30000L));
                 } catch (RestApiException e) {
                 } finally {
                     latch.countDown();
