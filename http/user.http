@@ -1,0 +1,10 @@
+### 유저 아이디로 예약 목록 조회
+GET localhost:8080/users/1/bookings
+
+### 예약 단건 조회
+GET localhost:8080/users/1/bookings/1
+
+### 예약 결제
+POST localhost:8080/users/1/bookings/1/payment
+Queue-Token: 165ffddb-1580-4267-a5f8-0b50fed2e1f5
+Content-Type: application/json

@@ -1,6 +1,5 @@
-package hhplus.concert.api.booking.usecase;
+package hhplus.concert.application.user;
 
-import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompletion;
@@ -53,7 +52,6 @@ class PayBookingUseCaseTest {
         // given
         Long bookingId = 1L;
         Long userId = 2L;
-        PaymentRequest paymentRequest = new PaymentRequest(userId);
 
         Booking booking = mock(Booking.class);
         User payer = mock(User.class);
@@ -64,7 +62,7 @@ class PayBookingUseCaseTest {
         given(clockManager.getNowDateTime()).willReturn(paymentDateTime);
 
         // when
-        payBookingUseCase.execute(bookingId, paymentRequest);
+        payBookingUseCase.execute(userId, bookingId);
 
         // then
         then(bookingReader).should(times(1)).getBookingById(bookingId);

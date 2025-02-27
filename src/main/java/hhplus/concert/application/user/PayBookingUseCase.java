@@ -1,8 +1,6 @@
-package hhplus.concert.api.booking.usecase;
+package hhplus.concert.application.user;
 
-import hhplus.concert.api.booking.controller.request.PaymentRequest;
 import hhplus.concert.api.common.UseCase;
-import hhplus.concert.api.common.response.PaymentResponse;
 import hhplus.concert.domain.booking.components.BookingReader;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.event.PaymentCompletion;
@@ -31,16 +29,16 @@ public class PayBookingUseCase {
     private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
-    public PaymentResponse execute(Long id, PaymentRequest request) {
-        Payment payment = createPayment(id, request);
+    public Payment execute(Long userId, Long bookingId) {
+        Payment payment = createPayment(userId, bookingId);
         paymentService.pay(payment);
         eventPublisher.publishEvent(PaymentCompletion.from(payment));
-        return PaymentResponse.from(payment);
+        return payment;
     }
 
-    private Payment createPayment(Long id, PaymentRequest request) {
-        Booking booking = bookingReader.getBookingById(id);
-        User payer = userReader.getUserById(request.userId());
+    private Payment createPayment(Long userId, Long bookingId) {
+        User payer = userReader.getUserById(userId);
+        Booking booking = bookingReader.getBookingById(bookingId);
         LocalDateTime paymentDateTime = clockManager.getNowDateTime();
         return Payment.of(booking, payer, paymentDateTime);
     }
