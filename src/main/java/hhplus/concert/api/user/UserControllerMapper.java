@@ -1,10 +1,12 @@
 package hhplus.concert.api.user;
 
 import hhplus.concert.api.user.request.BalanceChargeRequest;
+import hhplus.concert.api.user.request.ConcertBookingRequest;
 import hhplus.concert.api.user.response.BalanceResponse;
 import hhplus.concert.api.user.response.BookingResponse;
 import hhplus.concert.api.user.response.PaymentResponse;
-import hhplus.concert.application.dto.BalanceChargeDto;
+import hhplus.concert.application.user.dto.BalanceChargeDto;
+import hhplus.concert.application.user.dto.ConcertBookingDto;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
@@ -41,5 +43,9 @@ public class UserControllerMapper {
 
     public BalanceChargeDto toBalanceBalanceChargeRequest(BalanceChargeRequest request) {
         return new BalanceChargeDto(request.balance());
+    }
+
+    public ConcertBookingDto toConcertBookingDto(ConcertBookingRequest request) {
+        return new ConcertBookingDto(request.seatIds());
     }
 }

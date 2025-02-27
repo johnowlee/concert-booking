@@ -2,7 +2,7 @@ package hhplus.concert.application.user;
 
 import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.application.dto.BalanceChargeDto;
+import hhplus.concert.application.user.dto.BalanceChargeDto;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.components.UserWriter;

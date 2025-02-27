@@ -1,6 +1,6 @@
 package hhplus.concert.application.user;
 
-import hhplus.concert.application.dto.BalanceChargeDto;
+import hhplus.concert.application.user.dto.BalanceChargeDto;
 import hhplus.concert.domain.history.balance.models.Balance;
 import hhplus.concert.domain.history.balance.service.BalanceService;
 import hhplus.concert.domain.support.ClockManager;

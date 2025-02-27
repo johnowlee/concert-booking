@@ -1,19 +1,17 @@
 package hhplus.concert.api.concert.controller;
 
 import hhplus.concert.api.common.RestApiResponse;
-import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.BookConcertUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertOptionsUseCase;
 import hhplus.concert.api.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionWithSeatsResponse;
-import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
 import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
 import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
-import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,7 +21,6 @@ public class ConcertController {
     private final GetConcertsUseCase getConcertsUseCase;
     private final GetConcertOptionsUseCase getConcertOptionsUseCase;
     private final GetConcertOptionUseCase getConcertOptionUseCase;
-    private final BookConcertUseCase bookConcertUseCase;
 
     @GetMapping
     public RestApiResponse<ConcertsResponse> concerts() {
@@ -38,12 +35,5 @@ public class ConcertController {
     @GetMapping("/options/{id}")
     public RestApiResponse<ConcertOptionWithSeatsResponse> concertOption(@PathVariable Long id) {
         return RestApiResponse.ok(getConcertOptionUseCase.execute(id));
-    }
-
-
-    @PostMapping("/options/booking")
-    public RestApiResponse<BookConcertResponse> bookConcert(QueueTokenRequest queueTokenRequest,
-                                                            @Valid @RequestBody ConcertBookingRequest request) {
-        return RestApiResponse.ok(bookConcertUseCase.execute(request));
     }
 }

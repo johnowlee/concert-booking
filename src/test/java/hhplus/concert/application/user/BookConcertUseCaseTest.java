@@ -1,7 +1,6 @@
-package hhplus.concert.api.concert.usecase;
+package hhplus.concert.application.user;
 
-import hhplus.concert.api.concert.controller.request.ConcertBookingRequest;
-import hhplus.concert.api.concert.usecase.response.BookConcertResponse;
+import hhplus.concert.application.user.dto.ConcertBookingDto;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.models.BookingSeat;
 import hhplus.concert.domain.booking.service.BookingService;
@@ -19,6 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static hhplus.concert.domain.concert.models.SeatBookingStatus.AVAILABLE;
@@ -47,8 +47,10 @@ class BookConcertUseCaseTest {
     void execute() {
         // given
         Long userId = 1L;
-        String seatIds = "1,2";
-        ConcertBookingRequest request = new ConcertBookingRequest(userId, seatIds);
+        List<Long> seatIds = new ArrayList<>();
+        seatIds.add(1L);
+        seatIds.add(2L);
+        ConcertBookingDto dto = new ConcertBookingDto(seatIds);
 
         User user = User.builder().build();
 
@@ -72,22 +74,17 @@ class BookConcertUseCaseTest {
         BookingSeat bookingSeat2 = createBookingSeat(2L, seat2);
         bookingSeat2.setBooking(booking);
 
-        given(userReader.getUserById(request.userId())).willReturn(user);
-        given(seatReader.getSeatsByIds(request.seatIds())).willReturn(List.of(seat1, seat2));
+        given(userReader.getUserById(userId)).willReturn(user);
+        given(seatReader.getSeatsByIds(dto.seatIds())).willReturn(List.of(seat1, seat2));
         given(bookingService.book(user, List.of(seat1, seat2))).willReturn(booking);
 
         // when
-        BookConcertResponse result = bookConcertUseCase.execute(request);
+        Booking result = bookConcertUseCase.execute(userId, dto);
 
         // then
-        verify(bookingService, times(1)).validateBookability(request.seatIds());
-        assertThat(result.bookingDateTime()).isEqualTo(bookingDateTime);
-        assertThat(result.concertDateTime()).isEqualTo(concertDateTime);
-        assertThat(result.concertTitle()).isEqualTo("concert");
-        assertThat(result.seats()).hasSize(2)
-                .containsExactlyInAnyOrder(
-                        "A-1", "A-2"
-                );
+        verify(bookingService, times(1)).validateBookability(dto.seatIds());
+        assertThat(result.getBookingDateTime()).isEqualTo(bookingDateTime);
+        assertThat(result.getConcertTitle()).isEqualTo("concert");
     }
 
     private static Seat createSeat(String seatNo, ConcertOption concertOption) {

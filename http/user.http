@@ -1,3 +1,12 @@
+### 콘서트 예약
+POST localhost:8080/users/1/bookings
+Queue-Token: 665f0b3a-4451-4875-b61b-40ec0dd32296
+Content-Type: application/json
+
+{
+  "seat_id": "1, 2"
+}
+
 ### 유저 아이디로 예약 목록 조회
 GET localhost:8080/users/1/bookings
 

@@ -3,6 +3,7 @@ package hhplus.concert.api.user;
 import hhplus.concert.api.common.RestApiResponse;
 import hhplus.concert.api.queue.controller.request.QueueTokenRequest;
 import hhplus.concert.api.user.request.BalanceChargeRequest;
+import hhplus.concert.api.user.request.ConcertBookingRequest;
 import hhplus.concert.api.user.response.BalanceResponse;
 import hhplus.concert.api.user.response.BookingResponse;
 import hhplus.concert.api.user.response.PaymentResponse;
@@ -24,6 +25,7 @@ public class UserController {
 
     private final GetBookingsUseCase getBookingsUseCase;
     private final GetBookingUseCase getBookingUseCase;
+    private final BookConcertUseCase bookConcertUseCase;
     private final PayBookingUseCase payBookingUseCase;
     private final GetBalanceUseCase getBalanceUseCase;
     private final ChargeBalanceUseCase chargeBalanceUseCase;
@@ -36,6 +38,14 @@ public class UserController {
         return RestApiResponse.ok(mapper.toBookingResponseList(bookings));
     }
 
+    @PostMapping("/{userId}/bookings")
+    public RestApiResponse<BookingResponse> bookConcert(@PathVariable Long userId,
+                                                        @Valid @RequestBody ConcertBookingRequest request,
+                                                        QueueTokenRequest queueTokenRequest) {
+        Booking booking = bookConcertUseCase.execute(userId, mapper.toConcertBookingDto(request));
+        return RestApiResponse.ok(mapper.toBookingResponse(booking));
+    }
+
     @GetMapping("/{userId}/bookings/{bookingId}")
     public RestApiResponse<BookingResponse> fetchBooking(@PathVariable Long userId,
                                                          @PathVariable Long bookingId) {
@@ -43,7 +53,7 @@ public class UserController {
         return RestApiResponse.ok(mapper.toBookingResponse(booking));
     }
 
-    @PostMapping("/{userId}/bookings/{bookingId}/payment")
+    @PostMapping("/{userId}/bookings/{bookingId}/payments")
     public RestApiResponse<PaymentResponse> payBooking(@PathVariable Long userId,
                                                        @PathVariable Long bookingId,
                                                        QueueTokenRequest queueTokenRequest) {
@@ -59,7 +69,7 @@ public class UserController {
 
     @PatchMapping("/{userId}/balance")
     public RestApiResponse<BalanceResponse> charge(@PathVariable Long userId,
-                                                @Valid @RequestBody BalanceChargeRequest request) {
+                                                   @Valid @RequestBody BalanceChargeRequest request) {
         User user = chargeBalanceUseCase.execute(userId, mapper.toBalanceBalanceChargeRequest(request));
         return RestApiResponse.ok(mapper.toBalanceResponse(user));
     }
