@@ -1,7 +1,7 @@
 package hhplus.concert.domain.queue.service;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Key;
@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
-import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
+import static hhplus.concert.representer.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static hhplus.concert.representer.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static hhplus.concert.domain.queue.model.Key.WAITING;
 import static org.assertj.core.api.Assertions.assertThat;

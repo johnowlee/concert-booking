@@ -1,7 +1,7 @@
 package hhplus.concert.domain.user.components;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import static hhplus.concert.api.exception.code.UserErrorCode.NOT_FOUND_USER;
+import static hhplus.concert.representer.exception.code.UserErrorCode.NOT_FOUND_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

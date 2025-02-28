@@ -1,7 +1,7 @@
 package hhplus.concert.domain.booking.components;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BookingErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.BookingErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.booking.repositories.BookingReaderRepository;
 import lombok.RequiredArgsConstructor;

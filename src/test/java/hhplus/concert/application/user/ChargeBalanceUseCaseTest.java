@@ -1,7 +1,7 @@
 package hhplus.concert.application.user;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.application.user.dto.BalanceChargeDto;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.user.components.UserReader;
@@ -18,7 +18,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import static hhplus.concert.api.exception.code.UserErrorCode.NOT_FOUND_USER;
+import static hhplus.concert.representer.exception.code.UserErrorCode.NOT_FOUND_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 

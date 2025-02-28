@@ -1,7 +1,7 @@
 package hhplus.concert.domain.concert.components;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.concert.infrastructure.ConcertJpaRepository;
 import hhplus.concert.domain.concert.infrastructure.ConcertOptionJpaRepository;
 import hhplus.concert.domain.concert.models.*;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static hhplus.concert.api.exception.code.ConcertErrorCode.CONCERT_OPTION_NOT_FOUND;
+import static hhplus.concert.representer.exception.code.ConcertErrorCode.CONCERT_OPTION_NOT_FOUND;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional

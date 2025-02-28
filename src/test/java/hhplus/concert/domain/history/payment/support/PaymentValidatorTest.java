@@ -1,10 +1,9 @@
 package hhplus.concert.domain.history.payment.support;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.history.payment.support.PaymentValidator;
 import hhplus.concert.domain.user.models.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -13,8 +12,8 @@ import org.junit.jupiter.api.Test;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
-import static hhplus.concert.api.exception.code.PaymentErrorCode.INVALID_PAYER;
-import static hhplus.concert.api.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.INVALID_PAYER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;

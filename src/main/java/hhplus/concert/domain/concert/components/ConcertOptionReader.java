@@ -1,7 +1,7 @@
 package hhplus.concert.domain.concert.components;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.ConcertErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.ConcertErrorCode;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import hhplus.concert.domain.concert.repositories.ConcertOptionReaderRepository;
 import lombok.RequiredArgsConstructor;

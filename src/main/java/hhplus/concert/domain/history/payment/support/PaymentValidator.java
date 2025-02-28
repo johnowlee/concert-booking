@@ -1,7 +1,7 @@
 package hhplus.concert.domain.history.payment.support;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.user.models.User;
@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 
-import static hhplus.concert.api.exception.code.PaymentErrorCode.INVALID_PAYER;
-import static hhplus.concert.api.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.INVALID_PAYER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 import static hhplus.concert.domain.history.payment.models.PaymentTimeLimitPolicy.ALLOWED_MINUTES;
 
 @Component

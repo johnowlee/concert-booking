@@ -1,6 +1,6 @@
 package hhplus.concert.application.concert;
 
-import hhplus.concert.api.common.UseCase;
+import hhplus.concert.representer.api.common.UseCase;
 import hhplus.concert.domain.concert.components.ConcertReader;
 import hhplus.concert.domain.concert.models.Concert;
 import lombok.RequiredArgsConstructor;

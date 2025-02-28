@@ -1,6 +1,6 @@
 package hhplus.concert.domain.queue.service;
 
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.queue.components.QueueReader;
 import hhplus.concert.domain.queue.components.QueueWriter;
 import hhplus.concert.domain.queue.model.Key;
@@ -9,8 +9,8 @@ import hhplus.concert.domain.queue.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static hhplus.concert.api.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
-import static hhplus.concert.api.exception.code.TokenErrorCode.WAITING_TOKEN;
+import static hhplus.concert.representer.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
+import static hhplus.concert.representer.exception.code.TokenErrorCode.WAITING_TOKEN;
 import static hhplus.concert.domain.queue.model.Key.ACTIVE;
 import static hhplus.concert.domain.queue.model.Key.WAITING;
 

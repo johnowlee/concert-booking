@@ -1,7 +1,7 @@
 package hhplus.concert.domain.history.payment.service;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.payment.models.Payment;
 import hhplus.concert.domain.history.payment.support.PaymentValidator;
 import hhplus.concert.domain.user.models.User;
@@ -13,8 +13,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static hhplus.concert.api.exception.code.PaymentErrorCode.INVALID_PAYER;
-import static hhplus.concert.api.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.INVALID_PAYER;
+import static hhplus.concert.representer.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 import static org.mockito.BDDMockito.*;
 
 @ExtendWith(MockitoExtension.class)

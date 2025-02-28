@@ -1,7 +1,7 @@
 package hhplus.concert.domain.booking.components;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
 import hhplus.concert.domain.booking.models.Booking;
 import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static hhplus.concert.api.exception.code.BookingErrorCode.NOT_FOUND_BOOKING;
+import static hhplus.concert.representer.exception.code.BookingErrorCode.NOT_FOUND_BOOKING;
 import static org.assertj.core.api.Assertions.*;
 
 @Transactional

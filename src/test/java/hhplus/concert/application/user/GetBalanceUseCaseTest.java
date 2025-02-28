@@ -1,6 +1,6 @@
 package hhplus.concert.application.user;
 
-import hhplus.concert.api.exception.RestApiException;
+import hhplus.concert.representer.exception.RestApiException;
 import hhplus.concert.domain.user.components.UserReader;
 import hhplus.concert.domain.user.models.User;
 import org.junit.jupiter.api.DisplayName;
@@ -10,7 +10,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static hhplus.concert.api.exception.code.UserErrorCode.NOT_FOUND_USER;
+import static hhplus.concert.representer.exception.code.UserErrorCode.NOT_FOUND_USER;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;

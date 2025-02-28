@@ -1,7 +1,7 @@
 package hhplus.concert.domain.history.balance.service;
 
-import hhplus.concert.api.exception.RestApiException;
-import hhplus.concert.api.exception.code.BalanceErrorCode;
+import hhplus.concert.representer.exception.RestApiException;
+import hhplus.concert.representer.exception.code.BalanceErrorCode;
 import hhplus.concert.domain.history.balance.components.BalanceHistoryWriter;
 import hhplus.concert.domain.history.balance.models.Balance;
 import jakarta.persistence.EntityManager;
