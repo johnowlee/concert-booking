@@ -1,6 +1,5 @@
-package hhplus.concert.api.concert.usecase;
+package hhplus.concert.application.concert;
 
-import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.domain.concert.components.ConcertReader;
 import hhplus.concert.domain.concert.models.Concert;
 import org.junit.jupiter.api.DisplayName;
@@ -36,10 +35,10 @@ class GetConcertsUseCaseTest {
         given(concertReader.getConcerts()).willReturn(List.of(concert));
 
         // when
-        ConcertsResponse result = getConcertsUseCase.execute();
+        List<Concert> result = getConcertsUseCase.execute();
 
         // then
-        assertThat(result.concerts()).hasSize(1)
+        assertThat(result).hasSize(1)
                 .extracting("title", "organizer")
                 .contains(
                         tuple("concert", "jon")

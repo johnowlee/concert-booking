@@ -1,7 +1,5 @@
-package hhplus.concert.api.concert.usecase;
+package hhplus.concert.application.concert;
 
-import hhplus.concert.api.common.response.ConcertOptionResponse;
-import hhplus.concert.api.concert.usecase.response.ConcertOptionsResponse;
 import hhplus.concert.domain.concert.components.ConcertOptionReader;
 import hhplus.concert.domain.concert.models.ConcertOption;
 import org.junit.jupiter.api.DisplayName;
@@ -19,13 +17,13 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class GetConcertOptionsUseCaseTest {
+class GetConcertOptionsByConcertIdUseCaseTest {
 
     @Mock
     ConcertOptionReader concertOptionReader;
 
     @InjectMocks
-    GetConcertOptionsUseCase getConcertOptionsUseCase;
+    GetConcertOptionsByConcertIdUseCase getConcertOptionsByConcertIdUseCase;
 
     @DisplayName("콘서트 ID로 콘서트 옵션 목록을 가져온다.")
     @Test
@@ -40,12 +38,12 @@ class GetConcertOptionsUseCaseTest {
         given(concertOptionReader.getConcertOptionsByConcertId(1L)).willReturn(List.of(concertOption));
 
         // when
-        ConcertOptionsResponse result = getConcertOptionsUseCase.execute(1L);
+        List<ConcertOption> result = getConcertOptionsByConcertIdUseCase.execute(1L);
 
         // then
-        assertThat(result.concertOptions()).hasSize(1)
-                .extracting(ConcertOptionResponse::place,
-                        ConcertOptionResponse::concertDateTime
+        assertThat(result).hasSize(1)
+                .extracting(ConcertOption::getPlace,
+                        ConcertOption::getConcertDateTime
                 )
                 .contains(
                         tuple("stadium", concertDateTime)

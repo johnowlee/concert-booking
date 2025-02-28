@@ -1,7 +1,6 @@
 package hhplus.concert.api.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import hhplus.concert.api.concert.controller.request.ValidSeatIds;
 
 import java.util.Arrays;
 import java.util.List;

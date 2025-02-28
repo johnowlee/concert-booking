@@ -1,7 +1,6 @@
-package hhplus.concert.api.concert.usecase;
+package hhplus.concert.application.concert;
 
 import hhplus.concert.api.common.UseCase;
-import hhplus.concert.api.concert.usecase.response.ConcertsResponse;
 import hhplus.concert.domain.concert.components.ConcertReader;
 import hhplus.concert.domain.concert.models.Concert;
 import lombok.RequiredArgsConstructor;
@@ -15,8 +14,7 @@ public class GetConcertsUseCase {
 
     private final ConcertReader concertReader;
 
-    public ConcertsResponse execute() {
-        List<Concert> concerts = concertReader.getConcerts();
-        return ConcertsResponse.from(concerts);
+    public List<Concert> execute() {
+        return concertReader.getConcerts();
     }
 }

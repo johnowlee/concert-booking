@@ -1,4 +1,4 @@
-package hhplus.concert.api.concert.controller.request;
+package hhplus.concert.api.user.request;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

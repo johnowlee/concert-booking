@@ -10,7 +10,6 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 @JsonInclude(NON_NULL)
 public record ConcertResponse(
         Long id,
-
         String title,
         String organizer
 ) {
