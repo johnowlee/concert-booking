@@ -14,8 +14,8 @@ GET localhost:8080/users/1/bookings
 GET localhost:8080/users/1/bookings/1
 
 ### 예약 결제
-POST localhost:8080/users/1/bookings/1/payment
-Queue-Token: 165ffddb-1580-4267-a5f8-0b50fed2e1f5
+POST localhost:8080/users/1/bookings/1/payments
+Queue-Token: e7bfbe7c-f135-43cf-a64e-087893f059c0
 Content-Type: application/json
 
 ### 잔액 조회

@@ -1,7 +1,6 @@
 package hhplus.concert.domain.booking.models;
 
 import hhplus.concert.domain.concert.models.Seat;
-import hhplus.concert.domain.support.ClockManager;
 import hhplus.concert.domain.user.models.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -51,10 +50,10 @@ public class Booking {
         this.user = user;
     }
 
-    public static Booking initializeBooking(String concertTitle, ClockManager clockManager, User booker) {
+    public static Booking initializeBooking(String concertTitle, LocalDateTime bookingDateTime, User booker) {
         return Booking.builder()
                 .bookingStatus(INCOMPLETE)
-                .bookingDateTime(clockManager.getNowDateTime())
+                .bookingDateTime(bookingDateTime)
                 .concertTitle(concertTitle)
                 .user(booker)
                 .build();
@@ -93,6 +92,10 @@ public class Booking {
 
     public long getPassedMinutesSinceBookingFrom(LocalDateTime verificationTime) {
         return calculateDurationSinceBookingFrom(verificationTime).toMinutes();
+    }
+
+    public boolean isBooked() {
+        return this.bookingStatus == COMPLETE;
     }
 
     private Duration calculateDurationSinceBookingFrom(LocalDateTime dateTime) {

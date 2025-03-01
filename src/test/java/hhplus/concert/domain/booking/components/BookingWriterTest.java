@@ -45,7 +45,7 @@ class BookingWriterTest extends IntegrationTestSupport {
                 .build();
 
         // when
-        bookingWriter.bookConcert(booking);
+        bookingWriter.saveBooking(booking);
 
         // then
         List<Booking> bookings = bookingJpaRepository.findAll();

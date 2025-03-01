@@ -11,7 +11,7 @@ public class BookingWriter {
 
     private final BookingWriterRepository bookingWriterRepository;
 
-    public Booking bookConcert(Booking booking) {
+    public Booking saveBooking(Booking booking) {
         return bookingWriterRepository.save(booking);
     }
 }

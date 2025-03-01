@@ -1,3 +1,188 @@
+POST http://localhost:8080/users/1/bookings/1/payments
+Queue-Token: e7bfbe7c-f135-43cf-a64e-087893f059c0
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001500.200.json
+
+###
+
+POST http://localhost:8080/bookings/1/payments
+Queue-Token: 1c4f3884-815b-4c17-abab-b08a61a3a52a
+Content-Type: application/json
+Content-Length: 18
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 1
+}
+
+<> 2025-03-02T001447.404.json
+
+###
+
+POST http://localhost:8080/users/1/bookings/1/payment
+Queue-Token: e7bfbe7c-f135-43cf-a64e-087893f059c0
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001434.404.json
+
+###
+
+POST http://localhost:8080/users/1/bookings/1/payment
+Queue-Token: e7bfbe7c-f135-43cf-a64e-087893f059c0
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001428.404.json
+
+###
+
+GET http://localhost:8080/users/1/bookings/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001422.200.json
+
+###
+
+POST http://localhost:8080/users/1/bookings/1/payment
+Queue-Token: e7bfbe7c-f135-43cf-a64e-087893f059c0
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001402.404.json
+
+###
+
+POST http://localhost:8080/queue
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001355.200.json
+
+###
+
+POST http://localhost:8080/users/1/bookings/1/payment
+Queue-Token: 165ffddb-1580-4267-a5f8-0b50fed2e1f5
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001304.404.json
+
+###
+
+GET http://localhost:8080/users/1/bookings/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001253.200.json
+
+###
+
+POST http://localhost:8080/users/1/bookings/1/payment
+Queue-Token: 165ffddb-1580-4267-a5f8-0b50fed2e1f5
+Content-Type: application/json
+Content-Length: 0
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001240.404.json
+
+###
+
+GET http://localhost:8080/users/1/bookings/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001236.200.json
+
+###
+
+GET http://localhost:8080/users/1/bookings
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001233.200.json
+
+###
+
+POST http://localhost:8080/users/1/bookings
+Queue-Token: 665f0b3a-4451-4875-b61b-40ec0dd32296
+Content-Type: application/json
+Content-Length: 23
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "seat_id": "1, 2"
+}
+
+<> 2025-03-02T001231.200.json
+
+###
+
+POST http://localhost:8080/bookings/1/payment
+Queue-Token: 1c4f3884-815b-4c17-abab-b08a61a3a52a
+Content-Type: application/json
+Content-Length: 18
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "user_id": 1
+}
+
+<> 2025-03-02T001218.404.json
+
+###
+
+GET http://localhost:8080/bookings/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001215.404.json
+
+###
+
+GET http://localhost:8080/bookings/users/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T001209.404.json
+
+###
+
 GET http://localhost:8080/queue
 Content-Type: application/json
 Queue-Token: 181e26cc-646e-4927-bbf5-f4ee524d68b2
@@ -381,182 +566,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2025-02-26T205528.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205515.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205509.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205457.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205053.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205050.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205048.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205023.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205021.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T205013.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204829.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204827.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204822.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204820.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204819.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1s
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204722.200.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 3621adf1-0260-445b-ab25-ba8003b6e496
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-02-26T204716.200.json
 
 ###
 
