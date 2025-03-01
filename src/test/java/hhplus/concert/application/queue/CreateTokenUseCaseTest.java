@@ -1,8 +1,6 @@
-package hhplus.concert.representer.api.queue.usecase;
+package hhplus.concert.application.queue;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.representer.api.queue.usecase.CreateTokenUseCase;
-import hhplus.concert.representer.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.service.QueueService;
 import hhplus.concert.domain.queue.support.factory.score.ScoreFactory;
@@ -48,10 +46,10 @@ class CreateTokenUseCaseTest extends IntegrationTestSupport {
         given(queueService.createNewQueue(token, score)).willReturn(queue);
 
         // when
-        QueueResponse result = createTokenUseCase.execute();
+        Queue result = createTokenUseCase.execute();
 
         // then
-        assertThat(result.token()).isEqualTo("abc123");
-        assertThat(result.key()).isEqualTo(ACTIVE.toString());
+        assertThat(result.getToken()).isEqualTo("abc123");
+        assertThat(result.getKey()).isEqualTo(ACTIVE);
     }
 }

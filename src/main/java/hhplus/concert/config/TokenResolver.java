@@ -1,6 +1,6 @@
 package hhplus.concert.config;
 
-import hhplus.concert.representer.api.queue.controller.request.QueueTokenRequest;
+import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
 import hhplus.concert.domain.queue.service.QueueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +25,6 @@ public class TokenResolver implements HandlerMethodArgumentResolver {
     public QueueTokenRequest resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         String token = webRequest.getHeader("Queue-Token");
         queueService.validateToken(token);
-        return QueueTokenRequest.from(token);
+        return new QueueTokenRequest(token);
     }
 }

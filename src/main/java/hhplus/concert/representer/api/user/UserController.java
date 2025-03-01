@@ -1,7 +1,7 @@
 package hhplus.concert.representer.api.user;
 
 import hhplus.concert.representer.api.common.RestApiResponse;
-import hhplus.concert.representer.api.queue.controller.request.QueueTokenRequest;
+import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
 import hhplus.concert.representer.api.user.request.BalanceChargeRequest;
 import hhplus.concert.representer.api.user.request.ConcertBookingRequest;
 import hhplus.concert.representer.api.user.response.BalanceResponse;

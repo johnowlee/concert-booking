@@ -1,11 +1,10 @@
-package hhplus.concert.representer.api.queue.usecase;
+package hhplus.concert.application.queue;
 
-import hhplus.concert.representer.api.common.UseCase;
-import hhplus.concert.representer.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.service.QueueService;
 import hhplus.concert.domain.queue.support.factory.score.ScoreFactory;
 import hhplus.concert.domain.queue.support.factory.token.TokenFactory;
+import hhplus.concert.representer.api.common.UseCase;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
@@ -16,11 +15,7 @@ public class CreateTokenUseCase {
     private final TokenFactory tokenFactory;
     private final ScoreFactory scoreFactory;
 
-    public QueueResponse execute() {
-        return QueueResponse.createQueueResponse(createNewQueue());
-    }
-
-    private Queue createNewQueue() {
+    public Queue execute() {
         String token = tokenFactory.generateToken();
         long score = scoreFactory.getTimeScore();
         return queueService.createNewQueue(token, score);

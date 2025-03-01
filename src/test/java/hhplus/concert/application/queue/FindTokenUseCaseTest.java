@@ -1,10 +1,8 @@
-package hhplus.concert.representer.api.queue.usecase;
+package hhplus.concert.application.queue;
 
-import hhplus.concert.representer.api.queue.controller.request.QueueTokenRequest;
-import hhplus.concert.representer.api.queue.usecase.FindTokenUseCase;
-import hhplus.concert.representer.api.queue.usecase.response.QueueResponse;
 import hhplus.concert.domain.queue.model.Queue;
 import hhplus.concert.domain.queue.service.QueueService;
+import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -38,10 +36,10 @@ class FindTokenUseCaseTest {
 
         // when
         QueueTokenRequest request = new QueueTokenRequest("a1b2b3");
-        QueueResponse result = findTokenUseCase.execute(request);
+        Queue result = findTokenUseCase.execute(request);
 
         // then
-        assertThat(result.token()).isEqualTo("a1b2b3");
-        assertThat(result.key()).isEqualTo(ACTIVE.toString());
+        assertThat(result.getToken()).isEqualTo("a1b2b3");
+        assertThat(result.getKey()).isEqualTo(ACTIVE);
     }
 }
