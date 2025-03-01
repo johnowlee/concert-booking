@@ -1,6 +1,6 @@
 package hhplus.concert.config;
 
-import hhplus.concert.domain.queue.service.QueueService;
+import hhplus.concert.core.queue.domain.service.QueueQueryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -12,10 +12,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final QueueService queueService;
+    private final QueueQueryService queueQueryService;
 
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(new TokenResolver(queueService));
+        resolvers.add(new TokenResolver(queueQueryService));
     }
 }

@@ -1,5 +1,6 @@
 package hhplus.concert.representer.api.user;
 
+import hhplus.concert.core.payment.domain.model.Payment;
 import hhplus.concert.representer.api.user.request.BalanceChargeRequest;
 import hhplus.concert.representer.api.user.request.ConcertBookingRequest;
 import hhplus.concert.representer.api.user.response.BalanceResponse;
@@ -7,9 +8,8 @@ import hhplus.concert.representer.api.user.response.BookingResponse;
 import hhplus.concert.representer.api.user.response.PaymentResponse;
 import hhplus.concert.application.user.dto.BalanceChargeDto;
 import hhplus.concert.application.user.dto.ConcertBookingDto;
-import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.core.booking.domain.model.Booking;
+import hhplus.concert.core.user.domain.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

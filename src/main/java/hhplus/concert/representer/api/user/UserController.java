@@ -1,16 +1,16 @@
 package hhplus.concert.representer.api.user;
 
-import hhplus.concert.representer.api.common.RestApiResponse;
+import hhplus.concert.application.user.usecase.*;
+import hhplus.concert.core.payment.domain.model.Payment;
+import hhplus.concert.representer.api.RestApiResponse;
 import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
 import hhplus.concert.representer.api.user.request.BalanceChargeRequest;
 import hhplus.concert.representer.api.user.request.ConcertBookingRequest;
 import hhplus.concert.representer.api.user.response.BalanceResponse;
 import hhplus.concert.representer.api.user.response.BookingResponse;
 import hhplus.concert.representer.api.user.response.PaymentResponse;
-import hhplus.concert.application.user.*;
-import hhplus.concert.domain.booking.models.Booking;
-import hhplus.concert.domain.history.payment.models.Payment;
-import hhplus.concert.domain.user.models.User;
+import hhplus.concert.core.booking.domain.model.Booking;
+import hhplus.concert.core.user.domain.model.User;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -68,8 +68,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}/balance")
-    public RestApiResponse<BalanceResponse> charge(@PathVariable Long userId,
-                                                   @Valid @RequestBody BalanceChargeRequest request) {
+    public RestApiResponse<BalanceResponse> chargeBalance(@PathVariable Long userId,
+                                                          @Valid @RequestBody BalanceChargeRequest request) {
         User user = chargeBalanceUseCase.execute(userId, mapper.toBalanceBalanceChargeRequest(request));
         return RestApiResponse.ok(mapper.toBalanceResponse(user));
     }

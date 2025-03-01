@@ -1,11 +1,11 @@
 package hhplus.concert.representer.api.queue;
 
-import hhplus.concert.domain.queue.model.Queue;
+import hhplus.concert.core.queue.domain.model.Queue;
 import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
-import hhplus.concert.application.queue.CreateTokenUseCase;
-import hhplus.concert.application.queue.FindTokenUseCase;
+import hhplus.concert.application.queue.usecase.CreateTokenUseCase;
+import hhplus.concert.application.queue.usecase.FindTokenUseCase;
 import hhplus.concert.representer.api.queue.response.QueueResponse;
-import hhplus.concert.representer.api.common.RestApiResponse;
+import hhplus.concert.representer.api.RestApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 

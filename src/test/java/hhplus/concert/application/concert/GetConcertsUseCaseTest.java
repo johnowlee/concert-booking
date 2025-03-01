@@ -1,7 +1,7 @@
 package hhplus.concert.application.concert;
 
-import hhplus.concert.domain.concert.components.ConcertReader;
-import hhplus.concert.domain.concert.models.Concert;
+import hhplus.concert.core.concert.domain.service.ConcertQueryService;
+import hhplus.concert.core.concert.domain.model.Concert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,7 +19,7 @@ import static org.mockito.BDDMockito.given;
 class GetConcertsUseCaseTest {
 
     @Mock
-    ConcertReader concertReader;
+    ConcertQueryService concertQueryService;
 
     @InjectMocks
     GetConcertsUseCase getConcertsUseCase;
@@ -32,7 +32,7 @@ class GetConcertsUseCaseTest {
                 .title("concert")
                 .organizer("jon")
                 .build();
-        given(concertReader.getConcerts()).willReturn(List.of(concert));
+        given(concertQueryService.getConcerts()).willReturn(List.of(concert));
 
         // when
         List<Concert> result = getConcertsUseCase.execute();

@@ -2,8 +2,8 @@ package hhplus.concert.representer.api.concert;
 
 import hhplus.concert.representer.api.concert.response.ConcertOptionResponse;
 import hhplus.concert.representer.api.concert.response.ConcertResponse;
-import hhplus.concert.domain.concert.models.Concert;
-import hhplus.concert.domain.concert.models.ConcertOption;
+import hhplus.concert.core.concert.domain.model.Concert;
+import hhplus.concert.core.concert.domain.model.ConcertOption;
 import org.springframework.stereotype.Component;
 
 import java.util.List;

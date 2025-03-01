@@ -1,13 +1,13 @@
 package hhplus.concert.representer.api.concert;
 
-import hhplus.concert.representer.api.common.RestApiResponse;
+import hhplus.concert.representer.api.RestApiResponse;
 import hhplus.concert.representer.api.concert.response.ConcertOptionResponse;
 import hhplus.concert.representer.api.concert.response.ConcertResponse;
 import hhplus.concert.application.concert.GetConcertOptionByIdUseCase;
 import hhplus.concert.application.concert.GetConcertOptionsByConcertIdUseCase;
 import hhplus.concert.application.concert.GetConcertsUseCase;
-import hhplus.concert.domain.concert.models.Concert;
-import hhplus.concert.domain.concert.models.ConcertOption;
+import hhplus.concert.core.concert.domain.model.Concert;
+import hhplus.concert.core.concert.domain.model.ConcertOption;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

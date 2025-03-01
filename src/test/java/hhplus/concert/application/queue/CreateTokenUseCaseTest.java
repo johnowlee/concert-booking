@@ -1,16 +1,16 @@
 package hhplus.concert.application.queue;
 
 import hhplus.concert.IntegrationTestSupport;
-import hhplus.concert.domain.queue.model.Queue;
-import hhplus.concert.domain.queue.service.QueueService;
-import hhplus.concert.domain.queue.support.factory.score.ScoreFactory;
-import hhplus.concert.domain.queue.support.factory.token.TokenFactory;
+import hhplus.concert.application.queue.usecase.CreateTokenUseCase;
+import hhplus.concert.core.queue.domain.model.Queue;
+import hhplus.concert.core.queue.domain.service.support.factory.score.ScoreFactory;
+import hhplus.concert.core.queue.domain.service.support.factory.token.TokenFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import static hhplus.concert.domain.queue.model.Key.ACTIVE;
+import static hhplus.concert.core.queue.domain.model.Key.ACTIVE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 

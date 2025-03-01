@@ -1,7 +1,8 @@
 package hhplus.concert.application.user;
 
-import hhplus.concert.domain.booking.components.BookingReader;
-import hhplus.concert.domain.booking.models.Booking;
+import hhplus.concert.application.user.usecase.GetBookingsUseCase;
+import hhplus.concert.core.booking.domain.service.BookingQueryService;
+import hhplus.concert.core.booking.domain.model.Booking;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static hhplus.concert.domain.booking.models.BookingStatus.COMPLETE;
+import static hhplus.concert.core.booking.domain.model.BookingStatus.COMPLETE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
@@ -22,7 +23,7 @@ import static org.mockito.Mockito.mock;
 class GetBookingsUseCaseTest {
 
     @Mock
-    BookingReader bookingReader;
+    BookingQueryService bookingQueryService;
 
     @InjectMocks
     GetBookingsUseCase getBookingsUseCase;
@@ -38,7 +39,7 @@ class GetBookingsUseCaseTest {
         given(booking.getBookingDateTime()).willReturn(bookingDateTime);
         given(booking.getConcertTitle()).willReturn("아이유 콘서트");
 
-        given(bookingReader.getBookingsByUserId(1L)).willReturn(List.of(booking));
+        given(bookingQueryService.getBookingsByUserId(1L)).willReturn(List.of(booking));
 
         // when
         List<Booking> result = getBookingsUseCase.execute(1L);

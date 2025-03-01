@@ -1,6 +1,6 @@
 package hhplus.concert.representer.api.queue;
 
-import hhplus.concert.domain.queue.model.Queue;
+import hhplus.concert.core.queue.domain.model.Queue;
 import hhplus.concert.representer.api.queue.response.QueueResponse;
 import org.springframework.stereotype.Component;
 

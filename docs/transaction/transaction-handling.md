@@ -55,7 +55,7 @@ public class PaymentService {
         validatePay(payment);
         
         // 잔액 차감
-        useBalance(payment);
+        useTransaction(payment);
     }
 }
 ```

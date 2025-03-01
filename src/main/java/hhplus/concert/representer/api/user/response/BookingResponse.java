@@ -1,7 +1,7 @@
 package hhplus.concert.representer.api.user.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import hhplus.concert.domain.booking.models.BookingStatus;
+import hhplus.concert.core.booking.domain.model.BookingStatus;
 
 import java.time.LocalDateTime;
 

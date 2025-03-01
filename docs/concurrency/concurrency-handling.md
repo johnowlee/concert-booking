@@ -57,14 +57,14 @@
           private Long id;
     
           private String name;
-          private long balance;
+          private long transaction;
     
           @Column(name = "versions")
           @Version
           private Long version;
          ...
           ```
-     - chargeBalance() 낙관적 락 적용
+     - chargeTransaction() 낙관적 락 적용
           ```java
           @RequiredArgsConstructor
           @Service
@@ -73,21 +73,21 @@
               private final BalanceHistoryWriter balanceHistoryWriter;
               private final EntityManager em;
         
-              public Balance chargeBalanceWithOptimisticLock(Balance balance) {
+              public Balance chargeBalanceWithOptimisticLock(Balance transaction) {
                   try {
-                      chargeBalance(balance);
+                      chargeTransaction(transaction);
         
-                      balanceHistoryWriter.save(balance);
-                      return balance;
+                      balanceHistoryWriter.save(transaction);
+                      return transaction;
                   } catch (OptimisticLockException e) { // 버전 이상 시 충전 실패
                       throw new RestApiException(BalanceErrorCode.FAILED_CHARGE);
                   }
               }
         
               // EntityManager.flush()를 통한 버전 검증
-              private void chargeBalance(Balance balance) {
-                  long chargeAmount = balance.getAmount();
-                  balance.getUser().chargeBalance(chargeAmount);
+              private void chargeTransaction(Balance transaction) {
+                  long chargeAmount = transaction.getAmount();
+                  transaction.getUser().chargeTransaction(chargeAmount);
                   em.flush();
               }
           }
