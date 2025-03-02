@@ -1,9 +1,9 @@
 package hhplus.concert.application.user.usecase;
 
 import hhplus.concert.application.support.ClockManager;
+import hhplus.concert.application.user.dto.PaymentCompletion;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.booking.domain.service.BookingQueryService;
-import hhplus.concert.application.user.dto.PaymentCompletion;
 import hhplus.concert.core.payment.domain.model.Payment;
 import hhplus.concert.core.payment.domain.model.PaymentTimeLimitPolicy;
 import hhplus.concert.core.user.domain.model.User;
@@ -22,8 +22,9 @@ import static hhplus.concert.representer.exception.code.PaymentErrorCode.INVALID
 import static hhplus.concert.representer.exception.code.PaymentErrorCode.PAYABLE_TIME_OVER;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class PayBookingUseCase {
 
     private final UserQueryService userQueryService;
@@ -32,7 +33,6 @@ public class PayBookingUseCase {
 
     private final ApplicationEventPublisher eventPublisher;
 
-    @Transactional
     public Payment execute(Long userId, Long bookingId) {
         Payment payment = createPayment(userId, bookingId);
         validatePayment(payment);
@@ -85,3 +85,4 @@ public class PayBookingUseCase {
     }
 
 }
+

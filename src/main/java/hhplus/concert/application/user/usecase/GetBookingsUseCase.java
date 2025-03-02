@@ -5,12 +5,14 @@ import hhplus.concert.core.booking.domain.model.Booking;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Slf4j
-@RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class GetBookingsUseCase {
 
     private final BookingQueryService bookingQueryService;

@@ -48,6 +48,13 @@ public class User {
         this.version = version;
     }
 
+    public static User createUser(String name) {
+        return builder()
+                .name(name)
+                .balance(0)
+                .build();
+    }
+
     public void chargeBalance(long amount) {
         this.balance += amount;
     }

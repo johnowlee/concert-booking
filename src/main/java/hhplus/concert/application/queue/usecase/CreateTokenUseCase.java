@@ -8,9 +8,11 @@ import hhplus.concert.core.queue.domain.service.support.factory.token.TokenFacto
 import hhplus.concert.core.queue.domain.service.support.monitor.QueueMonitor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class CreateTokenUseCase {
 
     private final QueueQueryService queueQueryService;
@@ -41,3 +43,4 @@ public class CreateTokenUseCase {
         return Queue.createWaitingQueue(queue.getToken(), waitingNumber);
     }
 }
+

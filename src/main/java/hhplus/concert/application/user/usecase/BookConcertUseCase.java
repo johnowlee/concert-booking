@@ -19,8 +19,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class BookConcertUseCase {
 
     private final ConcertQueryService concertQueryService;
@@ -30,7 +31,6 @@ public class BookConcertUseCase {
     private final BookingValidator bookingValidator;
     private final ClockManager clockManager;
 
-    @Transactional
     public Booking execute(Long userId, ConcertBookingDto dto) {
         List<BookingSeat> bookingSeats = bookingQueryService.getBookingSeatsBySeatIds(dto.seatIds());
         LocalDateTime bookingDateTime = clockManager.getNowDateTime();

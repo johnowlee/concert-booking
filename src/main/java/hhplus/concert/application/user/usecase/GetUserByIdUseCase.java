@@ -4,10 +4,12 @@ import hhplus.concert.core.user.domain.service.UserQueryService;
 import hhplus.concert.core.user.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-@RequiredArgsConstructor
 @Service
-public class GetBalanceUseCase {
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
+public class GetUserByIdUseCase {
 
     private final UserQueryService userQueryService;
 

@@ -6,11 +6,13 @@ import hhplus.concert.representer.api.queue.request.QueueTokenRequest;
 import hhplus.concert.representer.exception.RestApiException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import static hhplus.concert.representer.exception.code.TokenErrorCode.NOT_FOUND_TOKEN;
 
-@RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
+@RequiredArgsConstructor
 public class FindTokenUseCase {
 
     private final QueueQueryService queueQueryService;

@@ -1,4 +1,4 @@
-package hhplus.concert.representer.api.user.response;
+package hhplus.concert.representer.api.booking.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import hhplus.concert.core.booking.domain.model.BookingStatus;

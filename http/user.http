@@ -1,3 +1,25 @@
+### 유저 생성
+POST localhost:8080/users
+Content-Type: application/json
+
+{
+  "name" : "홍길동"
+}
+
+### 유저 조회
+GET localhost:8080/users/1
+
+### 잔액 조회
+GET localhost:8080/users/1/balance
+
+### 잔액 충전
+PATCH localhost:8080/users/3/balance
+Content-Type: application/json
+
+{
+  "balance": 10000
+}
+
 ### 콘서트 예약
 POST localhost:8080/users/1/bookings
 Queue-Token: 32ae98c4-0aa3-4def-a8d9-929736221a35
@@ -18,13 +40,3 @@ POST localhost:8080/users/1/bookings/1/payments
 Queue-Token: 32ae98c4-0aa3-4def-a8d9-929736221a35
 Content-Type: application/json
 
-### 잔액 조회
-GET localhost:8080/users/1/balance
-
-### 잔액 충전
-PATCH localhost:8080/users/1/balance
-Content-Type: application/json
-
-{
-  "balance": 10000
-}

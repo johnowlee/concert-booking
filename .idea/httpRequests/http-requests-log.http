@@ -1,3 +1,42 @@
+GET http://localhost:8080/users/1
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2025-03-02T235035.200.json
+
+###
+
+PATCH http://localhost:8080/users/3/balance
+Content-Type: application/json
+Content-Length: 22
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "balance": 10000
+}
+
+<> 2025-03-02T234723.200.json
+
+###
+
+POST http://localhost:8080/users
+Content-Type: application/json
+Content-Length: 26
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+{
+  "name" : "홍길동"
+}
+
+<> 2025-03-02T234648.200.json
+
+###
+
 PATCH http://localhost:8080/users/1/balance
 Content-Type: application/json
 Content-Length: 22
@@ -548,37 +587,6 @@ User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
 Accept-Encoding: br,deflate,gzip,x-gzip
 
 <> 2025-03-02T001215.404.json
-
-###
-
-GET http://localhost:8080/bookings/users/1
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-03-02T001209.404.json
-
-###
-
-GET http://localhost:8080/queue
-Content-Type: application/json
-Queue-Token: 181e26cc-646e-4927-bbf5-f4ee524d68b2
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-03-01T232003.200.json
-
-###
-
-POST http://localhost:8080/queue
-Content-Type: application/json
-Content-Length: 0
-Connection: Keep-Alive
-User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.9)
-Accept-Encoding: br,deflate,gzip,x-gzip
-
-<> 2025-03-01T231959.200.json
 
 ###
 
