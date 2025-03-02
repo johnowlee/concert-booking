@@ -1,0 +1,2 @@
+### 유저 조회
+GET localhost:8080/users/1/transactions?page=0&size=5
