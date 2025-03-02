@@ -42,7 +42,7 @@ class ConcertCoreReaderRepositoryTest extends IntegrationTestSupport {
         concertJpaRepository.saveAll(List.of(concert1, concert2, concert3));
 
         // when
-        List<Concert> concerts = concertCoreReaderRepository.getConcerts();
+        List<Concert> concerts = concertCoreReaderRepository.findAllConcerts();
 
         // then
         assertThat(concerts).hasSize(3)

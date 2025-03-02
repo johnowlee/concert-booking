@@ -14,7 +14,7 @@ public class QueueQueryService {
     private final QueueQueryPort queueQueryPort;
 
     public Long getActiveUserCount() {
-        Long count = queueQueryPort.getTokenSizeFromSet(Key.ACTIVE.getKeyName());
+        Long count = queueQueryPort.findTokenSizeFromSet(Key.ACTIVE.getKeyName());
         return count == null ? 0 : count;
     }
 
@@ -23,15 +23,15 @@ public class QueueQueryService {
     }
 
     public boolean isWaitingToken(String token) {
-        return queueQueryPort.getTokenScoreFromSortedSet(Key.WAITING.getKeyName(), token) != null;
+        return queueQueryPort.findTokenScoreFromSortedSet(Key.WAITING.getKeyName(), token) != null;
     }
 
     public int getWaitingNumber(String token) {
-        Long rank = queueQueryPort.getTokenRankFromSortedSet(Key.WAITING.getKeyName(), token);
+        Long rank = queueQueryPort.findTokenRankFromSortedSet(Key.WAITING.getKeyName(), token);
         return rank == null ? 0 : (int) (rank + 1);
     }
 
-    public Set<String> getTokensFromSortedSetByRange(Key key, long start, long end) {
-        return queueQueryPort.getTokensFromSortedSetByRange(key.getKeyName(), start, end);
+    public Set<String> findTokensFromSortedSetByRange(Key key, long start, long end) {
+        return queueQueryPort.findTokensFromSortedSetByRange(key.getKeyName(), start, end);
     }
 }

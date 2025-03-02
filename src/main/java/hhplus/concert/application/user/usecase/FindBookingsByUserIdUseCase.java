@@ -13,11 +13,11 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetBookingsUseCase {
+public class FindBookingsByUserIdUseCase {
 
     private final BookingQueryService bookingQueryService;
 
     public List<Booking> execute(Long userId) {
-        return bookingQueryService.getBookingsByUserId(userId);
+        return bookingQueryService.findBookingsByUserId(userId);
     }
 }

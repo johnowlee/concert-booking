@@ -11,11 +11,11 @@ import java.util.List;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class GetConcertsUseCase {
+public class FindConcertsUseCase {
 
     private final ConcertQueryService concertQueryService;
 
     public List<Concert> execute() {
-        return concertQueryService.getConcerts();
+        return concertQueryService.findConcerts();
     }
 }

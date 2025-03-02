@@ -6,6 +6,6 @@ import java.util.Optional;
 
 public interface UserQueryPort {
 
-    Optional<User> getUserById(Long userId);
+    Optional<User> findUserById(Long userId);
 
 }

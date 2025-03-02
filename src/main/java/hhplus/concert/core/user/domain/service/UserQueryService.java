@@ -14,7 +14,7 @@ public class UserQueryService {
     private final UserQueryPort userQueryPort;
 
     public User getUserById(Long userId) {
-        return userQueryPort.getUserById(userId)
+        return userQueryPort.findUserById(userId)
                 .orElseThrow(() -> new RestApiException(UserErrorCode.NOT_FOUND_USER));
     }
 }

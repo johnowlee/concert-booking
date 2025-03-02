@@ -55,7 +55,7 @@ class BookingCoreReaderRepositoryTest extends IntegrationTestSupport {
         bookingJpaRepository.saveAll(List.of(booking1, booking2));
 
         // when
-        List<Booking> result = bookingCoreReaderRepository.getBookingsByUserId(savedUser.getId());
+        List<Booking> result = bookingCoreReaderRepository.findBookingsByUserId(savedUser.getId());
 
         // then
         assertThat(result).hasSize(2)
@@ -84,7 +84,7 @@ class BookingCoreReaderRepositoryTest extends IntegrationTestSupport {
         Booking savedBooking = bookingJpaRepository.save(booking);
 
         // when
-        Optional<Booking> result = bookingCoreReaderRepository.getBookingById(savedBooking.getId());
+        Optional<Booking> result = bookingCoreReaderRepository.findBookingById(savedBooking.getId());
 
         // then
         assertThat(result.isPresent()).isTrue();
@@ -111,7 +111,7 @@ class BookingCoreReaderRepositoryTest extends IntegrationTestSupport {
         Booking savedBooking = bookingJpaRepository.save(booking);
 
         // when
-        Optional<Booking> result = bookingCoreReaderRepository.getBookingById(2L);
+        Optional<Booking> result = bookingCoreReaderRepository.findBookingById(2L);
 
         // then
         assertThat(savedBooking.getId()).isNotEqualTo(2L);

@@ -19,18 +19,18 @@ public class BookingQueryAdapter implements BookingQueryPort {
     private final BookingSeatJpaRepository bookingSeatJpaRepository;
 
     @Override
-    public List<Booking> getBookingsByUserId(Long userId) {
+    public List<Booking> findBookingsByUserId(Long userId) {
         return bookingJpaRepository.findBookingsByUserId(userId);
 
     }
 
     @Override
-    public Optional<Booking> getBookingById(Long id) {
+    public Optional<Booking> findBookingById(Long id) {
         return bookingJpaRepository.findById(id);
     }
 
     @Override
-    public List<BookingSeat> getBookingSeatsBySeatIds(List<Long> seatIds) {
+    public List<BookingSeat> findBookingSeatsBySeatIds(List<Long> seatIds) {
         return bookingSeatJpaRepository.findAllBySeatIds(seatIds);
     }
 }

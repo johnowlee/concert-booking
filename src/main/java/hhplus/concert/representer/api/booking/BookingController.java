@@ -2,7 +2,7 @@ package hhplus.concert.representer.api.booking;
 
 import hhplus.concert.application.user.usecase.BookConcertUseCase;
 import hhplus.concert.application.user.usecase.GetBookingUseCase;
-import hhplus.concert.application.user.usecase.GetBookingsUseCase;
+import hhplus.concert.application.user.usecase.FindBookingsByUserIdUseCase;
 import hhplus.concert.application.user.usecase.PayBookingUseCase;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.payment.domain.model.Payment;
@@ -22,7 +22,7 @@ import java.util.List;
 @RequestMapping("/users")
 public class BookingController {
 
-    private final GetBookingsUseCase getBookingsUseCase;
+    private final FindBookingsByUserIdUseCase findBookingsByUserIdUseCase;
     private final GetBookingUseCase getBookingUseCase;
     private final BookConcertUseCase bookConcertUseCase;
     private final PayBookingUseCase payBookingUseCase;
@@ -38,7 +38,7 @@ public class BookingController {
 
     @GetMapping("/{userId}/bookings")
     public RestApiResponse<List<BookingResponse>> fetchBookings(@PathVariable Long userId) {
-        List<Booking> bookings = getBookingsUseCase.execute(userId);
+        List<Booking> bookings = findBookingsByUserIdUseCase.execute(userId);
         return RestApiResponse.ok(mapper.toBookingResponseList(bookings));
     }
 

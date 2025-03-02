@@ -1,6 +1,6 @@
 package hhplus.concert.application.concert;
 
-import hhplus.concert.application.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.application.concert.usecase.FindConcertsUseCase;
 import hhplus.concert.core.concert.domain.service.ConcertQueryService;
 import hhplus.concert.core.concert.domain.model.Concert;
 import org.junit.jupiter.api.DisplayName;
@@ -17,13 +17,13 @@ import static org.assertj.core.api.Assertions.tuple;
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(MockitoExtension.class)
-class GetConcertsUseCaseTest {
+class FindConcertsUseCaseTest {
 
     @Mock
     ConcertQueryService concertQueryService;
 
     @InjectMocks
-    GetConcertsUseCase getConcertsUseCase;
+    FindConcertsUseCase findConcertsUseCase;
 
     @DisplayName("콘서트 목록을 조회한다.")
     @Test
@@ -33,10 +33,10 @@ class GetConcertsUseCaseTest {
                 .title("concert")
                 .organizer("jon")
                 .build();
-        given(concertQueryService.getConcerts()).willReturn(List.of(concert));
+        given(concertQueryService.findConcerts()).willReturn(List.of(concert));
 
         // when
-        List<Concert> result = getConcertsUseCase.execute();
+        List<Concert> result = findConcertsUseCase.execute();
 
         // then
         assertThat(result).hasSize(1)

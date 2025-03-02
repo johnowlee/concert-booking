@@ -55,7 +55,7 @@ class BookingQueryServiceTest extends IntegrationTestSupport {
         bookingJpaRepository.saveAll(List.of(booking1, booking2));
 
         // when
-        List<Booking> result = bookingQueryService.getBookingsByUserId(savedUser.getId());
+        List<Booking> result = bookingQueryService.findBookingsByUserId(savedUser.getId());
 
         // then
         assertThat(result).hasSize(2)

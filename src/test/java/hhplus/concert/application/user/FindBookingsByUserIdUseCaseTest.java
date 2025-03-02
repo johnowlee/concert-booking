@@ -1,6 +1,6 @@
 package hhplus.concert.application.user;
 
-import hhplus.concert.application.user.usecase.GetBookingsUseCase;
+import hhplus.concert.application.user.usecase.FindBookingsByUserIdUseCase;
 import hhplus.concert.core.booking.domain.service.BookingQueryService;
 import hhplus.concert.core.booking.domain.model.Booking;
 import org.junit.jupiter.api.DisplayName;
@@ -20,13 +20,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @ExtendWith(MockitoExtension.class)
-class GetBookingsUseCaseTest {
+class FindBookingsByUserIdUseCaseTest {
 
     @Mock
     BookingQueryService bookingQueryService;
 
     @InjectMocks
-    GetBookingsUseCase getBookingsUseCase;
+    FindBookingsByUserIdUseCase findBookingsByUserIdUseCase;
 
     @DisplayName("유저 아이디로 예약 목록을 조회한다.")
     @Test
@@ -39,10 +39,10 @@ class GetBookingsUseCaseTest {
         given(booking.getBookingDateTime()).willReturn(bookingDateTime);
         given(booking.getConcertTitle()).willReturn("아이유 콘서트");
 
-        given(bookingQueryService.getBookingsByUserId(1L)).willReturn(List.of(booking));
+        given(bookingQueryService.findBookingsByUserId(1L)).willReturn(List.of(booking));
 
         // when
-        List<Booking> result = getBookingsUseCase.execute(1L);
+        List<Booking> result = findBookingsByUserIdUseCase.execute(1L);
 
         // then
         assertThat(result).hasSize(1)

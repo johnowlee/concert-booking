@@ -42,7 +42,7 @@ class ConcertQueryServiceTest extends IntegrationTestSupport {
         concertJpaRepository.saveAll(List.of(concert1, concert2, concert3));
 
         // when
-        List<Concert> concerts = concertQueryService.getConcerts();
+        List<Concert> concerts = concertQueryService.findConcerts();
 
         // then
         assertThat(concerts).hasSize(3)

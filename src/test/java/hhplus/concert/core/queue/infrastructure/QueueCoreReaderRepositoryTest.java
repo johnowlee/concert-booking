@@ -44,7 +44,7 @@ class QueueCoreReaderRepositoryTest {
         given(setOperations.size(activeUserKey)).willReturn(userCount);
 
         // when
-        Long result = queueCoreReaderRepository.getTokenSizeFromSet(activeUserKey);
+        Long result = queueCoreReaderRepository.findTokenSizeFromSet(activeUserKey);
 
         // then
         assertThat(result).isEqualTo(10L);
@@ -100,7 +100,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.range(waitingUserKey, start, end)).willReturn(waitingUsers);
 
         // when
-        Set<String> result = queueCoreReaderRepository.getTokensFromSortedSetByRange(waitingUserKey, start, end);
+        Set<String> result = queueCoreReaderRepository.findTokensFromSortedSetByRange(waitingUserKey, start, end);
 
         // then
         assertThat(result).hasSize(3);
@@ -120,7 +120,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.rank(waitingUserKey, token)).willReturn(rank);
 
         // when
-        Long result = queueCoreReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token);
+        Long result = queueCoreReaderRepository.findTokenRankFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isEqualTo(1L);
@@ -139,7 +139,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.rank(waitingUserKey, token)).willReturn(rank);
 
         // when
-        Long result = queueCoreReaderRepository.getTokenRankFromSortedSet(waitingUserKey, token);
+        Long result = queueCoreReaderRepository.findTokenRankFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isNull();
@@ -158,7 +158,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.score(waitingUserKey, token)).willReturn(score);
 
         // when
-        Double result = queueCoreReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token);
+        Double result = queueCoreReaderRepository.findTokenScoreFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isEqualTo(1234.56);
@@ -177,7 +177,7 @@ class QueueCoreReaderRepositoryTest {
         given(zSetOperations.score(waitingUserKey, token)).willReturn(score);
 
         // when
-        Double result = queueCoreReaderRepository.getTokenScoreFromSortedSet(waitingUserKey, token);
+        Double result = queueCoreReaderRepository.findTokenScoreFromSortedSet(waitingUserKey, token);
 
         // then
         assertThat(result).isNull();

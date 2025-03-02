@@ -5,7 +5,7 @@ import hhplus.concert.representer.api.concert.response.ConcertOptionResponse;
 import hhplus.concert.representer.api.concert.response.ConcertResponse;
 import hhplus.concert.application.concert.usecase.GetConcertOptionByIdUseCase;
 import hhplus.concert.application.concert.usecase.GetConcertOptionsByConcertIdUseCase;
-import hhplus.concert.application.concert.usecase.GetConcertsUseCase;
+import hhplus.concert.application.concert.usecase.FindConcertsUseCase;
 import hhplus.concert.core.concert.domain.model.Concert;
 import hhplus.concert.core.concert.domain.model.ConcertOption;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.List;
 @RequestMapping("/concerts")
 public class ConcertController {
 
-    private final GetConcertsUseCase getConcertsUseCase;
+    private final FindConcertsUseCase findConcertsUseCase;
     private final GetConcertOptionsByConcertIdUseCase getConcertOptionsByConcertIdUseCase;
     private final GetConcertOptionByIdUseCase getConcertOptionByIdUseCase;
 
@@ -29,7 +29,7 @@ public class ConcertController {
 
     @GetMapping
     public RestApiResponse<List<ConcertResponse>> fetchConcerts() {
-        List<Concert> concerts = getConcertsUseCase.execute();
+        List<Concert> concerts = findConcertsUseCase.execute();
         return RestApiResponse.ok(mapper.toConcertResponseList(concerts));
     }
 

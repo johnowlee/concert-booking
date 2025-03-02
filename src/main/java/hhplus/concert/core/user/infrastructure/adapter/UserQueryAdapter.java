@@ -15,7 +15,7 @@ public class UserQueryAdapter implements UserQueryPort {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public Optional<User> getUserById(Long userId) {
+    public Optional<User> findUserById(Long userId) {
         return userJpaRepository.findById(userId);
     }
 

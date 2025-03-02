@@ -22,27 +22,27 @@ public class ConcertQueryAdapter implements ConcertQueryPort {
     private final SeatJpaRepository seatJpaRepository;
 
     @Override
-    public List<Concert> getConcerts() {
+    public List<Concert> findAllConcerts() {
         return concertJpaRepository.findAll();
     }
 
     @Override
-    public List<ConcertOption> getConcertOptionsByConcertId(Long concertId) {
+    public List<ConcertOption> findAllConcertOptionsByConcertId(Long concertId) {
         return concertOptionJpaRepository.findAllByConcertId(concertId);
     }
 
     @Override
-    public Optional<ConcertOption> getConcertOptionById(Long id) {
+    public Optional<ConcertOption> findConcertOptionById(Long id) {
         return concertOptionJpaRepository.findConcertOptionById(id);
     }
 
     @Override
-    public List<Seat> getSeatsByConcertOptionId(Long concertOptionId) {
+    public List<Seat> findAllSeatsByConcertOptionId(Long concertOptionId) {
         return seatJpaRepository.findAllByConcertOptionId(concertOptionId);
     }
 
     @Override
-    public List<Seat> getSeatsByIds(List<Long> ids) {
+    public List<Seat> findAllSeatsByIds(List<Long> ids) {
         return seatJpaRepository.findAllByIdsWithPessimisticWriteLock(ids);
     }
 }

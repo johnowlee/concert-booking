@@ -16,16 +16,16 @@ public class BookingQueryService {
 
     private final BookingQueryPort bookingQueryPort;
 
-    public List<Booking> getBookingsByUserId(Long userId) {
-        return bookingQueryPort.getBookingsByUserId(userId);
+    public List<Booking> findBookingsByUserId(Long userId) {
+        return bookingQueryPort.findBookingsByUserId(userId);
     }
 
     public Booking getBookingById(Long id) {
-        return bookingQueryPort.getBookingById(id)
+        return bookingQueryPort.findBookingById(id)
                 .orElseThrow(() -> new RestApiException(BookingErrorCode.NOT_FOUND_BOOKING));
     }
 
-    public List<BookingSeat> getBookingSeatsBySeatIds (List<Long> seatIds) {
-        return bookingQueryPort.getBookingSeatsBySeatIds(seatIds);
+    public List<BookingSeat> findBookingSeatsBySeatIds(List<Long> seatIds) {
+        return bookingQueryPort.findBookingSeatsBySeatIds(seatIds);
     }
 }

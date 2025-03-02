@@ -31,7 +31,7 @@ public class RedisKeyEventService {
     }
 
     private Optional<String> getFirstTokenFromWaiting() {
-        Set<String> tokens = queueQueryService.getTokensFromSortedSetByRange(Key.WAITING, 0, 0);
+        Set<String> tokens = queueQueryService.findTokensFromSortedSetByRange(Key.WAITING, 0, 0);
         return Optional.ofNullable(tokens)
                 .filter((tokenSet) -> !tokenSet.isEmpty())
                 .map(tokenSet -> tokenSet.iterator().next());

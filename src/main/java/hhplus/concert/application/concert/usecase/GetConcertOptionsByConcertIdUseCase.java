@@ -16,7 +16,7 @@ public class GetConcertOptionsByConcertIdUseCase {
     private final ConcertQueryService concertQueryService;
 
     public List<ConcertOption> execute(Long concertId) {
-        return concertQueryService.getConcertOptionsByConcertId(concertId);
+        return concertQueryService.findConcertOptionsByConcertId(concertId);
     }
 }
 

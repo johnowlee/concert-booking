@@ -32,12 +32,12 @@ public class BookConcertUseCase {
     private final ClockManager clockManager;
 
     public Booking execute(Long userId, ConcertBookingCommand dto) {
-        List<BookingSeat> bookingSeats = bookingQueryService.getBookingSeatsBySeatIds(dto.seatIds());
+        List<BookingSeat> bookingSeats = bookingQueryService.findBookingSeatsBySeatIds(dto.seatIds());
         LocalDateTime bookingDateTime = clockManager.getNowDateTime();
 
         bookingValidator.validateBookability(bookingSeats, bookingDateTime);
 
-        List<Seat> seats = concertQueryService.getSeatsByIds(dto.seatIds());
+        List<Seat> seats = concertQueryService.findSeatsByIds(dto.seatIds());
         User user = userQueryService.getUserById(userId);
 
         Booking booking = saveBooking(seats, bookingDateTime, user);

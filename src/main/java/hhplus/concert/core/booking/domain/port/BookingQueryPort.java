@@ -9,9 +9,9 @@ import java.util.Optional;
 
 public interface BookingQueryPort {
 
-    List<Booking> getBookingsByUserId(Long userId);
+    List<Booking> findBookingsByUserId(Long userId);
 
-    Optional<Booking> getBookingById(Long id);
+    Optional<Booking> findBookingById(Long id);
 
-    List<BookingSeat> getBookingSeatsBySeatIds(List<Long> seatIds);
+    List<BookingSeat> findBookingSeatsBySeatIds(List<Long> seatIds);
 }

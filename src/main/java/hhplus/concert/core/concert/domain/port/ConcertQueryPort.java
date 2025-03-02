@@ -9,13 +9,13 @@ import java.util.Optional;
 
 public interface ConcertQueryPort {
 
-    List<Concert> getConcerts();
+    List<Concert> findAllConcerts();
 
-    List<ConcertOption> getConcertOptionsByConcertId(Long concertId);
+    List<ConcertOption> findAllConcertOptionsByConcertId(Long concertId);
 
-    Optional<ConcertOption> getConcertOptionById(Long id);
+    Optional<ConcertOption> findConcertOptionById(Long id);
 
-    List<Seat> getSeatsByConcertOptionId(Long concertOptionId);
+    List<Seat> findAllSeatsByConcertOptionId(Long concertOptionId);
 
-    List<Seat> getSeatsByIds(List<Long> ids);
+    List<Seat> findAllSeatsByIds(List<Long> ids);
 }

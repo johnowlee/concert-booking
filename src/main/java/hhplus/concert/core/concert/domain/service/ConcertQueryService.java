@@ -17,24 +17,24 @@ public class ConcertQueryService {
 
     private final ConcertQueryPort concertQueryPort;
 
-    public List<Concert> getConcerts() {
-        return concertQueryPort.getConcerts();
+    public List<Concert> findConcerts() {
+        return concertQueryPort.findAllConcerts();
     }
 
     public ConcertOption getConcertOptionById(Long id) {
-        return concertQueryPort.getConcertOptionById(id)
+        return concertQueryPort.findConcertOptionById(id)
                 .orElseThrow(() -> new RestApiException(ConcertErrorCode.CONCERT_OPTION_NOT_FOUND));
     }
 
-    public List<ConcertOption> getConcertOptionsByConcertId(Long concertId) {
-        return concertQueryPort.getConcertOptionsByConcertId(concertId);
+    public List<ConcertOption> findConcertOptionsByConcertId(Long concertId) {
+        return concertQueryPort.findAllConcertOptionsByConcertId(concertId);
     }
 
-    public List<Seat> getSeatsByIds(List<Long> ids) {
-        return concertQueryPort.getSeatsByIds(ids);
+    public List<Seat> findSeatsByIds(List<Long> ids) {
+        return concertQueryPort.findAllSeatsByIds(ids);
     }
 
-    public List<Seat> getSeatsByConcertOptionId(Long concertOptionId) {
-        return concertQueryPort.getSeatsByConcertOptionId(concertOptionId);
+    public List<Seat> findSeatsByConcertOptionId(Long concertOptionId) {
+        return concertQueryPort.findAllSeatsByConcertOptionId(concertOptionId);
     }
 }

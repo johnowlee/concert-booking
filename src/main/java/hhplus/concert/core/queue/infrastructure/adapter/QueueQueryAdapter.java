@@ -14,7 +14,7 @@ public class QueueQueryAdapter implements QueueQueryPort {
     private final RedisTemplate<String, String> redisTemplate;
 
     @Override
-    public Long getTokenSizeFromSet(String activeTokenKey) {
+    public Long findTokenSizeFromSet(String activeTokenKey) {
         return redisTemplate.opsForSet().size(activeTokenKey);
     }
 
@@ -24,17 +24,17 @@ public class QueueQueryAdapter implements QueueQueryPort {
     }
 
     @Override
-    public Set<String> getTokensFromSortedSetByRange(String waitingTokenKey, long start, long end) {
+    public Set<String> findTokensFromSortedSetByRange(String waitingTokenKey, long start, long end) {
         return redisTemplate.opsForZSet().range(waitingTokenKey, start, end);
     }
 
     @Override
-    public Long getTokenRankFromSortedSet(String waitingTokenKey, String token) {
+    public Long findTokenRankFromSortedSet(String waitingTokenKey, String token) {
         return redisTemplate.opsForZSet().rank(waitingTokenKey, token);
     }
 
     @Override
-    public Double getTokenScoreFromSortedSet(String waitingTokenKey, String token) {
+    public Double findTokenScoreFromSortedSet(String waitingTokenKey, String token) {
         return redisTemplate.opsForZSet().score(waitingTokenKey, token);
     }
 }
