@@ -14,16 +14,13 @@ public class SeatIdValidator implements ConstraintValidator<ValidSeatIds, String
     @Override
     public boolean isValid(String seatIds, ConstraintValidatorContext context) {
         return Arrays.stream(seatIds.split(","))
-                .allMatch(seatId -> isPositiveNumeric(seatId));
+                .allMatch(this::isPositiveNumeric);
     }
 
     private boolean isPositiveNumeric(String str) {
         try {
             long parsedSeatId = Long.parseLong(str.trim());
-            if (parsedSeatId > 0) {
-                return true;
-            }
-            return false;
+            return parsedSeatId > 0;
         } catch (NumberFormatException e) {
             return false;
         }
