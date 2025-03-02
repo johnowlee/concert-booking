@@ -1,4 +1,4 @@
-package hhplus.concert.application.concert;
+package hhplus.concert.application.concert.usecase;
 
 import hhplus.concert.core.concert.domain.model.Concert;
 import hhplus.concert.core.concert.domain.service.ConcertQueryService;

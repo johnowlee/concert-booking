@@ -1,6 +1,6 @@
 package hhplus.concert.application.user.event;
 
-import hhplus.concert.application.user.dto.PaymentCompletion;
+import hhplus.concert.application.user.data.command.PaymentCompletionCommand;
 import hhplus.concert.core.booking.domain.service.BookingQueryService;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.transaction.domain.service.TransactionCommandService;
@@ -31,16 +31,16 @@ public class PaymentCompletionEventListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveTransactionRecords(PaymentCompletion paymentCompletion) {
-        Payment payment = createPayment(paymentCompletion.bookingId(), paymentCompletion.payerId());
+    public void saveTransactionRecords(PaymentCompletionCommand paymentCompletionCommand) {
+        Payment payment = createPayment(paymentCompletionCommand.bookingId(), paymentCompletionCommand.payerId());
         transactionCommandService.save(Transaction.createUseBalanceFrom(payment));
         paymentCommandService.save(payment);
     }
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void completeBooking(PaymentCompletion paymentCompletion) {
-        Booking booking = bookingQueryService.getBookingById(paymentCompletion.bookingId());
+    public void completeBooking(PaymentCompletionCommand paymentCompletionCommand) {
+        Booking booking = bookingQueryService.getBookingById(paymentCompletionCommand.bookingId());
         booking.markAsComplete();
         booking.markSeatsAsBooked();
     }

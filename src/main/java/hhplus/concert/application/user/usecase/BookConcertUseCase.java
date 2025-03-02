@@ -1,6 +1,6 @@
 package hhplus.concert.application.user.usecase;
 
-import hhplus.concert.application.user.dto.ConcertBookingDto;
+import hhplus.concert.application.user.data.command.ConcertBookingCommand;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.booking.domain.model.BookingSeat;
 import hhplus.concert.core.booking.domain.service.BookingCommandService;
@@ -31,7 +31,7 @@ public class BookConcertUseCase {
     private final BookingValidator bookingValidator;
     private final ClockManager clockManager;
 
-    public Booking execute(Long userId, ConcertBookingDto dto) {
+    public Booking execute(Long userId, ConcertBookingCommand dto) {
         List<BookingSeat> bookingSeats = bookingQueryService.getBookingSeatsBySeatIds(dto.seatIds());
         LocalDateTime bookingDateTime = clockManager.getNowDateTime();
 

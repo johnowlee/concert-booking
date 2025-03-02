@@ -1,6 +1,6 @@
 package hhplus.concert.representer.api.booking;
 
-import hhplus.concert.application.user.dto.ConcertBookingDto;
+import hhplus.concert.application.user.data.command.ConcertBookingCommand;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.payment.domain.model.Payment;
 import hhplus.concert.representer.api.booking.request.ConcertBookingRequest;
@@ -33,7 +33,7 @@ public class BookingControllerMapper {
         return new PaymentResponse(payment.getId(), payment.getPaymentDateTime(), payment.getPaymentAmount());
     }
 
-    public ConcertBookingDto toConcertBookingDto(ConcertBookingRequest request) {
-        return new ConcertBookingDto(request.seatIds());
+    public ConcertBookingCommand toConcertBookingDto(ConcertBookingRequest request) {
+        return new ConcertBookingCommand(request.seatIds());
     }
 }

@@ -1,7 +1,7 @@
 package hhplus.concert.application.user.usecase;
 
 import hhplus.concert.application.support.ClockManager;
-import hhplus.concert.application.user.dto.PaymentCompletion;
+import hhplus.concert.application.user.data.command.PaymentCompletionCommand;
 import hhplus.concert.core.booking.domain.model.Booking;
 import hhplus.concert.core.booking.domain.service.BookingQueryService;
 import hhplus.concert.core.payment.domain.model.Payment;
@@ -38,7 +38,7 @@ public class PayBookingUseCase {
         validatePayment(payment);
         User payer = payment.getUser();
         payer.useBalance(payment.getPaymentAmount());
-        eventPublisher.publishEvent(PaymentCompletion.from(payment));
+        eventPublisher.publishEvent(PaymentCompletionCommand.from(payment));
         return payment;
     }
 

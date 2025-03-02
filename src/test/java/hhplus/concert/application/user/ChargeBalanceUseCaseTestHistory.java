@@ -4,7 +4,7 @@ import hhplus.concert.IntegrationTestSupport;
 import hhplus.concert.application.user.usecase.ChargeBalanceUseCase;
 import hhplus.concert.core.transaction.domain.service.TransactionCommandService;
 import hhplus.concert.representer.exception.RestApiException;
-import hhplus.concert.application.user.dto.BalanceChargeDto;
+import hhplus.concert.application.user.data.command.BalanceChargeCommand;
 import hhplus.concert.core.user.domain.service.UserQueryService;
 import hhplus.concert.core.user.domain.service.UserCommandService;
 import hhplus.concert.core.user.domain.model.User;
@@ -61,7 +61,7 @@ class ChargeBalanceUseCaseTestHistory extends IntegrationTestSupport {
         long version = user.getVersion();
 
         // when
-        User result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeDto(30000L));
+        User result = chargeBalanceUseCase.execute(user.getId(), new BalanceChargeCommand(30000L));
 
         // then
         assertThat(user.getVersion()).isEqualTo(version + 1);
@@ -86,7 +86,7 @@ class ChargeBalanceUseCaseTestHistory extends IntegrationTestSupport {
 
         // when & then
         assertThat(userId).isNotEqualTo(notFoundUserId);
-        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, new BalanceChargeDto(30000L)))
+        assertThatThrownBy(() -> chargeBalanceUseCase.execute(notFoundUserId, new BalanceChargeCommand(30000L)))
                 .isInstanceOf(RestApiException.class)
                 .hasMessage(NOT_FOUND_USER.getMessage());
     }
@@ -112,7 +112,7 @@ class ChargeBalanceUseCaseTestHistory extends IntegrationTestSupport {
         for (int i = 0; i < threadCount; i++) {
             executorService.submit(() -> {
                 try {
-                    chargeBalanceUseCase.execute(userId, new BalanceChargeDto(30000L));
+                    chargeBalanceUseCase.execute(userId, new BalanceChargeCommand(30000L));
                 } catch (RestApiException e) {
                 } finally {
                     latch.countDown();

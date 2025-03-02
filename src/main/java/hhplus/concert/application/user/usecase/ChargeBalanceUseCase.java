@@ -1,6 +1,6 @@
 package hhplus.concert.application.user.usecase;
 
-import hhplus.concert.application.user.dto.BalanceChargeDto;
+import hhplus.concert.application.user.data.command.BalanceChargeCommand;
 import hhplus.concert.core.transaction.domain.model.Transaction;
 import hhplus.concert.core.transaction.domain.service.TransactionCommandService;
 import hhplus.concert.application.support.ClockManager;
@@ -26,7 +26,7 @@ public class ChargeBalanceUseCase {
     private final ClockManager clockManager;
     private final EntityManager em;
 
-    public User execute(Long userId, BalanceChargeDto dto) {
+    public User execute(Long userId, BalanceChargeCommand dto) {
         User user = userQueryService.getUserById(userId);
         long amount = dto.balance();
         Transaction transaction = Transaction.createChargeBalance(user, amount, clockManager.getNowDateTime());

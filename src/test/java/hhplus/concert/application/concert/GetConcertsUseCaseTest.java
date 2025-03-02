@@ -1,5 +1,6 @@
 package hhplus.concert.application.concert;
 
+import hhplus.concert.application.concert.usecase.GetConcertsUseCase;
 import hhplus.concert.core.concert.domain.service.ConcertQueryService;
 import hhplus.concert.core.concert.domain.model.Concert;
 import org.junit.jupiter.api.DisplayName;
