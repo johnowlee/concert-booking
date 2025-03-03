@@ -1,7 +1,7 @@
 ### 토큰 조회
 GET localhost:8080/queue
 Content-Type: application/json
-Queue-Token: 60082f17-79ae-469d-8874-0412ca70d09b
+Queue-Token: 32ae98c4-0aa3-4def-a8d9-929736221a35
 
 ### 토큰 생성
 POST localhost:8080/queue

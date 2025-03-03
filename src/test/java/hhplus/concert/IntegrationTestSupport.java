@@ -1,13 +1,13 @@
 package hhplus.concert;
 
-import hhplus.concert.domain.booking.infrastructure.BookingJpaRepository;
-import hhplus.concert.domain.booking.infrastructure.BookingSeatJpaRepository;
-import hhplus.concert.domain.concert.infrastructure.ConcertJpaRepository;
-import hhplus.concert.domain.concert.infrastructure.ConcertOptionJpaRepository;
-import hhplus.concert.domain.concert.infrastructure.SeatJpaRepository;
-import hhplus.concert.domain.history.balance.infrastructure.BalanceJpaRepository;
-import hhplus.concert.domain.history.payment.infrastructure.PaymentJpaRepository;
-import hhplus.concert.domain.user.infrastructure.UserJpaRepository;
+import hhplus.concert.core.booking.infrastructure.repository.BookingJpaRepository;
+import hhplus.concert.core.booking.infrastructure.repository.BookingSeatJpaRepository;
+import hhplus.concert.core.concert.infrastructure.repository.ConcertJpaRepository;
+import hhplus.concert.core.concert.infrastructure.repository.ConcertOptionJpaRepository;
+import hhplus.concert.core.concert.infrastructure.repository.SeatJpaRepository;
+import hhplus.concert.core.transaction.infrastructure.repository.TransactionJpaRepository;
+import hhplus.concert.core.payment.infrastructure.repository.PaymentJpaRepository;
+import hhplus.concert.core.user.infrastructure.repository.UserJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +41,7 @@ public abstract class IntegrationTestSupport {
 
 
     @Autowired
-    protected BalanceJpaRepository balanceJpaRepository;
+    protected TransactionJpaRepository transactionJpaRepository;
 
     @Autowired
     protected PaymentJpaRepository paymentJpaRepository;
@@ -60,7 +60,7 @@ public abstract class IntegrationTestSupport {
         concertOptionJpaRepository.deleteAllInBatch();
         concertJpaRepository.deleteAllInBatch();
 
-        balanceJpaRepository.deleteAllInBatch();
+        transactionJpaRepository.deleteAllInBatch();
         paymentJpaRepository.deleteAllInBatch();
         bookingJpaRepository.deleteAllInBatch();
         userJpaRepository.deleteAllInBatch();

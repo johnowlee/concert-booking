@@ -274,9 +274,9 @@
 ## 3-3. 예약 결제
 ### REQUEST
   - #### Method
-  	| Method | URL                           |
-	|--------|-------------------------------|
-    | POST   | /bookings/{bookingId}/payment |
+  	| Method | URL                            |
+	|--------|--------------------------------|
+    | POST   | /bookings/{bookingId}/payments |
 
     - #### Header
     | Parameter    | Description                                     |
@@ -342,7 +342,7 @@
     | data                 | Object | 응답 데이터      |
     | &nbsp;&nbsp; id      | Int    | 유저 ID       |
     | &nbsp;&nbsp; name    | String | 유저 명        |
-    | &nbsp;&nbsp; balance | Int    | 잔액          |
+    | &nbsp;&nbsp; transaction | Int    | 잔액          |
     
 	<br>
 
@@ -351,7 +351,7 @@
   - #### Method
   	| Method | URL               |
 	|--------|-------------------|
-    | PATCH  | /balance/{userId} |
+    | PATCH  | /transaction/{userId} |
 	
   - #### Header
 	| Parameter    | Description                                     |
@@ -366,7 +366,7 @@
   - #### Body
 	| Name    | Type | Description | Required |
 	|---------|------|-------------|----------|
-	| balance | Int  | 충전금액        | 필수       |
+	| transaction | Int  | 충전금액        | 필수       |
 
 ### RESPONSE
   - | Name                 | Type   | Description |
@@ -377,4 +377,4 @@
     | data                 | Object | 응답 데이터      |
     | &nbsp;&nbsp; id      | Int    | 유저 ID       |
     | &nbsp;&nbsp; name    | String | 유저 명        |
-    | &nbsp;&nbsp; balance | Int    | 잔액          |
+    | &nbsp;&nbsp; transaction | Int    | 잔액          |

@@ -55,7 +55,7 @@ public class PaymentService {
         validatePay(payment);
         
         // 잔액 차감
-        useBalance(payment);
+        useTransaction(payment);
     }
 }
 ```
@@ -94,8 +94,8 @@ public class PaymentCompletionEventListener {
     // 잔액 및 결제 내역 저장 로직
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void saveTransactionRecords(PaymentCompletion paymentCompletion) {
-        Payment payment = createPayment(paymentCompletion.bookingId(), paymentCompletion.payerId());
+    public void saveTransactionRecords(PaymentCompletion paymentCompletionCommand) {
+        Payment payment = createPayment(paymentCompletionCommand.bookingId(), paymentCompletionCommand.payerId());
         balanceHistoryWriter.save(Balance.createUseBalanceFrom(payment));
         paymentHistoryWriter.save(payment);
     }
@@ -103,8 +103,8 @@ public class PaymentCompletionEventListener {
     // 예약 및 좌석 예약상태 변경 로직
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void completeBooking(PaymentCompletion paymentCompletion) {
-        Booking booking = bookingReader.getBookingById(paymentCompletion.bookingId());
+    public void completeBooking(PaymentCompletion paymentCompletionCommand) {
+        Booking booking = bookingReader.getBookingById(paymentCompletionCommand.bookingId());
         booking.markAsComplete();
         booking.markSeatsAsBooked();
     }

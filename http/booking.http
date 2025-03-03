@@ -1,14 +1,20 @@
-### 유저 아이디로 예약 목록 조회
-GET localhost:8080/bookings/users/1
-
-### 예약 단건 조회
-GET localhost:8080/bookings/1
-
-### 예약 결제
-POST localhost:8080/bookings/1/payment
-Queue-Token: 1c4f3884-815b-4c17-abab-b08a61a3a52a
+### 콘서트 예약
+POST localhost:8080/users/1/bookings
+Queue-Token: 32ae98c4-0aa3-4def-a8d9-929736221a35
 Content-Type: application/json
 
 {
-  "user_id": 1
+  "seat_id": "1, 2"
 }
+
+### 유저 아이디로 예약 목록 조회
+GET localhost:8080/users/1/bookings
+
+### 예약 단건 조회
+GET localhost:8080/users/1/bookings/1
+
+### 예약 결제
+POST localhost:8080/users/1/bookings/1/payments
+Queue-Token: 32ae98c4-0aa3-4def-a8d9-929736221a35
+Content-Type: application/json
+
