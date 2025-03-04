@@ -28,6 +28,6 @@
 ---
 ## 잔액
 - ### 잔액 조회
-  ![balance_search_sequence_diagram.png](transaction%2Fbalance_search_sequence_diagram.png)
+  ![balance_search_sequence_diagram.png](balance%2Fbalance_search_sequence_diagram.png)
 - ### 잔액 충전
-  ![balance_charge_sequence_diagram.png](transaction%2Fbalance_charge_sequence_diagram.png)
+  ![balance_charge_sequence_diagram.png](balance%2Fbalance_charge_sequence_diagram.png)
