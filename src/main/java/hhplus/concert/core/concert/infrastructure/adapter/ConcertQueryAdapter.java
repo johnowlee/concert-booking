@@ -42,7 +42,7 @@ public class ConcertQueryAdapter implements ConcertQueryPort {
     }
 
     @Override
-    public List<Seat> findAllSeatsByIds(List<Long> ids) {
+    public List<Seat> findAllByIdsWithPessimisticWriteLock(List<Long> ids) {
         return seatJpaRepository.findAllByIdsWithPessimisticWriteLock(ids);
     }
 }

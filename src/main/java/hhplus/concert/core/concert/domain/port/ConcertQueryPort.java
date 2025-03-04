@@ -17,5 +17,5 @@ public interface ConcertQueryPort {
 
     List<Seat> findAllSeatsByConcertOptionId(Long concertOptionId);
 
-    List<Seat> findAllSeatsByIds(List<Long> ids);
+    List<Seat> findAllByIdsWithPessimisticWriteLock(List<Long> ids);
 }

@@ -30,8 +30,8 @@ public class ConcertQueryService {
         return concertQueryPort.findAllConcertOptionsByConcertId(concertId);
     }
 
-    public List<Seat> findSeatsByIds(List<Long> ids) {
-        return concertQueryPort.findAllSeatsByIds(ids);
+    public List<Seat> findSeatsByIdsWithLock(List<Long> ids) {
+        return concertQueryPort.findAllByIdsWithPessimisticWriteLock(ids);
     }
 
     public List<Seat> findSeatsByConcertOptionId(Long concertOptionId) {
